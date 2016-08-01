@@ -18,9 +18,5 @@
         <processorPath useClasspath="true" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="irc-api_main" target="1.7" />
-      <module name="irc-api_test" target="1.7" />
-    </bytecodeTargetLevel>
   </component>
 </project>

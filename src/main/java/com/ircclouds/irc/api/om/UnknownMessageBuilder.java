@@ -13,8 +13,8 @@ import com.ircclouds.irc.api.domain.messages.*;
 public class UnknownMessageBuilder implements IBuilder<UnknownMessage>
 {
 	@Override
-	public UnknownMessage build(String aMessage)
+	public UnknownMessage build(Message aMessage)
 	{
-		return new UnknownMessage(aMessage);
+		return new UnknownMessage(aMessage.raw);
 	}
 }

@@ -6,10 +6,10 @@ import com.ircclouds.irc.api.utils.*;
 public class KickMessageBuilder implements IBuilder<ChannelKick>
 {
 	@Override
-	public ChannelKick build(String aMessage)
+	public ChannelKick build(Message aMessage)
 	{
-		String[] _cmpnts = aMessage.split(" ");
+		String[] _cmpnts = (String[]) aMessage.params.toArray();
 
-		return new ChannelKick(ParseUtils.getUser(_cmpnts[0]), aMessage.substring(aMessage.indexOf(" :") + 2), _cmpnts[2], _cmpnts[3]);
+		return new ChannelKick(ParseUtils.getUser(_cmpnts[0]), aMessage.getText(), _cmpnts[2], _cmpnts[3]);
 	}
 }

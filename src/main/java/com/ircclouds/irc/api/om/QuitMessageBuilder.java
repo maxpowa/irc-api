@@ -5,8 +5,8 @@ import com.ircclouds.irc.api.utils.*;
 
 public class QuitMessageBuilder implements IBuilder<QuitMessage>
 {
-	public QuitMessage build(String aMsg)
+	public QuitMessage build(Message aMsg)
 	{
-		return new QuitMessage(ParseUtils.getUser(aMsg.split(" ")[0]), aMsg.substring(aMsg.indexOf(" :") + 2));
+		return new QuitMessage(ParseUtils.getUser(aMsg.prefix), aMsg.getText());
 	}
 }

@@ -6,8 +6,8 @@ import com.ircclouds.irc.api.utils.*;
 public class NickMessageBuilder implements IBuilder<NickMessage>
 {
 	@Override
-	public NickMessage build(String aMessage)
+	public NickMessage build(Message aMessage)
 	{
-		return new NickMessage(ParseUtils.getUser(aMessage.split(" ")[0]), aMessage.substring(aMessage.indexOf("NICK :")+6));
+		return new NickMessage(ParseUtils.getUser(aMessage.prefix), aMessage.getText());
 	}
 }

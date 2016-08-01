@@ -8,12 +8,12 @@ public class ChanPartBuilder implements IBuilder<ChanPartMessage>
 {
 	// //:aae!aaf@bot.lebane.se PART #botcode :aSS
 
-	public ChanPartMessage build(String aMessage)
+	public ChanPartMessage build(Message aMessage)
 	{
-		String[] _cmpnts = aMessage.split(" ");
+		String[] _cmpnts = aMessage.raw.split(" ");
 
-		WritableIRCUser _info = ParseUtils.getUser(_cmpnts[0]);
-		String _chanName = _cmpnts[2].toLowerCase();
+		WritableIRCUser _info = ParseUtils.getUser(aMessage.prefix);
+		String _chanName = aMessage.params.get(0);
 		if (_chanName.startsWith(":"))
 		{
 			_chanName = _chanName.substring(1);
@@ -22,7 +22,7 @@ public class ChanPartBuilder implements IBuilder<ChanPartMessage>
 		ChanPartMessage _msg = null;
 		if (_cmpnts.length > 3)
 		{
-			 _msg = new ChanPartMessage(_chanName, _info, aMessage.substring(aMessage.indexOf(" :") + 2));
+			_msg = new ChanPartMessage(_chanName, _info, aMessage.raw.substring(aMessage.raw.indexOf(" :") + 2));
 		}
 		else
 		{

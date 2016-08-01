@@ -9,33 +9,25 @@ import com.ircclouds.irc.api.utils.*;
 
 public abstract class AbstractNoticeBuilder implements IBuilder<IMessage>
 {
-	private static final String NOTICE = "NOTICE";
-
-	public IMessage build(String aMessage)
+	public IMessage build(Message aMessage)
 	{
-		String _components[] = aMessage.split(" ");
-		if (!_components[0].contains("@"))
-		{
-			if (NOTICE.equals(_components[0]))
-			{
-				return new ServerNotice(aMessage.substring(aMessage.indexOf(NOTICE) + NOTICE.length()), null);
-			}
-			
-			return new ServerNotice(aMessage.substring(aMessage.indexOf(':', 1) + 1), new IRCServer(_components[0].substring(1)));
+		if (aMessage.prefix == null) {
+			return new ServerNotice(aMessage.getText(), null);
+		} else if (!aMessage.prefix.contains("@")) {
+			return new ServerNotice(aMessage.getText(), new IRCServer(aMessage.prefix));
 		}
 
-		WritableIRCUser _user = ParseUtils.getUser(_components[0]);
-		
-		UserNotice _msg = null;
-		String _text = aMessage.substring(aMessage.indexOf(" :") + 2);
+		WritableIRCUser _user = ParseUtils.getUser(aMessage.prefix);
 
-		if (getChannelTypes().contains(_components[2].charAt(0)))
+		UserNotice _msg;
+
+		if (getChannelTypes().contains(aMessage.params.get(0).charAt(0)))
 		{
-			_msg = new ChannelNotice(_user, _text, _components[2]);
+			_msg = new ChannelNotice(_user, aMessage.getText(), aMessage.params.get(0));
 		}
 		else
 		{
-			_msg = new UserNotice(_user, _text, _components[2]);
+			_msg = new UserNotice(_user, aMessage.getText(), aMessage.params.get(0));
 		}
 
 		return _msg;

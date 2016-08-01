@@ -5,6 +5,7 @@ import java.util.*;
 import org.slf4j.*;
 
 import com.ircclouds.irc.api.domain.*;
+import com.ircclouds.irc.api.domain.messages.Message;
 import com.ircclouds.irc.api.domain.messages.interfaces.*;
 
 /**
@@ -80,65 +81,37 @@ public abstract class AbstractMessageFactory
 		
 		try
 		{
-			String _components[] = aMsg.split(" ");
-			if (_components.length > 1)
+			Message msg = new Message(aMsg);
+			if (PING_KEY.equals(msg.command))
 			{
-				String _msgType = _components[1];
-				if (PING_KEY.equals(_components[0]))
-				{
-					return SERVER_PING_MESSAGE_BUILDER.build(aMsg);
-				}
-				else if (PRIVATE_MESSAGE_KEY.equals(_msgType))
-				{
-					return PRIVATE_MESSAGE_BUILDER.build(aMsg);
-				}
-				else if (NOTICE_KEY.equals(_msgType) || NOTICE_KEY.equals(_components[0]))
-				{
-					return NOTICE_BUILDER.build(aMsg);
-				}
-				else if (JOIN_KEY.equals(_msgType))
-				{
-					return CHAN_JOIN_BUILDER.build(aMsg);
-				}
-				else if (PART_KEY.equals(_msgType))
-				{
-					return CHAN_PART_BUILDER.build(aMsg);
-				}
-				else if (QUIT_MESSAGE_KEY.equals(_msgType))
-				{
-					return QUIT_MESSAGE_BUILDER.build(aMsg);
-				}
-				else if (TOPIC_KEY.equals(_msgType))
-				{
-					return TOPIC_MESSAGE_BUILDER.build(aMsg);
-				}
-				else if (NICK_KEY.equals(_msgType))
-				{
-					return NICK_MESSAGE_BUILDER.build(aMsg);
-				}
-				else if (KICK_KEY.equals(_msgType))
-				{
-					return KICK_MESSAGE_BUILDER.build(aMsg);
-				}
-				else if (MODE_KEY.equals(_msgType) && getIRCServerOptions().getChanTypes().contains(_components[2].charAt(0)))
-				{
-					return CHAN_MODE_BUILDER.build(aMsg);
-				}
-				else if (AWAY_KEY.equals(_msgType))
-				{
-					return AWAY_MESSAGE_BUILDER.build(aMsg);
-				}
-				else if (isNumeric(_msgType))
-				{
-					return SERVER_MESSAGE_BUILDER.build(aMsg);
-				}
-				else if (ERROR_KEY.equals(_components[0]))
-				{
-					return ERROR_MESSAGE_BUILDER.build(aMsg);
-				}
+				return SERVER_PING_MESSAGE_BUILDER.build(msg);
+			} else if (PRIVATE_MESSAGE_KEY.equals(msg.command)) {
+				return PRIVATE_MESSAGE_BUILDER.build(msg);
+			} else if (NOTICE_KEY.equals(msg.command) || NOTICE_KEY.equals(msg.prefix)) {
+				return NOTICE_BUILDER.build(msg);
+			} else if (JOIN_KEY.equals(msg.command)) {
+				return CHAN_JOIN_BUILDER.build(msg);
+			} else if (PART_KEY.equals(msg.command)) {
+				return CHAN_PART_BUILDER.build(msg);
+			} else if (QUIT_MESSAGE_KEY.equals(msg.command)) {
+				return QUIT_MESSAGE_BUILDER.build(msg);
+			} else if (TOPIC_KEY.equals(msg.command)) {
+				return TOPIC_MESSAGE_BUILDER.build(msg);
+			} else if (NICK_KEY.equals(msg.command)) {
+				return NICK_MESSAGE_BUILDER.build(msg);
+			} else if (KICK_KEY.equals(msg.command)) {
+				return KICK_MESSAGE_BUILDER.build(msg);
+			} else if (MODE_KEY.equals(msg.command) && getIRCServerOptions().getChanTypes().contains(msg.params.get(0).charAt(0))) {
+				return CHAN_MODE_BUILDER.build(msg);
+			} else if (AWAY_KEY.equals(msg.command)) {
+				return AWAY_MESSAGE_BUILDER.build(msg);
+			} else if (isNumeric(msg.command)) {
+				return SERVER_MESSAGE_BUILDER.build(msg);
+			} else if (ERROR_KEY.equals(msg.prefix)) {
+				return ERROR_MESSAGE_BUILDER.build(msg);
 			}
 
-			return UNKNOWN_MESSAGE_BUILDER.build(aMsg);
+			return UNKNOWN_MESSAGE_BUILDER.build(msg);
 		}
 		catch (Exception aExc)
 		{

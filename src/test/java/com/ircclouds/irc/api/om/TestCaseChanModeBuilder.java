@@ -43,7 +43,7 @@ public class TestCaseChanModeBuilder extends TestCase
 	
 	public void testAddModesOnly()
 	{
-		ChannelModeMessage _msg = chanModeBuilder.build(":krad!~k@unaffiliated/krad MODE #r0b0t +kt key");
+		ChannelModeMessage _msg = chanModeBuilder.build(new Message(":krad!~k@unaffiliated/krad MODE #r0b0t +kt key"));
 		
 		List<ChannelMode> _addedModes = _msg.getAddedModes();
 		List<ChannelMode> _removedModes = _msg.getRemovedModes();
@@ -60,7 +60,7 @@ public class TestCaseChanModeBuilder extends TestCase
 	
 	public void testRemoveModesOnly()
 	{
-		ChannelModeMessage _msg = chanModeBuilder.build(":krad!~k@unaffiliated/krad MODE #r0b0t -kts *");
+		ChannelModeMessage _msg = chanModeBuilder.build(new Message(":krad!~k@unaffiliated/krad MODE #r0b0t -kts *"));
 		
 		List<ChannelMode> _addedModes = _msg.getAddedModes();
 		List<ChannelMode> _removedModes = _msg.getRemovedModes();
@@ -78,7 +78,7 @@ public class TestCaseChanModeBuilder extends TestCase
 	
 	public void testAddModesWith2Params()
 	{
-		ChannelModeMessage _msg = chanModeBuilder.build(":krad!~k@unaffiliated/krad MODE #r0b0t +kltn key 4");
+		ChannelModeMessage _msg = chanModeBuilder.build(new Message(":krad!~k@unaffiliated/krad MODE #r0b0t +kltn key 4"));
 		
 		List<ChannelMode> _addedModes = _msg.getAddedModes();
 		List<ChannelMode> _removedModes = _msg.getRemovedModes();
@@ -97,7 +97,7 @@ public class TestCaseChanModeBuilder extends TestCase
 	
 	public void testAddRemoveModes()
 	{
-		ChannelModeMessage _msg = chanModeBuilder.build(":krad!~k@unaffiliated/krad MODE #r0b0t +kt-ln key");
+		ChannelModeMessage _msg = chanModeBuilder.build(new Message(":krad!~k@unaffiliated/krad MODE #r0b0t +kt-ln key"));
 		
 		List<ChannelMode> _addedModes = _msg.getAddedModes();
 		List<ChannelMode> _removedModes = _msg.getRemovedModes();
@@ -117,14 +117,14 @@ public class TestCaseChanModeBuilder extends TestCase
 	
 	public void testRemoveLimitOnly()
 	{
-		ChannelModeMessage _msg = chanModeBuilder.build(":krad!~k@unaffiliated/krad MODE #r0b0t -l");
+		ChannelModeMessage _msg = chanModeBuilder.build(new Message(":krad!~k@unaffiliated/krad MODE #r0b0t -l"));
 		
 		assertTrue(_msg.getRemovedModes().contains(new ChannelModeC('l')));			
 	}
 	
 	public void testAddRemoveAddRemove()
 	{
-		ChannelModeMessage _msg = chanModeBuilder.build(":krad!~k@unaffiliated/krad MODE #r0b0t +nto-o+o-o+o-o goraaab goraaab goraaab goraaab goraaab goraaab");
+		ChannelModeMessage _msg = chanModeBuilder.build(new Message(":krad!~k@unaffiliated/krad MODE #r0b0t +nto-o+o-o+o-o goraaab goraaab goraaab goraaab goraaab goraaab"));
 		
 		List<ChannelMode> _addedModes = _msg.getAddedModes();
 		List<ChannelMode> _removedModes = _msg.getRemovedModes();

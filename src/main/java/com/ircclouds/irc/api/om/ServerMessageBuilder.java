@@ -6,15 +6,9 @@ import com.ircclouds.irc.api.utils.*;
 
 public class ServerMessageBuilder implements IBuilder<ServerNumericMessage>
 {
-	public ServerNumericMessage build(String aMessage)
+	public ServerNumericMessage build(Message aMessage)
 	{
-		int _indexOfCol = StringUtils.indexOf(' ', 3, aMessage);
-		String _firstPart = aMessage.substring(0, _indexOfCol);
-		String _secondPart = aMessage.substring(_indexOfCol + 1);
-
-		String[] _firstPartCmpnts = _firstPart.split(" ");
-
-		return new ServerNumericMessage(getNumberFrom(_firstPartCmpnts[1]), _firstPartCmpnts[2], _secondPart, new IRCServer(_firstPartCmpnts[0].substring(1)));
+		return new ServerNumericMessage(getNumberFrom(aMessage.command), aMessage.params.get(0), aMessage.getText(), new IRCServer(aMessage.prefix));
 	}
 
 	private Integer getNumberFrom(String aString)

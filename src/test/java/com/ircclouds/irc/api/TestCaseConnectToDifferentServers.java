@@ -98,6 +98,50 @@ public class TestCaseConnectToDifferentServers
 	}
 
 	@Test
+	public void connectToChaos() throws Exception {
+		ConnectedApi _api = MockUtils.newConnectedApi(new MockConnectionImpl("chaos.esper.net"), newMockServerParameters(), 2);
+		Assert.assertEquals("hahaeheh", _api.getConnectedState().getNickname());
+		assertUserStatuses(_api.getConnectedState().getServerOptions().getUserChanStatuses());
+		assertChannelModes(_api.getConnectedState().getServerOptions().getChannelModes(), new HashSet<Character>() {
+			{
+				add('e');
+				add('I');
+				add('b');
+				add('q');
+			}
+		}, new HashSet<Character>() {
+			{
+				add('k');
+			}
+		}, new HashSet<Character>() {
+			{
+				add('f');
+				add('l');
+				add('j');
+			}
+		}, new HashSet<Character>() {
+			{
+				add('C');
+				add('F');
+				add('L');
+				add('M');
+				add('P');
+				add('Q');
+				add('c');
+				add('g');
+				add('i');
+				add('m');
+				add('n');
+				add('p');
+				add('s');
+				add('t');
+				add('r');
+				add('z');
+			}
+		});
+	}
+
+	@Test
 	public void connectToDALnetMesra() throws Exception
 	{
 		ConnectedApi _api = MockUtils.newConnectedApi(new MockConnectionImpl("mesra.dal.net"), newMockServerParameters(), 2);

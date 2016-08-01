@@ -1,5 +1,6 @@
 package com.ircclouds.irc.api.negotiators.capabilities;
 
+import com.ircclouds.irc.api.domain.messages.Message;
 import com.ircclouds.irc.api.domain.messages.ServerNumericMessage;
 import com.ircclouds.irc.api.listeners.VariousMessageListenerAdapter;
 import com.ircclouds.irc.api.negotiators.CompositeNegotiator;
@@ -144,7 +145,7 @@ public class SaslCapability extends VariousMessageListenerAdapter
 		}
 		else if (RawMessageUtils.isServerNumericMessage(msg))
 		{
-			final ServerNumericMessage numMsg = SERVER_MSG_BUILDER.build(msg);
+			final ServerNumericMessage numMsg = SERVER_MSG_BUILDER.build(new Message(msg));
 			switch (numMsg.getNumericCode())
 			{
 			case RPL_LOGGEDIN:

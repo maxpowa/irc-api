@@ -52,24 +52,24 @@ public class TestCaseBuilders extends TestCase
 	public void testChanJoinBuiler()
 	{
 		ChanJoinBuilder _builder = new ChanJoinBuilder();
-		ChanJoinMessage _msg    = _builder.build(USER_STRING+" JOIN "+TEST_CHANNEL);
+		ChanJoinMessage _msg = _builder.build(new Message(USER_STRING + " JOIN " + TEST_CHANNEL));
 		checkChannelAndUser(_msg.getSource(),_msg.getChannelName(),true);
 	}
 	
 	/**
 	 * Test to build a PART MESSAGE
 	 */
-	public void testChannelPartBuiler()
+	public void testChannelPartBuilder()
 	{
 		ChanJoinBuilder _builder = new ChanJoinBuilder();
-		ChanJoinMessage _msg    = _builder.build(USER_STRING+" PART "+TEST_CHANNEL);
-		checkChannelAndUser(_msg.getSource(),_msg.getChannelName(),true);
+		ChanJoinMessage _msg = _builder.build(new Message(USER_STRING + " PART " + TEST_CHANNEL));
+		checkChannelAndUser(_msg.getSource(), _msg.getChannelName(), true);
 	}
 	
 	/**
 	 * Test to build a PART MESSAGE
 	 */
-	public void testNoticeBuiler()
+	public void testNoticeBuilder()
 	{
 		AbstractNoticeBuilder _builder = new AbstractNoticeBuilder()
 		{
@@ -79,38 +79,39 @@ public class TestCaseBuilders extends TestCase
 				return new LinkedHashSet<Character>() {{ add('#'); }};
 			}
 		};
-		IMessage _msg    = _builder.build("NOTICE Server Shit");
-		assertEquals(_msg.getClass(),ServerNotice.class);
-		
-		_msg = _builder.build(USER_STRING+" NOTICE Something To An User");
-		assertEquals(_msg.getClass(),UserNotice.class);
+		IMessage _msg = _builder.build(new Message("NOTICE :Server Shit"));
+		assertEquals(ServerNotice.class, _msg.getClass());
+		assertEquals("Server Shit", ((ServerNotice) _msg).getText());
+
+		_msg = _builder.build(new Message(USER_STRING + " NOTICE :Something To An User"));
+		assertEquals(UserNotice.class, _msg.getClass());
 		assertEquals(TEST_USER,((UserNotice)_msg).getSource());
-		assertEquals(TEST_USER.getNick()+"!"+TEST_USER.getIdent()+"@"+TEST_USER.getHostname()+" NOTICE Something To An User",((UserNotice)_msg).getText());
-		
-		_msg = _builder.build(USER_STRING+" NOTICE "+TEST_CHANNEL+" Something To a Chan");
-		assertEquals(_msg.getClass(),ChannelNotice.class);
-		checkChannelAndUser(((ChannelNotice)_msg).getSource(),((ChannelNotice)_msg).getChannelName(),false);
-		assertEquals(TEST_USER.getNick()+"!"+TEST_USER.getIdent()+"@"+TEST_USER.getHostname()+" NOTICE " +TEST_CHANNEL+" Something To a Chan",((ChannelNotice)_msg).getText());
+		assertEquals("Something To An User", ((UserNotice) _msg).getText());
+
+		_msg = _builder.build(new Message(USER_STRING + " NOTICE " + TEST_CHANNEL + " :Something To a Chan"));
+		assertEquals(ChannelNotice.class, _msg.getClass());
+		checkChannelAndUser(((ChannelNotice) _msg).getSource(), ((ChannelNotice) _msg).getChannelName(), false);
+		assertEquals("Something To a Chan", ((ChannelNotice) _msg).getText());
 	}
 	
 	/**
 	 * Test to build a PING MESSAGE
 	 */
-	public void testPingBuiler()
+	public void testPingBuilder()
 	{
 		ServerPingMessageBuilder _builder = new ServerPingMessageBuilder();
-		ServerPing _msg    = _builder.build("PING miguel:1234");
-		assertEquals("1234",_msg.getText());
+		ServerPing _msg = _builder.build(new Message("PING miguel :1234"));
+		assertEquals("1234", _msg.getText());
 	}
 
 	
 	/**
 	 * Test to build a PRIVMSG MESSAGE
 	 */
-	public void testQuitMessageBuiler()
+	public void testQuitMessageBuilder()
 	{
 		QuitMessageBuilder _builder = new QuitMessageBuilder();
-		QuitMessage _msg    = _builder.build(USER_STRING+" QUIT :stfu message");
+		QuitMessage _msg = _builder.build(new Message(USER_STRING + " QUIT :stfu message"));
 		assertEquals("stfu message",_msg.getQuitMsg());
 		assertEquals(TEST_USER,_msg.getSource());
 	}
@@ -119,11 +120,11 @@ public class TestCaseBuilders extends TestCase
 	/**
 	 * Test to build a TOPIC MESSAGE
 	 */
-	public void testTopicMessageBuiler()
+	public void testTopicMessageBuilder()
 	{
 		TopicMessageBuilder _builder = new TopicMessageBuilder();
-		TopicMessage _msg = _builder.build(USER_STRING+ " TOPIC " + TEST_CHANNEL + " :let's set that topic :D");
-		checkChannelAndUser(ParseUtils.getUser(":" + _msg.getTopic().getSetBy()),_msg.getChannelName(),false);
+		TopicMessage _msg = _builder.build(new Message(USER_STRING + " TOPIC " + TEST_CHANNEL + " :let's set that topic :D"));
+		checkChannelAndUser(ParseUtils.getUser(_msg.getTopic().getSetBy()), _msg.getChannelName(), false);
 		assertEquals(_msg.getChannelName(), TEST_CHANNEL);
 		assertEquals(_msg.getTopic().getValue(),"let's set that topic :D");
 		
@@ -132,25 +133,36 @@ public class TestCaseBuilders extends TestCase
 	/**
 	 * Test to build a PRIVMSG MESSAGE
 	 */
-	public void testPrivateMessageBuiler()
+	public void testPrivateMessageBuilder()
 	{
-		//TODO i'm lazy :D
+		AbstractPrivateMessageBuilder _builder = new AbstractPrivateMessageBuilder() {
+			@Override
+			protected Set<Character> getChannelTypes() {
+				return new LinkedHashSet<Character>() {{
+					add('#');
+				}};
+			}
+		};
+		IMessage _msg = _builder.build(new Message(USER_STRING + " PRIVMSG :Something To An User"));
+		assertEquals(UserPrivMsg.class, _msg.getClass());
+		assertEquals(TEST_USER, ((UserPrivMsg) _msg).getSource());
+		assertEquals("Something To An User", ((UserPrivMsg) _msg).getText());
+
+		_msg = _builder.build(new Message(USER_STRING + " PRIVMSG " + TEST_CHANNEL + " :Something To a Chan"));
+		assertEquals(ChannelPrivMsg.class, _msg.getClass());
+		checkChannelAndUser(((ChannelPrivMsg) _msg).getSource(), ((ChannelPrivMsg) _msg).getChannelName(), false);
+		assertEquals("Something To a Chan", ((ChannelPrivMsg) _msg).getText());
 	}
 	
 	/**
 	 * Test to build a SERVER MESSAGE
 	 */
-	public void testServerMessageBuiler()
+	public void testServerMessageBuilder()
 	{
-		//TODO i'm lazy :D
-	}
-	
-	/**
-	 * Test to build a MODE MESSAGE
-	 */
-	public void testChanModeBuiler()
-	{
-		//TODO i'm lazy :D
+		ServerMessageBuilder _builder = new ServerMessageBuilder();
+		ServerNumericMessage _msg = _builder.build(new Message("421 WTF :Unknown command"));
+		assertEquals(421, (int) _msg.getNumericCode());
+		//assertEquals(TEST_USER, _msg.getTarget());
 	}
 	
 }

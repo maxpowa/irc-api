@@ -8,16 +8,15 @@ import com.ircclouds.irc.api.utils.*;
 
 public abstract class AbstractChanModeBuilder implements IBuilder<ChannelModeMessage>
 {
-	public ChannelModeMessage build(String aMessage)
+	public ChannelModeMessage build(Message aMessage)
 	{
-		String[] _cmpnts = aMessage.split(" ");
-		
-		Stack<String> _params = createParamsInStack(_cmpnts);
+		Stack<String> _params = new Stack<String>();
+		_params.addAll(aMessage.params.subList(2, aMessage.params.size()));
 		
 		List<ChannelMode> _addedModes = new ArrayList<ChannelMode>();
 		List<ChannelMode> _removedModes = new ArrayList<ChannelMode>();
-		
-		String _modesStr = _cmpnts[3];
+
+		String _modesStr = aMessage.params.get(1);
 		for (int _i = 0; _i < _modesStr.length(); _i++)
 		{
 			int _plusIndex = _modesStr.indexOf("+", _i + 1);
@@ -62,36 +61,23 @@ public abstract class AbstractChanModeBuilder implements IBuilder<ChannelModeMes
 				parseModes(_params, _removedModes, _mode, false);
 			}
 		}
-		
-		return new ChannelModeMessage(ParseUtils.getSource(_cmpnts[0]), _cmpnts[2], getModeStr(_cmpnts), _addedModes, _removedModes);
+
+		return new ChannelModeMessage(ParseUtils.getSource(aMessage.prefix), aMessage.params.get(0), getModeStr(aMessage.params), _addedModes, _removedModes);
 	}
 
 	protected abstract IRCServerOptions getIRCServerOptions();
-	
-	private String getModeStr(String[] aCmpnts)
+
+	private String getModeStr(List<String> aCmpnts)
 	{
 		StringBuilder _sb = new StringBuilder();
-		
-		int _i = aCmpnts.length;
-		for (int _j = 3; _j < _i; _j++)
+
+		int _i = aCmpnts.size();
+		for (int _j = 1; _j < _i; _j++)
 		{
-			_sb.append(aCmpnts[_j]).append(" ");
+			_sb.append(aCmpnts.get(_j)).append(" ");
 		}
 		
 		return _sb.substring(0, _sb.length() -1).toString();
-	}
-
-	private Stack<String> createParamsInStack(String[] aCmpnts)
-	{
-		Stack<String> _params = new Stack<String>();
-		
-		int _i = aCmpnts.length;
-		for (int _j = _i-1; _j > 3; _j--)
-		{
-			_params.push(aCmpnts[_j]);
-		}
-		
-		return _params;
 	}
 
 	private void parseModes(Stack<String> aParams, List<ChannelMode> aModes, String aModesStr, boolean aAddFlag)

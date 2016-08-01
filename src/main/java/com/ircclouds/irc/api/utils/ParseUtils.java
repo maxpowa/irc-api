@@ -29,7 +29,7 @@ public final class ParseUtils
 		final String[] _cmpnts1 = aString.split("@");
 		final String[] _cmpnts2 = _cmpnts1[0].split("!");
 
-		final String nick = _cmpnts2[0].substring(1);
+		final String nick = _cmpnts2[0];
 		final String ident = _cmpnts2.length > 1 ? _cmpnts2[1] : "";
 		final String hostname = _cmpnts1.length > 1 ? _cmpnts1[1] : "";
 
