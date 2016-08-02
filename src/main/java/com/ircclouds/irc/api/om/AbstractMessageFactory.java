@@ -107,8 +107,8 @@ public abstract class AbstractMessageFactory
 				return AWAY_MESSAGE_BUILDER.build(msg);
 			} else if (isNumeric(msg.command)) {
 				return SERVER_MESSAGE_BUILDER.build(msg);
-			} else if (ERROR_KEY.equals(msg.prefix)) {
-				return ERROR_MESSAGE_BUILDER.build(msg);
+            } else if (ERROR_KEY.equals(msg.command)) {
+                return ERROR_MESSAGE_BUILDER.build(msg);
 			}
 
 			return UNKNOWN_MESSAGE_BUILDER.build(msg);

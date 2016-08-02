@@ -49,8 +49,8 @@ public abstract class AbstractChannelJoinListener
 				}
 				else if (_numcode == IRCServerNumerics.TOPIC_USER_DATE)
 				{
-                    topic.setSetBy(aServerMessage.params.get(1));
-                    topic.setDate(new Date(Long.parseLong(aServerMessage.params.get(2) + "000")));
+                    topic.setSetBy(aServerMessage.params.get(2));
+                    topic.setDate(new Date(Long.parseLong(aServerMessage.params.get(3) + "000")));
                     channel.setTopic(topic);
                 } else if (_numcode == IRCServerNumerics.CHANNEL_NICKS_END_OF_LIST) {
 					Callback<IRCChannel> _chanCallback = callbacks.remove(channel.getName());
@@ -71,7 +71,7 @@ public abstract class AbstractChannelJoinListener
                 } else if (_numcode == IRCServerNumerics.CHANNEL_CANNOT_JOIN_FULL) {
                     callbacks.remove(aServerMessage.params.get(0)).onFailure(new IRCException(aServerMessage.getText()));
                 } else if (_numcode == IRCServerNumerics.CHANNEL_FORWARD) {
-                    Callback<IRCChannel> callback = callbacks.remove(aServerMessage.params.get(0));
+                    Callback<IRCChannel> callback = callbacks.remove(aServerMessage.params.get(1));
                     if (callback != null) {
                         callbacks.put(aServerMessage.params.get(1), callback);
                     }

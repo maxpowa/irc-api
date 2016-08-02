@@ -35,3 +35,16 @@
 :chaos.esper.net 372 TestUser123 :-
 :chaos.esper.net 376 TestUser123 :End of /MOTD command.
 :TestUser123 MODE TestUser123 :+i
+:TestUser123!test@test JOIN #Test
+:chaos.esper.net 332 TestUser123 #Test :Test topic
+:chaos.esper.net 333 TestUser123 #Test Topic!Setter@is.cool 1420492038
+:chaos.esper.net 353 TestUser123 = #Test :List Of Nicknames In The Channel
+:chaos.esper.net 366 TestUser123 #Test :End of /NAMES list.
+:Nicknames!part@message PART #Test :I didn't want to test anyways.
+:List!quit@message QUIT :I didn't want to test anyways.
+:Channel!topic@change TOPIC #Test :new topic!
+:Channel!topic@change AWAY :away message
+:Channel!topic@change MODE #Test +t
+:Channel!topic@change NICK NewNick
+:Channel!topic@change KICK KickedPerson :Kick Reason
+ERROR :potatOS booting up
