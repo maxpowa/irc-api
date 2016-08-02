@@ -1,0 +1,37 @@
+:chaos.esper.net NOTICE * :*** Looking up your hostname...
+:chaos.esper.net NOTICE * :*** Checking Ident
+:chaos.esper.net NOTICE * :*** Couldn't look up your hostname
+:chaos.esper.net NOTICE * :*** No Ident response
+:chaos.esper.net CAP * LS :account-notify away-notify extended-join multi-prefix sasl tls
+:chaos.esper.net 451 * :You have not registered
+:chaos.esper.net CAP TestUser123 NAK :server-time
+:chaos.esper.net CAP TestUser123 ACK :multi-prefix
+:chaos.esper.net CAP TestUser123 NAK :=account-notify
+:chaos.esper.net CAP TestUser123 NAK :=extended-join
+:chaos.esper.net CAP TestUser123 NAK :cap-notify
+:chaos.esper.net CAP TestUser123 ACK :away-notify
+:chaos.esper.net 001 TestUser123 :Welcome to the EsperNet Internet Relay Chat Network TestUser123
+:chaos.esper.net 002 TestUser123 :Your host is chaos.esper.net[72.14.191.81/6667], running version charybdis-3.5.0-dev
+:chaos.esper.net 003 TestUser123 :This server was created Sun Oct 11 2015 at 20:24:54 EDT
+:chaos.esper.net 004 TestUser123 chaos.esper.net charybdis-3.5.0-dev DQRSZagiloswz CFILPQTbcefgijklmnopqrstvz bkloveqjfI
+:chaos.esper.net 005 TestUser123 SAFELIST ELIST=CTU CHANTYPES=# EXCEPTS INVEX CHANMODES=eIbq,k,flj,CFLPQTcgimnprstz CHANLIMIT=#:50 PREFIX=(ov)@+ MAXLIST=bqeI:100 MODES=4 NETWORK=EsperNet KNOCK :are supported by this server
+:chaos.esper.net 005 TestUser123 STATUSMSG=@+ CALLERID=g CASEMAPPING=rfc1459 NICKLEN=30 MAXNICKLEN=30 CHANNELLEN=50 TOPICLEN=390 ETRACE CPRIVMSG CNOTICE DEAF=D MONITOR=100 :are supported by this server
+:chaos.esper.net 005 TestUser123 FNC TARGMAX=NAMES:1,LIST:1,KICK:1,WHOIS:1,PRIVMSG:4,NOTICE:4,ACCEPT:,MONITOR: EXTBAN=$,acjorsxz WHOX CLIENTVER=3.0 :are supported by this server
+:chaos.esper.net 251 TestUser123 :There are 9 users and 7230 invisible on 15 servers
+:chaos.esper.net 252 TestUser123 35 :IRC Operators online
+:chaos.esper.net 254 TestUser123 5435 :channels formed
+:chaos.esper.net 255 TestUser123 :I have 127 clients and 1 servers
+:chaos.esper.net 265 TestUser123 127 132 :Current local users 127, max 132
+:chaos.esper.net 266 TestUser123 7239 7370 :Current global users 7239, max 7370
+:chaos.esper.net 250 TestUser123 :Highest connection count: 133 (132 clients) (1972 connections received)
+:chaos.esper.net 375 TestUser123 :- chaos.esper.net Message of the Day -
+:chaos.esper.net 372 TestUser123 :-
+:chaos.esper.net 372 TestUser123 :-      _|_|_|      _|    _|        _|_|          _|_|          _|_|_|
+:chaos.esper.net 372 TestUser123 :-    _|            _|    _|      _|    _|      _|    _|      _|
+:chaos.esper.net 372 TestUser123 :-    _|            _|_|_|_|      _|_|_|_|      _|    _|        _|_|
+:chaos.esper.net 372 TestUser123 :-    _|            _|    _|      _|    _|      _|    _|            _|
+:chaos.esper.net 372 TestUser123 :-      _|_|_|      _|    _|      _|    _|        _|_|        _|_|_|
+:chaos.esper.net 372 TestUser123 :-                             chaos.esper.net
+:chaos.esper.net 372 TestUser123 :-
+:chaos.esper.net 376 TestUser123 :End of /MOTD command.
+:TestUser123 MODE TestUser123 :+i

@@ -163,6 +163,9 @@ public class TestCaseBuilders extends TestCase
 		ServerNumericMessage _msg = _builder.build(new Message("421 WTF :Unknown command"));
 		assertEquals(421, (int) _msg.getNumericCode());
 		//assertEquals(TEST_USER, _msg.getTarget());
+
+		_msg = _builder.build(new Message(":chaos.esper.net 005 Nickname SAFELIST ELIST=CTU CHANTYPES=# EXCEPTS INVEX CHANMODES=eIbq,k,flj,CFLPQTcgimnprstz CHANLIMIT=#:50 PREFIX=(ov)@+ MAXLIST=bqeI:100 MODES=4 NETWORK=EsperNet KNOCK :are supported by this server"));
+		assertEquals(5, (int) _msg.getNumericCode());
 	}
 	
 }

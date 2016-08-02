@@ -13,7 +13,7 @@ public class TestCaseConnectToDifferentServers
 	@Test
 	public void connectToEFnetMzima() throws Exception
 	{
-		ConnectedApi _api = MockUtils.newConnectedApi(new MockConnectionImpl("irc.mzima.net"), newMockServerParameters(), 2);
+		ConnectedApi _api = MockUtils.newConnectedApi(new MockConnectionImpl("irc.mzima.net"), newMockServerParameters("irc.mzima.net"), 2);
 
 		assertNotNull(_api);
 		Assert.assertEquals("HAHAA", _api.getConnectedState().getNickname());
@@ -51,7 +51,7 @@ public class TestCaseConnectToDifferentServers
 	@Test
 	public void connectToFreenode() throws Exception
 	{
-		ConnectedApi _api = MockUtils.newConnectedApi(new MockConnectionImpl("irc.freenode.net"), newMockServerParameters(), 2);
+		ConnectedApi _api = MockUtils.newConnectedApi(new MockConnectionImpl("irc.freenode.net"), newMockServerParameters("irc.freenode.net"), 2);
 		Assert.assertEquals("hahaeheh", _api.getConnectedState().getNickname());
 		assertUserStatuses(_api.getConnectedState().getServerOptions().getUserChanStatuses());
 		assertChannelModes(_api.getConnectedState().getServerOptions().getChannelModes(), new HashSet<Character>()
@@ -99,8 +99,8 @@ public class TestCaseConnectToDifferentServers
 
 	@Test
 	public void connectToChaos() throws Exception {
-		ConnectedApi _api = MockUtils.newConnectedApi(new MockConnectionImpl("chaos.esper.net"), newMockServerParameters(), 2);
-		Assert.assertEquals("hahaeheh", _api.getConnectedState().getNickname());
+		ConnectedApi _api = MockUtils.newConnectedApi(new MockConnectionImpl("chaos.esper.net"), newMockServerParameters("chaos.esper.net"), 2);
+		Assert.assertEquals("TestUser123", _api.getConnectedState().getNickname());
 		assertUserStatuses(_api.getConnectedState().getServerOptions().getUserChanStatuses());
 		assertChannelModes(_api.getConnectedState().getServerOptions().getChannelModes(), new HashSet<Character>() {
 			{
@@ -124,18 +124,18 @@ public class TestCaseConnectToDifferentServers
 				add('C');
 				add('F');
 				add('L');
-				add('M');
 				add('P');
 				add('Q');
+				add('T');
 				add('c');
 				add('g');
 				add('i');
 				add('m');
 				add('n');
 				add('p');
+				add('r');
 				add('s');
 				add('t');
-				add('r');
 				add('z');
 			}
 		});
@@ -144,7 +144,7 @@ public class TestCaseConnectToDifferentServers
 	@Test
 	public void connectToDALnetMesra() throws Exception
 	{
-		ConnectedApi _api = MockUtils.newConnectedApi(new MockConnectionImpl("mesra.dal.net"), newMockServerParameters(), 2);
+		ConnectedApi _api = MockUtils.newConnectedApi(new MockConnectionImpl("mesra.dal.net"), newMockServerParameters("mesra.dal.net"), 2);
 		Assert.assertEquals("hasdd", _api.getConnectedState().getNickname());
 		assertUserStatuses(_api.getConnectedState().getServerOptions().getUserChanStatuses());
 		assertChannelModes(_api.getConnectedState().getServerOptions().getChannelModes(), new HashSet<Character>()
@@ -192,9 +192,9 @@ public class TestCaseConnectToDifferentServers
 		Assert.assertEquals(aExpectedUserStatus.getChanModeType(), aActualUserStatus.getChanModeType());
 	}
 
-	private MockServerParametersImpl newMockServerParameters()
+	private MockServerParametersImpl newMockServerParameters(String name)
 	{
-		return new MockServerParametersImpl("test", Arrays.asList("heh1", "heh2"), "ident", "a real name", new IRCServer("irc.mzima.net"));
+		return new MockServerParametersImpl("test", Arrays.asList("heh1", "heh2"), "ident", "a real name", new IRCServer(name));
 	}
 
 	private void assertUserStatuses(IRCUserStatuses aIRCUserStatuses)

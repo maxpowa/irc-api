@@ -19,11 +19,11 @@ public class ServerNumericMessage implements IServerMessage, IHasText, IHasNumer
 	private IRCServer server;
 	private String target;
 
-	public ServerNumericMessage(Integer aNumericCode, String aTarget, String aText, IRCServer aServer)
+	public ServerNumericMessage(Integer aNumericCode, String aTarget, String[] aText, IRCServer aServer)
 	{
 		numericCode = aNumericCode;
 		target = aTarget;
-		text = aText;
+		text = strJoin(aText, " ");
 		server = aServer;
 	}
 
@@ -40,6 +40,16 @@ public class ServerNumericMessage implements IServerMessage, IHasText, IHasNumer
 	public String getTarget()
 	{
 		return target;
+	}
+
+	public static String strJoin(String[] aArr, String sSep) {
+		StringBuilder sbStr = new StringBuilder();
+		for (int i = 0, il = aArr.length; i < il; i++) {
+			if (i > 0)
+				sbStr.append(sSep);
+			sbStr.append(aArr[i]);
+		}
+		return sbStr.toString();
 	}
 
 	@Override
