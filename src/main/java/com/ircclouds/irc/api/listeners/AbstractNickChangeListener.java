@@ -30,9 +30,8 @@ public abstract class AbstractNickChangeListener
 		}
 	}
 
-	public void onServerMessage(ServerNumericMessage aServerMessage)
-	{
-		Callback<String> _callback = callbacks.remove(aServerMessage.getText().split(" ")[0]);
+	public void onServerMessage(ServerNumeric aServerMessage) {
+		Callback<String> _callback = callbacks.remove(aServerMessage.params.get(0));
 		if (_callback != null)
 		{
 			if (aServerMessage.getNumericCode().equals(IRCServerNumerics.NICKNAME_IN_USE))

@@ -2,6 +2,7 @@ package com.ircclouds.irc.api.om;
 
 import java.util.*;
 
+import com.ircclouds.irc.api.domain.messages.ChannelMode;
 import junit.framework.*;
 
 import com.ircclouds.irc.api.domain.*;
@@ -43,10 +44,10 @@ public class TestCaseChanModeBuilder extends TestCase
 	
 	public void testAddModesOnly()
 	{
-		ChannelModeMessage _msg = chanModeBuilder.build(new Message(":krad!~k@unaffiliated/krad MODE #r0b0t +kt key"));
-		
-		List<ChannelMode> _addedModes = _msg.getAddedModes();
-		List<ChannelMode> _removedModes = _msg.getRemovedModes();
+		ChannelMode _msg = chanModeBuilder.build(new Message(":krad!~k@unaffiliated/krad MODE #r0b0t +kt key"));
+
+		List<com.ircclouds.irc.api.domain.ChannelMode> _addedModes = _msg.getAddedModes();
+		List<com.ircclouds.irc.api.domain.ChannelMode> _removedModes = _msg.getRemovedModes();
 		
 		assertTrue("+kt key".equals(_msg.getModeStr()));
 		assertTrue(_addedModes != null);
@@ -60,10 +61,10 @@ public class TestCaseChanModeBuilder extends TestCase
 	
 	public void testRemoveModesOnly()
 	{
-		ChannelModeMessage _msg = chanModeBuilder.build(new Message(":krad!~k@unaffiliated/krad MODE #r0b0t -kts *"));
-		
-		List<ChannelMode> _addedModes = _msg.getAddedModes();
-		List<ChannelMode> _removedModes = _msg.getRemovedModes();
+		ChannelMode _msg = chanModeBuilder.build(new Message(":krad!~k@unaffiliated/krad MODE #r0b0t -kts *"));
+
+		List<com.ircclouds.irc.api.domain.ChannelMode> _addedModes = _msg.getAddedModes();
+		List<com.ircclouds.irc.api.domain.ChannelMode> _removedModes = _msg.getRemovedModes();
 		
 		assertTrue("-kts *".equals(_msg.getModeStr()));
 		assertTrue(_removedModes != null);
@@ -78,10 +79,10 @@ public class TestCaseChanModeBuilder extends TestCase
 	
 	public void testAddModesWith2Params()
 	{
-		ChannelModeMessage _msg = chanModeBuilder.build(new Message(":krad!~k@unaffiliated/krad MODE #r0b0t +kltn key 4"));
-		
-		List<ChannelMode> _addedModes = _msg.getAddedModes();
-		List<ChannelMode> _removedModes = _msg.getRemovedModes();
+		ChannelMode _msg = chanModeBuilder.build(new Message(":krad!~k@unaffiliated/krad MODE #r0b0t +kltn key 4"));
+
+		List<com.ircclouds.irc.api.domain.ChannelMode> _addedModes = _msg.getAddedModes();
+		List<com.ircclouds.irc.api.domain.ChannelMode> _removedModes = _msg.getRemovedModes();
 		
 		assertTrue("+kltn key 4".equals(_msg.getModeStr()));
 		assertTrue(_addedModes != null);
@@ -97,10 +98,10 @@ public class TestCaseChanModeBuilder extends TestCase
 	
 	public void testAddRemoveModes()
 	{
-		ChannelModeMessage _msg = chanModeBuilder.build(new Message(":krad!~k@unaffiliated/krad MODE #r0b0t +kt-ln key"));
-		
-		List<ChannelMode> _addedModes = _msg.getAddedModes();
-		List<ChannelMode> _removedModes = _msg.getRemovedModes();
+		ChannelMode _msg = chanModeBuilder.build(new Message(":krad!~k@unaffiliated/krad MODE #r0b0t +kt-ln key"));
+
+		List<com.ircclouds.irc.api.domain.ChannelMode> _addedModes = _msg.getAddedModes();
+		List<com.ircclouds.irc.api.domain.ChannelMode> _removedModes = _msg.getRemovedModes();
 		
 		assertTrue("+kt-ln key".equals(_msg.getModeStr()));
 		assertTrue(_addedModes != null);
@@ -113,21 +114,36 @@ public class TestCaseChanModeBuilder extends TestCase
 		assertTrue(_removedModes.size() == 2);
 		assertTrue(_removedModes.contains(new ChannelModeC('l')));
 		assertTrue(_removedModes.contains(new ChannelModeD('n')));
+
+		_msg = chanModeBuilder.build(new Message(":krad!~k@unaffiliated/krad MODE #r0b0t -e+ln key key"));
+
+		_addedModes = _msg.getAddedModes();
+		_removedModes = _msg.getRemovedModes();
+
+		assertTrue("-e+ln key key".equals(_msg.getModeStr()));
+		assertTrue(_addedModes != null);
+		assertTrue(_addedModes.size() == 2);
+		assertTrue(_addedModes.contains(new ChannelModeC('l')));
+		assertTrue(_addedModes.contains(new ChannelModeD('n')));
+
+		assertTrue(_removedModes != null);
+		assertTrue(_removedModes.size() == 1);
+		assertTrue(_removedModes.contains(new ChannelModeA('e', "*")));
 	}
 	
 	public void testRemoveLimitOnly()
 	{
-		ChannelModeMessage _msg = chanModeBuilder.build(new Message(":krad!~k@unaffiliated/krad MODE #r0b0t -l"));
+		ChannelMode _msg = chanModeBuilder.build(new Message(":krad!~k@unaffiliated/krad MODE #r0b0t -l"));
 		
 		assertTrue(_msg.getRemovedModes().contains(new ChannelModeC('l')));			
 	}
 	
 	public void testAddRemoveAddRemove()
 	{
-		ChannelModeMessage _msg = chanModeBuilder.build(new Message(":krad!~k@unaffiliated/krad MODE #r0b0t +nto-o+o-o+o-o goraaab goraaab goraaab goraaab goraaab goraaab"));
-		
-		List<ChannelMode> _addedModes = _msg.getAddedModes();
-		List<ChannelMode> _removedModes = _msg.getRemovedModes();
+		ChannelMode _msg = chanModeBuilder.build(new Message(":krad!~k@unaffiliated/krad MODE #r0b0t +nto-o+o-o+o-o goraaab goraaab goraaab goraaab goraaab goraaab"));
+
+		List<com.ircclouds.irc.api.domain.ChannelMode> _addedModes = _msg.getAddedModes();
+		List<com.ircclouds.irc.api.domain.ChannelMode> _removedModes = _msg.getRemovedModes();
 		
 		assertTrue(_addedModes != null);
 		assertTrue(_addedModes.size() == 5);

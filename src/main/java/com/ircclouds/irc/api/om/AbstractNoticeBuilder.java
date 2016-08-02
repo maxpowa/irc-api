@@ -11,24 +11,14 @@ public abstract class AbstractNoticeBuilder implements IBuilder<IMessage>
 {
 	public IMessage build(Message aMessage)
 	{
-		if (aMessage.prefix == null) {
-			return new ServerNotice(aMessage.getText(), null);
-		} else if (!aMessage.prefix.contains("@")) {
-			return new ServerNotice(aMessage.getText(), new IRCServer(aMessage.prefix));
-		}
+        if (aMessage.prefix == null || !aMessage.prefix.contains("@")) {
+            return new ServerNotice(aMessage);
+        }
 
-		WritableIRCUser _user = ParseUtils.getUser(aMessage.prefix);
-
-		UserNotice _msg;
-
-		if (getChannelTypes().contains(aMessage.params.get(0).charAt(0)))
-		{
-			_msg = new ChannelNotice(_user, aMessage.getText(), aMessage.params.get(0));
-		}
-		else
-		{
-			_msg = new UserNotice(_user, aMessage.getText(), aMessage.params.get(0));
-		}
+        UserNotice _msg = new UserNotice(aMessage);
+        if (getChannelTypes().contains(aMessage.params.get(0).charAt(0))) {
+            _msg = new ChannelNotice(aMessage);
+        }
 
 		return _msg;
 	}

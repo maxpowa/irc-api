@@ -2,14 +2,11 @@ package com.ircclouds.irc.api.om;
 
 import java.util.*;
 
-import com.ircclouds.irc.api.domain.*;
 import com.ircclouds.irc.api.domain.messages.*;
-import com.ircclouds.irc.api.utils.*;
 
 public abstract class AbstractPrivateMessageBuilder implements IBuilder<AbstractPrivMsg>
 {
 	private static final char NUL = '\001';
-	private static final String EMPTY = " ";
 	private static final String PING = "PING";
 	private static final String VERSION = "VERSION";
 	private static final String ACTION = "ACTION";
@@ -17,75 +14,60 @@ public abstract class AbstractPrivateMessageBuilder implements IBuilder<Abstract
 	@Override
 	public AbstractPrivMsg build(Message aMessage)
 	{
-		String _components[] = aMessage.raw.split(EMPTY);
-		WritableIRCUser _user = ParseUtils.getUser(aMessage.prefix);
-
 		final AbstractPrivMsg _msg;
-		String _m = aMessage.raw.substring(aMessage.raw.indexOf(" :") + 2);
+		String _m = aMessage.getText();
 
-		if (!_components[2].isEmpty() && getChannelTypes().contains(_components[2].charAt(0)))
+		if (!aMessage.params.get(0).isEmpty() && getChannelTypes().contains(aMessage.params.get(0).charAt(0)))
 		{
-			// channel msg
-			final ChannelPrivMsg _cPrivMsg;
-			String _chanName = _components[2];
-
 			if (_m.length() >= 2 && _m.charAt(0) == NUL && _m.charAt(_m.length() - 1) == NUL)
 			{
-				String _type = _m.substring(1, _m.length() - 1);
-				_m = _type;
-				if (VERSION.equals(_type))
+				String _type = aMessage.getText().substring(1, aMessage.getText().length() - 1);
+				if (_type.startsWith(VERSION))
 				{
-					_cPrivMsg = new ChannelVersionMsg(_user, _m, _chanName);
-				}
-				else if (PING.equals(_type))
+					_msg = new ChannelVersion(aMessage);
+				} else if (_type.startsWith(PING))
 				{
-					_cPrivMsg = new ChannelPingMsg(_user, _m, _chanName);
+					_msg = new ChannelPing(aMessage);
 				}
 				else if (_type.startsWith(ACTION))
 				{
-					_m = _m.substring(_m.indexOf(' ') + 1);
-					_cPrivMsg = new ChannelActionMsg(_user, _m, _chanName);
+					_msg = new ChannelAction(aMessage);
 				}
 				else
 				{
-					_cPrivMsg = new ChannelCTCPMsg(_user, _m, _chanName);
+					_msg = new ChannelCTCP(aMessage);
 				}
 			}
 			else
 			{
-				_cPrivMsg = new ChannelPrivMsg(_user, _m, _chanName);
+				_msg = new ChannelPrivMsg(aMessage);
 			}
-
-			_msg = _cPrivMsg;
 		}
 		else
 		{
 			// user msg
 			if (_m.length() >= 2 && _m.charAt(0) == NUL && _m.charAt(_m.length() - 1) == NUL)
 			{
-				String _type = _m.substring(1, _m.length() - 1);
-				_m = _type;
-				if (VERSION.compareTo(_type) <= 0)
+				String _type = aMessage.getText().substring(1, aMessage.getText().length() - 1);
+				if (_type.startsWith(VERSION))
 				{
-					_msg = new UserVersion(_user, _components[2], _m);
-				}
-				else if (PING.compareTo(_type) <= 0)
+					_msg = new UserVersion(aMessage);
+				} else if (_type.startsWith(PING))
 				{
-					_msg = new UserPing(_user, _components[2], _m);
+					_msg = new UserPing(aMessage);
 				}
 				else if (_type.startsWith(ACTION))
 				{
-					_m = _m.substring(_m.indexOf(' ') + 1);
-					_msg = new UserActionMsg(_user, _components[2], _m);
+					_msg = new UserAction(aMessage);
 				}
 				else
 				{
-					_msg = new UserCTCPMsg(_user, _components[2], _m);
+					_msg = new UserCTCP(aMessage);
 				}
 			}
 			else
 			{
-				_msg = new UserPrivMsg(_user, _components[2], _m);
+				_msg = new UserPrivMsg(aMessage);
 			}
 		}
 

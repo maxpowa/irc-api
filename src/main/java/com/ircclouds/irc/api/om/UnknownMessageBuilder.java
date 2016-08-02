@@ -15,6 +15,6 @@ public class UnknownMessageBuilder implements IBuilder<UnknownMessage>
 	@Override
 	public UnknownMessage build(Message aMessage)
 	{
-		return new UnknownMessage(aMessage.raw);
-	}
+        return new UnknownMessage(aMessage);
+    }
 }

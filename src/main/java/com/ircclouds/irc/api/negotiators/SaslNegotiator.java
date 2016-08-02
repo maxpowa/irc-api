@@ -3,7 +3,7 @@ package com.ircclouds.irc.api.negotiators;
 
 import com.ircclouds.irc.api.*;
 import com.ircclouds.irc.api.commands.*;
-import com.ircclouds.irc.api.domain.messages.ServerNumericMessage;
+import com.ircclouds.irc.api.domain.messages.ServerNumeric;
 import com.ircclouds.irc.api.domain.messages.interfaces.*;
 import com.ircclouds.irc.api.listeners.VariousMessageListenerAdapter;
 import com.ircclouds.irc.api.negotiators.api.Relay;
@@ -26,7 +26,7 @@ public class SaslNegotiator extends VariousMessageListenerAdapter implements Cap
 
 	private static final String SASL_CAPABILITY_ID = "sasl";
 
-	private static final Pattern CAPABILITY_ACK = Pattern.compile("\\sCAP\\s+([^\\s]+)\\s+ACK\\s+:([\\w-_]+(?:\\s+[\\w-_]+)*)\\s*$", 0);
+	private static final Pattern CAPABILITY_ACK = Pattern.compile("\\sCAP\\s+([^\\s]+)\\s+ACK\\s+:([-\\w_]+(?:\\s+[-\\w_]+)*)\\s*$", 0);
 	private static final Pattern CAPABILITY_NAK = Pattern.compile("\\sCAP\\s+([^\\s]+)\\s+NAK");
 	private static final Pattern AUTHENTICATE_CONFIRMATION = Pattern.compile("AUTHENTICATE\\s+(\\+)\\s*$", 0);
 
@@ -138,8 +138,7 @@ public class SaslNegotiator extends VariousMessageListenerAdapter implements Cap
 	}
 
 	@Override
-	public void onServerNumericMessage(ServerNumericMessage msg)
-	{
+	public void onServerNumericMessage(ServerNumeric msg) {
 		if (LOG.isDebugEnabled())
 		{
 			LOG.debug("SERVER: {}", msg.asRaw());

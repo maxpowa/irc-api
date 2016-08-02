@@ -1,26 +1,17 @@
 package com.ircclouds.irc.api.domain.messages;
 
-import com.ircclouds.irc.api.domain.*;
-
 public class UserPrivMsg extends AbstractPrivMsg
 {
-	private String toUser;
-
-	public UserPrivMsg(IRCUser aFromUser, String aToUser, String aText)
-	{
-		super(aFromUser, aText);
-
-		toUser = aToUser;
+	public UserPrivMsg(Message message) {
+		super(message);
 	}
 
-	public String getToUser()
-	{
-		return toUser;
+	public String getTarget() {
+		return this.params.get(0);
 	}
 
 	@Override
-	public String asRaw()
-	{
-		return new StringBuffer().append(":").append(fromUser).append(" PRIVMSG ").append(toUser).append(" :").append(text).toString();
+	public String asRaw() {
+		return new StringBuffer().append(":").append(this.getSource()).append(" PRIVMSG ").append(this.getTarget()).append(" :").append(this.getText()).toString();
 	}
 }

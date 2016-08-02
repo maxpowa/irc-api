@@ -5,14 +5,19 @@ import com.ircclouds.irc.api.domain.messages.interfaces.*;
 
 public class ChannelNotice extends UserNotice implements IChannelMessage
 {
-	public ChannelNotice(IRCUser aFromUser, String aText, String aChannelName)
+	public ChannelNotice(Message message)
 	{
-		super(aFromUser, aText, aChannelName);
+		super(message);
 	}
 
 	@Override
 	public String getChannelName()
 	{
-		return target;
+		return this.params.get(0);
+	}
+
+	@Override
+	public String asRaw() {
+		return new StringBuffer().append(":").append(this.getSource()).append(" NOTICE ").append(this.params.get(0)).append(" :").append(this.getText()).toString();
 	}
 }

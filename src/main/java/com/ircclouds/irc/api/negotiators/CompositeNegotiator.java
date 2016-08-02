@@ -6,7 +6,7 @@ import com.ircclouds.irc.api.commands.CapCmd;
 import com.ircclouds.irc.api.commands.CapEndCmd;
 import com.ircclouds.irc.api.commands.CapLsCmd;
 import com.ircclouds.irc.api.commands.ICommand;
-import com.ircclouds.irc.api.domain.messages.ServerNumericMessage;
+import com.ircclouds.irc.api.domain.messages.ServerNumeric;
 import com.ircclouds.irc.api.domain.messages.interfaces.IMessage;
 import com.ircclouds.irc.api.listeners.IMessageListener;
 import com.ircclouds.irc.api.negotiators.api.Relay;
@@ -37,8 +37,8 @@ public class CompositeNegotiator implements CapabilityNegotiator, IMessageListen
 	 */
 	private static final Logger LOG = LoggerFactory.getLogger(CompositeNegotiator.class);
 
-	private static final Pattern CAPABILITY_LS = Pattern.compile("\\sCAP\\s+([^\\s]+)\\s+LS\\s+:([\\w-_]+(?:\\s+[\\w-_]+)*)\\s*$", 0);
-	private static final Pattern CAPABILITY_ACK = Pattern.compile("\\sCAP\\s+([^\\s]+)\\s+ACK\\s+:([\\w-_]+(?:\\s+[\\w-_]+)*)\\s*$", 0);
+	private static final Pattern CAPABILITY_LS = Pattern.compile("\\sCAP\\s+([^\\s]+)\\s+LS\\s+:([-\\w_]+(?:\\s+[-\\w_]+)*)\\s*$", 0);
+	private static final Pattern CAPABILITY_ACK = Pattern.compile("\\sCAP\\s+([^\\s]+)\\s+ACK\\s+:([-\\w_]+(?:\\s+[-\\w_]+)*)\\s*$", 0);
 	private static final Pattern CAPABILITY_NAK = Pattern.compile("\\sCAP\\s+([^\\s]+)\\s+NAK");
 
 	/**
@@ -163,9 +163,8 @@ public class CompositeNegotiator implements CapabilityNegotiator, IMessageListen
 		{
 			LOG.debug("SERVER: {}", msg.asRaw());
 		}
-		if (msg instanceof ServerNumericMessage)
-		{
-			final ServerNumericMessage numeric = (ServerNumericMessage) msg;
+		if (msg instanceof ServerNumeric) {
+			final ServerNumeric numeric = (ServerNumeric) msg;
 			if (numeric.getNumericCode() == 1)
 			{
 				// server numeric message 001 is indication that IRC server finished

@@ -11,13 +11,10 @@ public class AsyncMessageListener
 	private static final List<Integer> NUMERICS = Arrays.asList(IRCServerNumerics.NO_SUCH_NICK_CHANNEL, IRCServerNumerics.NO_EXTERNAL_CHANNEL_MESSAGES);
 	
 	private Queue<AsyncTriple> myQueue = new LinkedList<AsyncTriple>();
-	
-	public void onServerMsg(ServerNumericMessage aMsg)
-	{
-		if (NUMERICS.contains(aMsg.getNumericCode()))
-		{
-			String aText = aMsg.getText();
-			String cmpnts[] = aText.split(" :");
+
+    public void onServerMsg(ServerNumeric aMsg) {
+        if (NUMERICS.contains(aMsg.getNumericCode())) {
+            String cmpnts[] = aMsg.params.toArray(new String[0]);
 
 			AsyncTriple _aTrip = myQueue.peek();
 			if (_aTrip != null)
@@ -32,11 +29,11 @@ public class AsyncMessageListener
 				}
 				else
 				{
-					_aTrip.callback.onFailure(new IRCException(aText));
-					_aTrip.flag = true;
-				}
-			}
-		}
+                    _aTrip.callback.onFailure(new IRCException(aMsg.getText()));
+                    _aTrip.flag = true;
+                }
+            }
+        }
 	}
 
 	public void submit(int aAsyncId, Callback<String> aCallback)

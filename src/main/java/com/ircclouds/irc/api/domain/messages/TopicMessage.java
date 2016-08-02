@@ -2,39 +2,36 @@ package com.ircclouds.irc.api.domain.messages;
 
 import com.ircclouds.irc.api.domain.*;
 import com.ircclouds.irc.api.domain.messages.interfaces.*;
+import com.ircclouds.irc.api.utils.ParseUtils;
 
-public class TopicMessage implements IChannelMessage, IUserMessage
+import java.util.Date;
+
+public class TopicMessage extends Message implements IChannelMessage, IUserMessage
 {
-	private String channel;
 	private IRCTopic topic;
-	private IRCUser user;
 
-	public TopicMessage(IRCUser aUser, String aChannel, IRCTopic aTopic)
-	{
-		user = aUser;
-		channel = aChannel;
-		topic = aTopic;
+	public TopicMessage(Message message) {
+		super(message);
+
+		topic = new WritableIRCTopic(this.getSource().toString(), new Date(), this.getText());
 	}
 
-	public String getChannelName()
-	{
-		return channel;
-	}
-
-	public IRCTopic getTopic()
-	{
+	public IRCTopic getTopic() {
 		return topic;
 	}
 
 	@Override
-	public IRCUser getSource()
-	{
-		return user;
+	public String asRaw() {
+		return new StringBuffer().append(":").append(this.getSource()).append(" TOPIC ").append(this.getChannelName()).append(" :").append(topic.getValue()).toString();
 	}
 
 	@Override
-	public String asRaw()
-	{
-		return new StringBuffer().append(":").append(user).append(" TOPIC ").append(channel).append(" :").append(topic.getValue()).toString();
+	public String getChannelName() {
+		return this.params.get(0);
+	}
+
+	@Override
+	public IRCUser getSource() {
+		return ParseUtils.getUser(this.prefix);
 	}
 }

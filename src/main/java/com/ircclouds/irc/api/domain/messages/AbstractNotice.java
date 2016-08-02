@@ -2,17 +2,14 @@ package com.ircclouds.irc.api.domain.messages;
 
 import com.ircclouds.irc.api.domain.messages.interfaces.*;
 
-public abstract class AbstractNotice implements IHasText
+public abstract class AbstractNotice extends Message implements IHasText
 {
-	String text;
+	public AbstractNotice(Message message) {
+		super(message);
+	}
 
 	public AbstractNotice(String aText)
 	{
-		text = aText;
-	}
-	
-	public String getText()
-	{
-		return text;
+		super(aText);
 	}
 }

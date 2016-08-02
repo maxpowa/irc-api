@@ -35,11 +35,9 @@ public class ConnectCmdListener
 		properties = new Properties();
 	}
 
-	public void onServerMessage(ServerNumericMessage aServMsg)
-	{
-		if (aServMsg.getNumericCode() == IRCServerNumerics.NICKNAME_IN_USE)
-		{
-			String _altNick = null;
+    public void onServerMessage(ServerNumeric aServMsg) {
+        if (aServMsg.getNumericCode() == IRCServerNumerics.NICKNAME_IN_USE) {
+            String _altNick = null;
 			if (!altNicks.isEmpty())
 			{
 				_altNick = altNicks.poll();
@@ -68,12 +66,9 @@ public class ConnectCmdListener
 		}
 		else if (aServMsg.getNumericCode().equals(IRCServerNumerics.SERVER_OPTIONS))
 		{
-			String _opts[] = aServMsg.getText().split(" ");
-			for (String _opt : _opts)
-			{
-				if (_opt.contains("="))
-				{
-					String _kv[] = _opt.split("=");
+            for (String _opt : aServMsg.params) {
+                if (_opt.contains("=")) {
+                    String _kv[] = _opt.split("=");
 					properties.put(_kv[0], _kv[1]);
 				}
 			}

@@ -4,12 +4,11 @@ import com.ircclouds.irc.api.domain.messages.*;
 
 public class SendServerPingReplyCmd implements ICommand
 {
-	private ServerPongMessage pong;
+    private ServerPong pong;
 
-	public SendServerPingReplyCmd(ServerPongMessage aPong)
-	{
-		pong = aPong;
-	}
+    public SendServerPingReplyCmd(ServerPong aPong) {
+        pong = aPong;
+    }
 
 	public String asString()
 	{

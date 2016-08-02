@@ -4,17 +4,18 @@ import java.util.*;
 
 import com.ircclouds.irc.api.domain.*;
 import com.ircclouds.irc.api.domain.messages.*;
+import com.ircclouds.irc.api.domain.messages.ChannelMode;
 import com.ircclouds.irc.api.utils.*;
 
-public abstract class AbstractChanModeBuilder implements IBuilder<ChannelModeMessage>
+public abstract class AbstractChanModeBuilder implements IBuilder<ChannelMode>
 {
-	public ChannelModeMessage build(Message aMessage)
+	public ChannelMode build(Message aMessage)
 	{
 		Stack<String> _params = new Stack<String>();
 		_params.addAll(aMessage.params.subList(2, aMessage.params.size()));
-		
-		List<ChannelMode> _addedModes = new ArrayList<ChannelMode>();
-		List<ChannelMode> _removedModes = new ArrayList<ChannelMode>();
+
+		List<com.ircclouds.irc.api.domain.ChannelMode> _addedModes = new ArrayList<com.ircclouds.irc.api.domain.ChannelMode>();
+		List<com.ircclouds.irc.api.domain.ChannelMode> _removedModes = new ArrayList<com.ircclouds.irc.api.domain.ChannelMode>();
 
 		String _modesStr = aMessage.params.get(1);
 		for (int _i = 0; _i < _modesStr.length(); _i++)
@@ -62,7 +63,7 @@ public abstract class AbstractChanModeBuilder implements IBuilder<ChannelModeMes
 			}
 		}
 
-		return new ChannelModeMessage(ParseUtils.getSource(aMessage.prefix), aMessage.params.get(0), getModeStr(aMessage.params), _addedModes, _removedModes);
+		return new ChannelMode(ParseUtils.getSource(aMessage.prefix), aMessage.params.get(0), getModeStr(aMessage.params), _addedModes, _removedModes);
 	}
 
 	protected abstract IRCServerOptions getIRCServerOptions();
@@ -80,7 +81,7 @@ public abstract class AbstractChanModeBuilder implements IBuilder<ChannelModeMes
 		return _sb.substring(0, _sb.length() -1).toString();
 	}
 
-	private void parseModes(Stack<String> aParams, List<ChannelMode> aModes, String aModesStr, boolean aAddFlag)
+	private void parseModes(Stack<String> aParams, List<com.ircclouds.irc.api.domain.ChannelMode> aModes, String aModesStr, boolean aAddFlag)
 	{
 		for (int _i = 0; _i < aModesStr.length(); _i++)
 		{

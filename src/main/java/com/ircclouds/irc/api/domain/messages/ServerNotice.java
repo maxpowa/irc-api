@@ -6,12 +6,12 @@ import com.ircclouds.irc.api.domain.messages.interfaces.*;
 public class ServerNotice extends AbstractNotice implements IServerMessage
 {
 	private IRCServer server;
-	
-	public ServerNotice(String aText, IRCServer aServer)
+
+	public ServerNotice(Message message)
 	{
-		super(aText);
-		
-		server = aServer;
+		super(message);
+
+		server = this.prefix != null ? new IRCServer(this.prefix) : null;
 	}
 
 	@Override
@@ -23,6 +23,10 @@ public class ServerNotice extends AbstractNotice implements IServerMessage
 	@Override
 	public String asRaw()
 	{
-		return new StringBuffer().append(":").append(server).append(" NOTICE AUTH :").append(text).toString();
+		StringBuffer sb = new StringBuffer();
+		if (this.getSource() != null) {
+			sb.append(":").append(this.getSource()).append(" ");
+		}
+		return sb.append("NOTICE :").append(this.getText()).toString();
 	}
 }

@@ -15,8 +15,8 @@ public abstract class AbstractPingVersionListener extends VariousMessageListener
 	@Override
 	public void onServerPing(ServerPing aMsg)
 	{
-		execute(new SendServerPingReplyCmd(new ServerPongMessage(aMsg.getText())));
-	}
+        execute(new SendServerPingReplyCmd(new ServerPong(aMsg)));
+    }
 
 	protected abstract IIRCSession getSession();
 	

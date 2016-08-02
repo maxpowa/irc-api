@@ -23,16 +23,14 @@ public abstract class AbstractChannelJoinListener
 		callbacks.put(aChannelName, aCallback);
 	}
 
-	public void onChanJoinMessage(ChanJoinMessage aMsg)
-	{
-		saveChannel(channel = new WritableIRCChannel(aMsg.getChannelName()));
-	}
+    public void onChanJoinMessage(ChannelJoin aMsg) {
+        saveChannel(channel = new WritableIRCChannel(aMsg.getChannelName()));
+    }
 
-	public void onServerMessage(ServerNumericMessage aServerMessage)
-	{
-		int _numcode = aServerMessage.getNumericCode();
-		if (_numcode == IRCServerNumerics.CHANNEL_FORWARD || _numcode == IRCServerNumerics.TOPIC_USER_DATE || _numcode == IRCServerNumerics.CHANNEL_NICKS_LIST
-				|| _numcode == IRCServerNumerics.CHANNEL_TOPIC || _numcode == IRCServerNumerics.CHANNEL_NICKS_END_OF_LIST
+    public void onServerMessage(ServerNumeric aServerMessage) {
+        int _numcode = aServerMessage.getNumericCode();
+        if (_numcode == IRCServerNumerics.CHANNEL_FORWARD || _numcode == IRCServerNumerics.TOPIC_USER_DATE || _numcode == IRCServerNumerics.CHANNEL_NICKS_LIST
+                || _numcode == IRCServerNumerics.CHANNEL_TOPIC || _numcode == IRCServerNumerics.CHANNEL_NICKS_END_OF_LIST
 				|| _numcode == IRCServerNumerics.CHANNEL_CANNOT_JOIN_INVITE || _numcode == IRCServerNumerics.CHANNEL_CANNOT_JOIN_KEYED
 				|| _numcode == IRCServerNumerics.CHANNEL_CANNOT_JOIN_FULL || _numcode == IRCServerNumerics.CHANNEL_CANNOT_JOIN_BANNED)
 		{
@@ -40,11 +38,10 @@ public abstract class AbstractChannelJoinListener
 			{
 				if (_numcode == IRCServerNumerics.CHANNEL_NICKS_LIST)
 				{
-					String _nicks[] = aServerMessage.getText().substring(aServerMessage.getText().indexOf(":") + 1).split(" ");
-					for (String _nick : _nicks)
-					{
-						add(_nick);
-					}
+                    String _nicks[] = aServerMessage.getText().split(" "); // reviewed
+                    for (String _nick : _nicks) {
+                        add(_nick);
+                    }
 				}
 				else if (_numcode == IRCServerNumerics.CHANNEL_TOPIC)
 				{
@@ -52,13 +49,10 @@ public abstract class AbstractChannelJoinListener
 				}
 				else if (_numcode == IRCServerNumerics.TOPIC_USER_DATE)
 				{
-					String _cmpnts[] = aServerMessage.getText().split(" ");
-					topic.setSetBy(_cmpnts[1]);
-					topic.setDate(new Date(Long.parseLong(_cmpnts[2] + "000")));
-					channel.setTopic(topic);
-				}
-				else if (_numcode == IRCServerNumerics.CHANNEL_NICKS_END_OF_LIST)
-				{
+                    topic.setSetBy(aServerMessage.params.get(1));
+                    topic.setDate(new Date(Long.parseLong(aServerMessage.params.get(2) + "000")));
+                    channel.setTopic(topic);
+                } else if (_numcode == IRCServerNumerics.CHANNEL_NICKS_END_OF_LIST) {
 					Callback<IRCChannel> _chanCallback = callbacks.remove(channel.getName());
 					if (_chanCallback != null)
 					{
@@ -67,46 +61,28 @@ public abstract class AbstractChannelJoinListener
 					channel = null;
 					topic = null;
 				}
-			}
-			else if (callbacks.containsKey(getChannelNameFrom(aServerMessage.getText())))
-			{
-				if (_numcode == IRCServerNumerics.CHANNEL_CANNOT_JOIN_INVITE)
-				{
-					callbacks.remove(getChannelNameFrom(aServerMessage.getText())).onFailure(new IRCException(aServerMessage.getText()));
-				}
-				else if (_numcode == IRCServerNumerics.CHANNEL_CANNOT_JOIN_KEYED)
-				{
-					callbacks.remove(getChannelNameFrom(aServerMessage.getText())).onFailure(new IRCException(aServerMessage.getText()));
-				}
-				else if (_numcode == IRCServerNumerics.CHANNEL_CANNOT_JOIN_BANNED)
-				{
-					callbacks.remove(getChannelNameFrom(aServerMessage.getText())).onFailure(new IRCException(aServerMessage.getText()));
-				}
-				else if (_numcode == IRCServerNumerics.CHANNEL_CANNOT_JOIN_FULL)
-				{
-					callbacks.remove(getChannelNameFrom(aServerMessage.getText())).onFailure(new IRCException(aServerMessage.getText()));
-				}
-				else if (_numcode == IRCServerNumerics.CHANNEL_FORWARD)
-				{
-					String[] _components = aServerMessage.getText().split(" ");
-					Callback<IRCChannel> callback = callbacks.remove(_components[0]);
-					if (callback != null)
-					{
-						callbacks.put(_components[1], callback);
-					}
-				}					
-			}		
-		}
+            } else if (callbacks.containsKey(aServerMessage.params.get(0))) {
+                if (_numcode == IRCServerNumerics.CHANNEL_CANNOT_JOIN_INVITE) {
+                    callbacks.remove(aServerMessage.params.get(0)).onFailure(new IRCException(aServerMessage.getText()));
+                } else if (_numcode == IRCServerNumerics.CHANNEL_CANNOT_JOIN_KEYED) {
+                    callbacks.remove(aServerMessage.params.get(0)).onFailure(new IRCException(aServerMessage.getText()));
+                } else if (_numcode == IRCServerNumerics.CHANNEL_CANNOT_JOIN_BANNED) {
+                    callbacks.remove(aServerMessage.params.get(0)).onFailure(new IRCException(aServerMessage.getText()));
+                } else if (_numcode == IRCServerNumerics.CHANNEL_CANNOT_JOIN_FULL) {
+                    callbacks.remove(aServerMessage.params.get(0)).onFailure(new IRCException(aServerMessage.getText()));
+                } else if (_numcode == IRCServerNumerics.CHANNEL_FORWARD) {
+                    Callback<IRCChannel> callback = callbacks.remove(aServerMessage.params.get(0));
+                    if (callback != null) {
+                        callbacks.put(aServerMessage.params.get(1), callback);
+                    }
+                }
+            }
+        }
 	}
 
 	protected abstract void saveChannel(WritableIRCChannel aChannel);
 
 	protected abstract IRCUserStatuses getIRCUserStatuses();
-
-	private String getChannelNameFrom(String aMessage)
-	{
-		return aMessage.split(" ")[0];
-	}
 
 	private void add(String aNick)
 	{
@@ -131,10 +107,9 @@ public abstract class AbstractChannelJoinListener
 		channel.addUser(user, new SynchronizedUnmodifiableSet<IRCUserStatus>(active));
 	}
 
-	private String getTopic(ServerNumericMessage aServMsg)
-	{
-		return aServMsg.getText().substring(aServMsg.getText().indexOf(":") + 1);
-	}
+    private String getTopic(ServerNumeric aServMsg) {
+        return aServMsg.getText().substring(aServMsg.getText().indexOf(":") + 1);
+    }
 
 	private static Map<Character, IRCUserStatus> mapPrefixes(final IRCUserStatuses statuses) {
 		final HashMap<Character, IRCUserStatus> map = new HashMap<Character, IRCUserStatus>();

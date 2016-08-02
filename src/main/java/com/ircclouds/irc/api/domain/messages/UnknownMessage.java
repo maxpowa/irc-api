@@ -8,13 +8,12 @@ import com.ircclouds.irc.api.domain.messages.interfaces.*;
  * 
  * @author Danny van Heumen
  */
-public class UnknownMessage implements IMessage
+public class UnknownMessage extends Message implements IMessage
 {
-	private final String msg;
 
-	public UnknownMessage(final String rawMsg)
+	public UnknownMessage(Message message)
 	{
-		msg = rawMsg;
+		super(message);
 	}
 
 	/**
@@ -38,6 +37,6 @@ public class UnknownMessage implements IMessage
 	@Override
 	public String asRaw()
 	{
-		return msg;
+		return this.raw;
 	}
 }

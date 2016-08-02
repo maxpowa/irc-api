@@ -1,9 +1,8 @@
 package com.ircclouds.irc.api.domain.messages;
 
-import com.ircclouds.irc.api.IRCException;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,18 +18,34 @@ public class Message {
 
     public String raw;
 
+    public Message() throws NotImplementedException {
+        throw new NotImplementedException();
+    }
+
     public Message(String raw) {
         this.raw = raw;
         this.parse();
-        LOG.debug("new " + this.toString());
+        LOG.info("new " + this.toString());
+    }
+
+    public Message(Message msg) {
+        this.raw = msg.raw;
+        this.tags = msg.tags;
+        this.prefix = msg.prefix;
+        this.command = msg.command;
+        this.params = msg.params;
+        LOG.info("map " + this.toString());
     }
 
     public String getText() {
+        if (this.params.size() <= 0) {
+            return null;
+        }
         return this.params.get(this.params.size() - 1);
     }
 
     public String toString() {
-        return "Message(tags=" + tags +
+        return this.getClass().getSimpleName() + "(tags=" + tags +
                 ", prefix=" + prefix +
                 ", command=" + command +
                 ", params=" + params + ")";

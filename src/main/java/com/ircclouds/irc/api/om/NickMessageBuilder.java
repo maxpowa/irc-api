@@ -8,6 +8,6 @@ public class NickMessageBuilder implements IBuilder<NickMessage>
 	@Override
 	public NickMessage build(Message aMessage)
 	{
-		return new NickMessage(ParseUtils.getUser(aMessage.prefix), aMessage.getText());
+		return new NickMessage(aMessage);
 	}
 }

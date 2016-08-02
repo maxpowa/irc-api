@@ -78,25 +78,16 @@ public final class MessageDispatcherImpl implements IMessageDispatcher
 
 	private void dispatchVarious(IVariousMessageListener aListener, IMessage aMessage)
 	{
-		if (aMessage instanceof ChanJoinMessage)
-		{
-			aListener.onChannelJoin((ChanJoinMessage) aMessage);
-		}
-		else if (aMessage instanceof ChanPartMessage)
-		{
-			aListener.onChannelPart((ChanPartMessage) aMessage);
-		}
-		else if (aMessage instanceof ChannelNotice)
-		{
-			aListener.onChannelNotice((ChannelNotice) aMessage);
-		}
-		else if (aMessage instanceof ChannelActionMsg)
-		{
-			aListener.onChannelAction((ChannelActionMsg) aMessage);
-		}
-		else if (aMessage instanceof ChannelKick)
-		{
-			aListener.onChannelKick((ChannelKick) aMessage);
+        if (aMessage instanceof ChannelJoin) {
+            aListener.onChannelJoin((ChannelJoin) aMessage);
+        } else if (aMessage instanceof ChannelPart) {
+            aListener.onChannelPart((ChannelPart) aMessage);
+        } else if (aMessage instanceof ChannelNotice) {
+            aListener.onChannelNotice((ChannelNotice) aMessage);
+        } else if (aMessage instanceof ChannelAction) {
+            aListener.onChannelAction((ChannelAction) aMessage);
+        } else if (aMessage instanceof ChannelKick) {
+            aListener.onChannelKick((ChannelKick) aMessage);
 		}
 		else if (aMessage instanceof ChannelPrivMsg)
 		{
@@ -115,27 +106,19 @@ public final class MessageDispatcherImpl implements IMessageDispatcher
 			else if (aMessage instanceof UserPing)
 			{
 				aListener.onUserPing((UserPing) aMessage);
-			}
-			else if (aMessage instanceof UserActionMsg)
-			{
-				aListener.onUserAction((UserActionMsg) aMessage);
-			}
-			else
-			{
-				aListener.onUserPrivMessage((UserPrivMsg) aMessage);
+            } else if (aMessage instanceof UserAction) {
+                aListener.onUserAction((UserAction) aMessage);
+            } else {
+                aListener.onUserPrivMessage((UserPrivMsg) aMessage);
 			}
 		}
 		else if (aMessage instanceof UserNotice)
 		{
 			aListener.onUserNotice((UserNotice) aMessage);
-		}
-		else if (aMessage instanceof ServerNumericMessage)
-		{
-			aListener.onServerNumericMessage((ServerNumericMessage) aMessage);
-		}
-		else if (aMessage instanceof ServerNotice)
-		{
-			aListener.onServerNotice((ServerNotice) aMessage);
+        } else if (aMessage instanceof ServerNumeric) {
+            aListener.onServerNumericMessage((ServerNumeric) aMessage);
+        } else if (aMessage instanceof ServerNotice) {
+            aListener.onServerNotice((ServerNotice) aMessage);
 		}
 		else if (aMessage instanceof NickMessage)
 		{
@@ -152,14 +135,10 @@ public final class MessageDispatcherImpl implements IMessageDispatcher
 		else if (aMessage instanceof ClientErrorMessage)
 		{
 			aListener.onClientError((ClientErrorMessage) aMessage);
-		}
-		else if (aMessage instanceof ChannelModeMessage)
-		{
-			aListener.onChannelMode((ChannelModeMessage) aMessage);
-		}
-		else if (aMessage instanceof ServerPing)
-		{
-			aListener.onServerPing((ServerPing) aMessage);
+        } else if (aMessage instanceof ChannelMode) {
+            aListener.onChannelMode((ChannelMode) aMessage);
+        } else if (aMessage instanceof ServerPing) {
+            aListener.onServerPing((ServerPing) aMessage);
 		}
 		else if (aMessage instanceof AwayMessage)
 		{

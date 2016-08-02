@@ -1,7 +1,7 @@
 package com.ircclouds.irc.api.negotiators.capabilities;
 
 import com.ircclouds.irc.api.domain.messages.Message;
-import com.ircclouds.irc.api.domain.messages.ServerNumericMessage;
+import com.ircclouds.irc.api.domain.messages.ServerNumeric;
 import com.ircclouds.irc.api.listeners.VariousMessageListenerAdapter;
 import com.ircclouds.irc.api.negotiators.CompositeNegotiator;
 import com.ircclouds.irc.api.negotiators.SaslContext;
@@ -145,11 +145,10 @@ public class SaslCapability extends VariousMessageListenerAdapter
 		}
 		else if (RawMessageUtils.isServerNumericMessage(msg))
 		{
-			final ServerNumericMessage numMsg = SERVER_MSG_BUILDER.build(new Message(msg));
-			switch (numMsg.getNumericCode())
-			{
-			case RPL_LOGGEDIN:
-				this.state.loggedIn();
+            final ServerNumeric numMsg = SERVER_MSG_BUILDER.build(new Message(msg));
+            switch (numMsg.getNumericCode()) {
+                case RPL_LOGGEDIN:
+                    this.state.loggedIn();
 				return true;
 			case RPL_SASLSUCCESS:
 				this.state.success();

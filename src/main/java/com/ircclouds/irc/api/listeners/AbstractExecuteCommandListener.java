@@ -60,20 +60,16 @@ public abstract class AbstractExecuteCommandListener extends VariousMessageListe
 	}
 
 	@Override
-	public void onChannelJoin(ChanJoinMessage aMsg)
-	{
-		if (isForMe(aMsg))
-		{
-			chanJoinListener.onChanJoinMessage(aMsg);
+    public void onChannelJoin(ChannelJoin aMsg) {
+        if (isForMe(aMsg)) {
+            chanJoinListener.onChanJoinMessage(aMsg);
 		}
 	}
 
 	@Override
-	public void onChannelPart(ChanPartMessage aMsg)
-	{
-		if (isForMe(aMsg))
-		{
-			chanPartListener.onChannelPart(aMsg);
+    public void onChannelPart(ChannelPart aMsg) {
+        if (isForMe(aMsg)) {
+            chanPartListener.onChannelPart(aMsg);
 		}
 	}
 
@@ -87,11 +83,10 @@ public abstract class AbstractExecuteCommandListener extends VariousMessageListe
 	}
 	
 	@Override
-	public void onServerNumericMessage(ServerNumericMessage aMsg)
-	{
-		chanJoinListener.onServerMessage(aMsg);
-		chanPartListener.onServerMessage(aMsg);
-		if (!getIRCState().isConnected())
+    public void onServerNumericMessage(ServerNumeric aMsg) {
+        chanJoinListener.onServerMessage(aMsg);
+        chanPartListener.onServerMessage(aMsg);
+        if (!getIRCState().isConnected())
 		{
 			connectListener.onServerMessage(aMsg);
 		}

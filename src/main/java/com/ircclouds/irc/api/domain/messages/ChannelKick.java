@@ -1,26 +1,20 @@
 package com.ircclouds.irc.api.domain.messages;
 
-import com.ircclouds.irc.api.domain.*;
-
 public class ChannelKick extends ChannelPrivMsg
 {
-	private String kickedNick;
-	
-	public ChannelKick(IRCUser aFromUser, String aText, String aChanName, String aKickedNick)
-	{
-		super(aFromUser, aText, aChanName);
-		
-		kickedNick = aKickedNick;
+	public ChannelKick(Message message) {
+		super(message);
 	}
-	
+
 	public String getKickedNickname()
 	{
-		return kickedNick;
+		return this.params.get(1);
 	}
 	
 	@Override
 	public String asRaw()
 	{
-		return new StringBuffer().append(":").append(fromUser).append(" KICK ").append(channelName).append(" ").append(kickedNick).append(" :").append(text).toString();
+		return new StringBuffer().append(":").append(this.getSource()).append(" KICK ").append(this.getChannelName())
+				.append(" ").append(this.getKickedNickname()).append(" :").append(this.getText()).toString();
 	}	
 }

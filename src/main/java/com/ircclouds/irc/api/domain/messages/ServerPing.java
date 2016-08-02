@@ -3,18 +3,10 @@ package com.ircclouds.irc.api.domain.messages;
 import com.ircclouds.irc.api.domain.*;
 import com.ircclouds.irc.api.domain.messages.interfaces.*;
 
-public class ServerPing implements IHasText, IServerMessage
+public class ServerPing extends Message implements IHasText, IServerMessage
 {
-	private String text;
-
-	public String getText()
-	{
-		return text;
-	}
-
-	public void setText(String aText)
-	{
-		text = aText;
+	public ServerPing(Message message) {
+		super(message);
 	}
 
 	@Override
@@ -26,6 +18,6 @@ public class ServerPing implements IHasText, IServerMessage
 	@Override
 	public String asRaw()
 	{
-		return new StringBuffer().append("PING :").append(text).toString();
+		return new StringBuffer().append("PING :").append(this.getText()).toString();
 	}
 }

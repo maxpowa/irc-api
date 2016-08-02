@@ -7,6 +7,6 @@ public class ErrorMessageBuilder implements IBuilder<ErrorMessage>
 	@Override
 	public ErrorMessage build(Message aMessage)
 	{
-		return new ErrorMessage(aMessage.raw.substring(7));
-	}
+        return new ErrorMessage(aMessage);
+    }
 }

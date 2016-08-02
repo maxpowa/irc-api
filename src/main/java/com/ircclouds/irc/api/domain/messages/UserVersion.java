@@ -1,16 +1,18 @@
 package com.ircclouds.irc.api.domain.messages;
 
-import com.ircclouds.irc.api.domain.*;
-
 /**
  * 
  * @author
  * 
  */
-public class UserVersion extends UserCTCPMsg
+public class UserVersion extends UserCTCP
 {
-	public UserVersion(IRCUser aFromUser, String aToUser, String aText)
-	{
-		super(aFromUser, aToUser, aText);
+	public UserVersion(Message message) {
+		super(message);
+	}
+
+	@Override
+	public String getText() {
+		return super.getText().replaceFirst("(?i)VERSION", "").trim();
 	}
 }

@@ -2,6 +2,7 @@ package com.ircclouds.irc.api.domain.messages;
 
 import com.ircclouds.irc.api.domain.IRCUser;
 import com.ircclouds.irc.api.domain.messages.interfaces.IUserMessage;
+import com.ircclouds.irc.api.utils.ParseUtils;
 
 /**
  * Away notification message. (IRCv3 "away-notify" capability)
@@ -13,46 +14,30 @@ import com.ircclouds.irc.api.domain.messages.interfaces.IUserMessage;
  *
  * @author Danny van Heumen
  */
-public class AwayMessage implements IUserMessage
+public class AwayMessage extends Message implements IUserMessage
 {
-	private final IRCUser user;
-	private final String message;
 
-	public AwayMessage(final IRCUser aUser, final String aMessage)
-	{
-		this.user = aUser;
-		this.message = aMessage;
+	public AwayMessage(Message message) {
+		super(message);
+
 	}
 
 	@Override
 	public IRCUser getSource()
 	{
-		return this.user;
+		return ParseUtils.getUser(this.prefix);
 	}
 
 	@Override
 	public String asRaw()
 	{
 		final StringBuilder raw = new StringBuilder(":");
-		raw.append(user).append(" AWAY");
-		if (this.message != null)
+		raw.append(this.getSource()).append(" AWAY");
+		if (this.getText() != null)
 		{
-			raw.append(" :").append(this.message);
+			raw.append(" :").append(this.getText());
 		}
 		return raw.toString();
-	}
-
-	/**
-	 * Get away message.
-	 *
-	 * If away message is null this implies that user is available, if message
-	 * is non-null this implies that user is away.
-	 *
-	 * @return Returns the away message of the user.
-	 */
-	public String getMessage()
-	{
-		return this.message;
 	}
 
 	/**
@@ -65,6 +50,6 @@ public class AwayMessage implements IUserMessage
 	 */
 	public boolean isAway()
 	{
-		return this.message != null;
+		return this.getText() != null;
 	}
 }

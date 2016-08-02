@@ -2,6 +2,7 @@ package com.ircclouds.irc.api.state;
 
 import com.ircclouds.irc.api.domain.*;
 import com.ircclouds.irc.api.domain.messages.*;
+import com.ircclouds.irc.api.domain.messages.ChannelMode;
 import com.ircclouds.irc.api.domain.messages.interfaces.*;
 import com.ircclouds.irc.api.listeners.*;
 import com.ircclouds.irc.api.utils.*;
@@ -9,11 +10,9 @@ import com.ircclouds.irc.api.utils.*;
 public abstract class AbstractIRCStateUpdater extends VariousMessageListenerAdapter implements IStateAccessor
 {
 	@Override
-	public void onChannelJoin(ChanJoinMessage aMsg)
-	{
-		if (!isForMe(aMsg))
-		{
-			IRCUser _user = aMsg.getSource();
+    public void onChannelJoin(ChannelJoin aMsg) {
+        if (!isForMe(aMsg)) {
+            IRCUser _user = aMsg.getSource();
 			WritableIRCChannel _chan = getIRCStateImpl().getWritableChannelByName(aMsg.getChannelName());
 			
 			savedOldState(_chan);
@@ -23,11 +22,9 @@ public abstract class AbstractIRCStateUpdater extends VariousMessageListenerAdap
 	}
 
 	@Override
-	public void onChannelPart(ChanPartMessage aMsg)
-	{
-		if (!isForMe(aMsg))
-		{
-			WritableIRCChannel _chan = getIRCStateImpl().getWritableChannelByName(aMsg.getChannelName());
+    public void onChannelPart(ChannelPart aMsg) {
+        if (!isForMe(aMsg)) {
+            WritableIRCChannel _chan = getIRCStateImpl().getWritableChannelByName(aMsg.getChannelName());
 			
 			savedOldState(_chan);
 
@@ -87,18 +84,15 @@ public abstract class AbstractIRCStateUpdater extends VariousMessageListenerAdap
 	}
 
 	@Override
-	public void onChannelMode(ChannelModeMessage aMsg)
-	{
-		String _chanName = aMsg.getChannelName();
-		WritableIRCChannel _chan = getIRCStateImpl().getWritableChannelByName(_chanName);
-		
-		savedOldState(_chan);
-		
-		for (ChannelMode _mode : aMsg.getAddedModes())
-		{
-			if (_mode instanceof IRCUserStatusMode)
-			{
-				if (aMsg.getRemovedModes().contains(_mode))
+    public void onChannelMode(ChannelMode aMsg) {
+        String _chanName = aMsg.getChannelName();
+        WritableIRCChannel _chan = getIRCStateImpl().getWritableChannelByName(_chanName);
+
+        savedOldState(_chan);
+
+        for (com.ircclouds.irc.api.domain.ChannelMode _mode : aMsg.getAddedModes()) {
+            if (_mode instanceof IRCUserStatusMode) {
+                if (aMsg.getRemovedModes().contains(_mode))
 				{
 					aMsg.getRemovedModes().remove(_mode);
 				}
@@ -114,11 +108,9 @@ public abstract class AbstractIRCStateUpdater extends VariousMessageListenerAdap
 				}
 			}
 		}
-		for (ChannelMode _mode : aMsg.getRemovedModes())
-		{
-			if (_mode instanceof IRCUserStatusMode)
-			{
-				IRCUserStatusMode _usm = (IRCUserStatusMode) _mode;
+        for (com.ircclouds.irc.api.domain.ChannelMode _mode : aMsg.getRemovedModes()) {
+            if (_mode instanceof IRCUserStatusMode) {
+                IRCUserStatusMode _usm = (IRCUserStatusMode) _mode;
 				IRCUserStatus _us = getAvailableUserStatuses().getUserStatus(_usm.getChannelModeType());
 				if (_us != null)
 				{

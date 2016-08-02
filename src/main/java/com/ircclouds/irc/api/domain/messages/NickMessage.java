@@ -2,32 +2,28 @@ package com.ircclouds.irc.api.domain.messages;
 
 import com.ircclouds.irc.api.domain.*;
 import com.ircclouds.irc.api.domain.messages.interfaces.*;
+import com.ircclouds.irc.api.utils.ParseUtils;
 
-public class NickMessage implements IUserMessage
+public class NickMessage extends Message implements IUserMessage
 {
-	private IRCUser user;
-	private String newNick;
-	
-	public NickMessage(IRCUser aUser, String aNewNick)
-	{
-		user = aUser;
-		newNick = aNewNick;
+	public NickMessage(Message message) {
+		super(message);
 	}
 	
 	public String getNewNick()
 	{
-		return newNick;
+		return this.getText();
 	}
 
 	@Override
 	public IRCUser getSource()
 	{
-		return user;
+		return ParseUtils.getUser(this.prefix);
 	}
 	
 	@Override
 	public String asRaw()
 	{
-		return new StringBuffer().append(user).append(" NICK :").append(newNick).toString();
+		return new StringBuffer(":").append(this.getSource()).append(" NICK :").append(this.getNewNick()).toString();
 	}	
 }

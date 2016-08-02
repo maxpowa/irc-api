@@ -22,12 +22,9 @@ public class SetTopicListener implements IMessageListener
 			TopicMessage _topicMsg = (TopicMessage) aMessage;
 
 			callback.onSuccess(_topicMsg.getTopic().getValue());
-		}
-		else if (aMessage instanceof ServerNumericMessage)
-		{
-			if (((ServerNumericMessage) aMessage).getNumericCode().equals(IRCServerNumerics.NOT_CHANNEL_OP))
-			{
-				callback.onFailure(new IRCException(((ServerNumericMessage) aMessage).getText()));
+		} else if (aMessage instanceof ServerNumeric) {
+			if (((ServerNumeric) aMessage).getNumericCode().equals(IRCServerNumerics.NOT_CHANNEL_OP)) {
+				callback.onFailure(new IRCException(((ServerNumeric) aMessage).getText()));
 			}
 		}
 	}

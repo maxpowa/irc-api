@@ -31,14 +31,12 @@ public class VariousMessageListenerAdapter implements IVariousMessageListener
 	}
 
 	@Override
-	public void onChannelJoin(ChanJoinMessage aMsg)
-	{
-	}
+    public void onChannelJoin(ChannelJoin aMsg) {
+    }
 
 	@Override
-	public void onChannelPart(ChanPartMessage aMsg)
-	{
-	}
+    public void onChannelPart(ChannelPart aMsg) {
+    }
 
 	@Override
 	public void onChannelNotice(ChannelNotice aMsg)
@@ -46,9 +44,8 @@ public class VariousMessageListenerAdapter implements IVariousMessageListener
 	}
 
 	@Override
-	public void onChannelAction(ChannelActionMsg aMsg)
-	{
-	}
+    public void onChannelAction(ChannelAction aMsg) {
+    }
 
 	@Override
 	public void onChannelKick(ChannelKick aMsg)
@@ -71,14 +68,12 @@ public class VariousMessageListenerAdapter implements IVariousMessageListener
 	}
 
 	@Override
-	public void onUserAction(UserActionMsg aMsg)
-	{
-	}
+    public void onUserAction(UserAction aMsg) {
+    }
 
 	@Override
-	public void onServerNumericMessage(ServerNumericMessage aMsg)
-	{
-	}
+    public void onServerNumericMessage(ServerNumeric aMsg) {
+    }
 
 	@Override
 	public void onServerNotice(ServerNotice aMsg)
@@ -106,9 +101,8 @@ public class VariousMessageListenerAdapter implements IVariousMessageListener
 	}
 
 	@Override
-	public void onChannelMode(ChannelModeMessage aMsg)
-	{
-	}
+    public void onChannelMode(ChannelMode aMsg) {
+    }
 
 	@Override
 	public void onUserAway(AwayMessage aMsg)

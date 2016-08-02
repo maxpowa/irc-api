@@ -2,30 +2,26 @@ package com.ircclouds.irc.api.domain.messages;
 
 import com.ircclouds.irc.api.domain.*;
 import com.ircclouds.irc.api.domain.messages.interfaces.*;
+import com.ircclouds.irc.api.utils.ParseUtils;
 
 /**
  * 
  * @author
  * 
  */
-public abstract class AbstractPrivMsg implements IUserMessage, IHasText
+public abstract class AbstractPrivMsg extends Message implements IUserMessage, IHasText
 {
-	IRCUser fromUser;
-	String text;
-
-	public AbstractPrivMsg(IRCUser aFromUser, String aText)
+	public AbstractPrivMsg(String aText)
 	{
-		fromUser = aFromUser;
-		text = aText;
+		super(aText);
+	}
+
+	public AbstractPrivMsg(Message message) {
+		super(message);
 	}
 	
 	public IRCUser getSource()
 	{
-		return fromUser;
-	}
-
-	public String getText()
-	{
-		return text;
+		return ParseUtils.getUser(this.prefix);
 	}
 }
