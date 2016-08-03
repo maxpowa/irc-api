@@ -17,7 +17,7 @@ public abstract class AbstractNickChangeListener
 		callbacks.put(aNewNick, aCallback);
 	}
 
-	public void onNickChange(NickMessage aMsg)
+	public void onNickChange(UserNickMessage aMsg)
 	{
 		Callback<String> _callback = callbacks.get(aMsg.getNewNick());
 		if (_callback != null)

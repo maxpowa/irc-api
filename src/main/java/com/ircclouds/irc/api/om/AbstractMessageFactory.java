@@ -87,7 +87,7 @@ public abstract class AbstractMessageFactory
 				return SERVER_PING_MESSAGE_BUILDER.build(msg);
 			} else if (PRIVATE_MESSAGE_KEY.equals(msg.command)) {
 				return PRIVATE_MESSAGE_BUILDER.build(msg);
-			} else if (NOTICE_KEY.equals(msg.command) || NOTICE_KEY.equals(msg.prefix)) {
+			} else if (NOTICE_KEY.equals(msg.command)) {
 				return NOTICE_BUILDER.build(msg);
 			} else if (JOIN_KEY.equals(msg.command)) {
 				return CHAN_JOIN_BUILDER.build(msg);

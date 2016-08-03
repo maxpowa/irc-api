@@ -28,11 +28,11 @@ public interface IVariousMessageListener extends IMessageListener
 
     void onServerNotice(ServerNotice aMsg);
 
-    void onNickChange(NickMessage aMsg);
+    void onNickChange(UserNickMessage aMsg);
 
-    void onUserQuit(QuitMessage aMsg);
+    void onUserQuit(UserQuitMessage aMsg);
 
-    void onError(ErrorMessage aMsg);
+    void onError(ServerError aMsg);
 
 	void onClientError(ClientErrorMessage aMsg);
 
@@ -54,5 +54,5 @@ public interface IVariousMessageListener extends IMessageListener
 	 *
 	 * @param aMsg the away message
 	 */
-	void onUserAway(AwayMessage aMsg);
+	void onUserAway(UserAwayMessage aMsg);
 }

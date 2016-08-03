@@ -2,10 +2,10 @@ package com.ircclouds.irc.api.om;
 
 import com.ircclouds.irc.api.domain.messages.*;
 
-public class QuitMessageBuilder implements IBuilder<QuitMessage>
+public class QuitMessageBuilder implements IBuilder<UserQuitMessage>
 {
-	public QuitMessage build(AbstractMessage aMsg)
+	public UserQuitMessage build(AbstractMessage aMsg)
 	{
-		return new QuitMessage(aMsg);
+		return new UserQuitMessage(aMsg);
 	}
 }

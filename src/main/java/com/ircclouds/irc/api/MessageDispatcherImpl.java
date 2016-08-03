@@ -120,17 +120,17 @@ public final class MessageDispatcherImpl implements IMessageDispatcher
         } else if (aMessage instanceof ServerNotice) {
             aListener.onServerNotice((ServerNotice) aMessage);
 		}
-		else if (aMessage instanceof NickMessage)
+		else if (aMessage instanceof UserNickMessage)
 		{
-			aListener.onNickChange((NickMessage) aMessage);
+			aListener.onNickChange((UserNickMessage) aMessage);
 		}
-		else if (aMessage instanceof QuitMessage)
+		else if (aMessage instanceof UserQuitMessage)
 		{
-			aListener.onUserQuit((QuitMessage) aMessage);
+			aListener.onUserQuit((UserQuitMessage) aMessage);
 		}
-		else if (aMessage instanceof ErrorMessage)
+		else if (aMessage instanceof ServerError)
 		{
-			aListener.onError((ErrorMessage) aMessage);
+			aListener.onError((ServerError) aMessage);
 		}
 		else if (aMessage instanceof ClientErrorMessage)
 		{
@@ -140,9 +140,9 @@ public final class MessageDispatcherImpl implements IMessageDispatcher
         } else if (aMessage instanceof ServerPing) {
             aListener.onServerPing((ServerPing) aMessage);
 		}
-		else if (aMessage instanceof AwayMessage)
+		else if (aMessage instanceof UserAwayMessage)
 		{
-			aListener.onUserAway((AwayMessage) aMessage);
+			aListener.onUserAway((UserAwayMessage) aMessage);
 		}
 		else
 		{

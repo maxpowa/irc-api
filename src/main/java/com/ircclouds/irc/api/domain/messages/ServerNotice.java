@@ -3,7 +3,7 @@ package com.ircclouds.irc.api.domain.messages;
 import com.ircclouds.irc.api.domain.*;
 import com.ircclouds.irc.api.domain.messages.interfaces.*;
 
-public class ServerNotice extends AbstractNotice
+public class ServerNotice extends AbstractMessage
 {
 	public ServerNotice(AbstractMessage message)
 	{

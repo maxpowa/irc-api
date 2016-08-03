@@ -81,17 +81,17 @@ public class VariousMessageListenerAdapter implements IVariousMessageListener
 	}
 
 	@Override
-	public void onNickChange(NickMessage aMsg)
+	public void onNickChange(UserNickMessage aMsg)
 	{
 	}
 
 	@Override
-	public void onUserQuit(QuitMessage aMsg)
+	public void onUserQuit(UserQuitMessage aMsg)
 	{
 	}
 
 	@Override
-	public void onError(ErrorMessage aMsg)
+	public void onError(ServerError aMsg)
 	{
 	}
 
@@ -105,7 +105,7 @@ public class VariousMessageListenerAdapter implements IVariousMessageListener
     }
 
 	@Override
-	public void onUserAway(AwayMessage aMsg)
+	public void onUserAway(UserAwayMessage aMsg)
 	{
 	}
 }

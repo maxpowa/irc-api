@@ -32,7 +32,7 @@ public abstract class AbstractIRCStateUpdater extends VariousMessageListenerAdap
 	}
 
 	@Override
-	public void onNickChange(NickMessage aMsg)
+	public void onNickChange(UserNickMessage aMsg)
 	{
 		WritableIRCUser _old = new WritableIRCUser(aMsg.getSource().getNick());
 		WritableIRCUser _new = new WritableIRCUser(aMsg.getNewNick());
@@ -49,7 +49,7 @@ public abstract class AbstractIRCStateUpdater extends VariousMessageListenerAdap
 	}
 
 	@Override
-	public void onUserQuit(QuitMessage aMsg)
+	public void onUserQuit(UserQuitMessage aMsg)
 	{
 		for (WritableIRCChannel _chan : getIRCStateImpl().getChannelsMutable())
 		{

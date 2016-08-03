@@ -2,11 +2,11 @@ package com.ircclouds.irc.api.om;
 
 import com.ircclouds.irc.api.domain.messages.*;
 
-public class NickMessageBuilder implements IBuilder<NickMessage>
+public class NickMessageBuilder implements IBuilder<UserNickMessage>
 {
 	@Override
-	public NickMessage build(AbstractMessage aMessage)
+	public UserNickMessage build(AbstractMessage aMessage)
 	{
-		return new NickMessage(aMessage);
+		return new UserNickMessage(aMessage);
 	}
 }

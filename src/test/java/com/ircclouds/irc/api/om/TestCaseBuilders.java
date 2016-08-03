@@ -109,14 +109,14 @@ public class TestCaseBuilders extends TestCase {
     public void testErrorBuilder() {
         ErrorMessageBuilder _builder = new ErrorMessageBuilder();
         GenericMessage input = new GenericMessage("ERROR :Unfortunately, something broke");
-        ErrorMessage _msg = _builder.build(input);
+        ServerError _msg = _builder.build(input);
         assertEquals(input.raw, _msg.asRaw());
         assertEquals("Unfortunately, something broke", _msg.getText());
 
         input = new GenericMessage(":" + TEST_SERVER + " ERROR :Unfortunately, something broke");
         _msg = _builder.build(input);
         assertEquals(input.raw, _msg.asRaw());
-        assertEquals(TEST_SERVER.toString(), _msg.getSource());
+        assertEquals(TEST_SERVER.toString(), _msg.getSource().toString());
         assertEquals("Unfortunately, something broke", _msg.getText());
     }
 
@@ -126,7 +126,7 @@ public class TestCaseBuilders extends TestCase {
      */
     public void testQuitMessageBuilder() {
         QuitMessageBuilder _builder = new QuitMessageBuilder();
-        QuitMessage _msg = _builder.build(new GenericMessage(USER_STRING + " QUIT :stfu message"));
+        UserQuitMessage _msg = _builder.build(new GenericMessage(USER_STRING + " QUIT :stfu message"));
         assertEquals("stfu message", _msg.getText());
         assertEquals(TEST_USER, _msg.getSource());
     }
@@ -134,7 +134,7 @@ public class TestCaseBuilders extends TestCase {
     public void testAwayMessageBuilder() {
         AwayMessageBuilder _builder = new AwayMessageBuilder();
         GenericMessage input = new GenericMessage(USER_STRING + " AWAY :user is away");
-        AwayMessage _msg = _builder.build(input);
+        UserAwayMessage _msg = _builder.build(input);
         assertEquals(input.raw, _msg.asRaw());
         assertEquals(true, _msg.isAway());
         assertEquals("user is away", _msg.getText());
@@ -151,7 +151,7 @@ public class TestCaseBuilders extends TestCase {
     public void testNickMessageBuilder() {
         NickMessageBuilder _builder = new NickMessageBuilder();
         GenericMessage input = new GenericMessage(USER_STRING + " NICK :soka|away");
-        NickMessage _msg = _builder.build(input);
+        UserNickMessage _msg = _builder.build(input);
         assertEquals(input.raw, _msg.asRaw());
         assertEquals("soka|away", _msg.getNewNick());
         assertEquals(TEST_USER, _msg.getSource());

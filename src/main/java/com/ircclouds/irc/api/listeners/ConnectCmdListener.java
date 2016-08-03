@@ -80,7 +80,7 @@ public class ConnectCmdListener
 		}
 	}
 
-	public void onError(ErrorMessage aMsg)
+	public void onError(ServerError aMsg)
 	{
 		callback.onFailure(new IRCException(aMsg.getText()));
 	}

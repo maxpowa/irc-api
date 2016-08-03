@@ -1,6 +1,6 @@
 package com.ircclouds.irc.api.om;
 
-import com.ircclouds.irc.api.domain.messages.AwayMessage;
+import com.ircclouds.irc.api.domain.messages.UserAwayMessage;
 import com.ircclouds.irc.api.domain.messages.AbstractMessage;
 
 /**
@@ -10,12 +10,12 @@ import com.ircclouds.irc.api.domain.messages.AbstractMessage;
  *
  * @author Danny van Heumen
  */
-public class AwayMessageBuilder implements IBuilder<AwayMessage>
+public class AwayMessageBuilder implements IBuilder<UserAwayMessage>
 {
 
 	@Override
-	public AwayMessage build(AbstractMessage aMessage)
+	public UserAwayMessage build(AbstractMessage aMessage)
 	{
-        return new AwayMessage(aMessage);
+        return new UserAwayMessage(aMessage);
     }
 }

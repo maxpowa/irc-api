@@ -105,7 +105,7 @@ public abstract class AbstractExecuteCommandListener extends VariousMessageListe
 	 * @param aMsg the error message
 	 */
 	@Override
-	public void onError(ErrorMessage aMsg)
+	public void onError(ServerError aMsg)
 	{
 		if (!getIRCState().isConnected())
 		{
@@ -119,7 +119,7 @@ public abstract class AbstractExecuteCommandListener extends VariousMessageListe
 	}
 	
 	@Override
-	public void onNickChange(NickMessage aMsg)
+	public void onNickChange(UserNickMessage aMsg)
 	{
 		if (isForMe(aMsg))
 		{

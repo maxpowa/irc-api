@@ -13,9 +13,9 @@ import com.ircclouds.irc.api.utils.ParseUtils;
  *
  * @author Danny van Heumen
  */
-public class AwayMessage extends AbstractUserMessage {
+public class UserAwayMessage extends AbstractUserMessage {
 
-	public AwayMessage(AbstractMessage message) {
+	public UserAwayMessage(AbstractMessage message) {
 		super(message);
 
 	}
