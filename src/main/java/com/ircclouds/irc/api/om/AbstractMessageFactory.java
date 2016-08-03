@@ -80,8 +80,7 @@ public abstract class AbstractMessageFactory
 		LOG.debug(aMsg);
 
 		GenericMessage msg = new GenericMessage(aMsg);
-		if (PING_KEY.equals(msg.command))
-		{
+		if (PING_KEY.equals(msg.command)) {
 			return SERVER_PING_MESSAGE_BUILDER.build(msg);
 		} else if (PRIVATE_MESSAGE_KEY.equals(msg.command)) {
 			return PRIVATE_MESSAGE_BUILDER.build(msg);

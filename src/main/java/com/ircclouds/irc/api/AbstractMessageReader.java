@@ -57,16 +57,8 @@ public abstract class AbstractMessageReader implements IMessageReader, INeedsCon
 	{
 		IMessage _msg = null;
 		
-		if (ircMessages.peek() != null)
-		{
-			try 
-			{
-				_msg =  msgFactory.build(ircMessages.poll());
-			}
-			catch (IRCOMException aExc)
-			{
-				LOG.error("Error from the OM layer", aExc);
-			}
+		if (ircMessages.peek() != null) {
+			_msg =  msgFactory.build(ircMessages.poll());
 		}
 		
 		canRead = ircMessages.isEmpty();
