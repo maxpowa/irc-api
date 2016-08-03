@@ -2,8 +2,6 @@ package com.ircclouds.irc.api;
 
 import java.util.concurrent.*;
 
-import mockit.*;
-
 import com.ircclouds.irc.api.comms.*;
 import com.ircclouds.irc.api.state.*;
 
@@ -14,8 +12,6 @@ public class MockUtils
 
 	public static ConnectedApi newConnectedApi(IConnection aConnection, IServerParameters aServerParams, Integer aWaitingDuration) throws Exception
 	{
-		Mockit.setUpMock(SocketChannelConnection.class, aConnection);
-
 		final CountDownLatch _cdl = new CountDownLatch(1);
 
 		final IRCApi api = new IRCApiImpl(false);

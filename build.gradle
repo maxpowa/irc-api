@@ -20,9 +20,9 @@ task copyTestResources(type: Copy) {
 processTestResources.dependsOn copyTestResources
 
 dependencies {
-    testCompile 'junit:junit:4.11'
+    testCompile 'org.jmockit:jmockit:1.26'
+    testCompile 'junit:junit:4.12'
     testCompile 'org.slf4j:slf4j-simple:1.7.21'
     compile 'commons-codec:commons-codec:1.4'
-    compile 'org.slf4j:slf4j-api:1.6.1'
-    compile 'com.googlecode.jmockit:jmockit:0.999.19'
+    compile 'org.slf4j:slf4j-api:1.7.21'
 }

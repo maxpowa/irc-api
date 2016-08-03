@@ -8,7 +8,7 @@ import javax.net.ssl.*;
 
 import mockit.*;
 
-public class MockConnectionImpl implements IConnection
+public class MockConnectionImpl extends MockUp<SocketChannelConnection> implements IConnection
 {
 	private BufferedReader reader;
 	private String filename;
