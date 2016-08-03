@@ -6,7 +6,7 @@ public class ChanPartBuilder implements IBuilder<ChannelPart>
 {
 	// //:aae!aaf@bot.lebane.se PART #botcode :aSS
 
-    public ChannelPart build(Message aMessage) {
+    public ChannelPart build(AbstractMessage aMessage) {
         return new ChannelPart(aMessage);
     }
 }

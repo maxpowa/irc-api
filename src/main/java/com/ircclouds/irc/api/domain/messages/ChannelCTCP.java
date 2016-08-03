@@ -1,12 +1,10 @@
 package com.ircclouds.irc.api.domain.messages;
 
-import com.ircclouds.irc.api.domain.*;
-
 /**
  * @author
  */
 public class ChannelCTCP extends ChannelPrivMsg {
-    public ChannelCTCP(Message message) {
+    public ChannelCTCP(AbstractMessage message) {
         super(message);
     }
 

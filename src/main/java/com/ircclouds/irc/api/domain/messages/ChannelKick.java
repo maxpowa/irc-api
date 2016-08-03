@@ -1,8 +1,8 @@
 package com.ircclouds.irc.api.domain.messages;
 
-public class ChannelKick extends ChannelPrivMsg
+public class ChannelKick extends AbstractChannelMessage
 {
-	public ChannelKick(Message message) {
+	public ChannelKick(AbstractMessage message) {
 		super(message);
 	}
 
@@ -14,7 +14,6 @@ public class ChannelKick extends ChannelPrivMsg
 	@Override
 	public String asRaw()
 	{
-		return new StringBuffer().append(":").append(this.getSource()).append(" KICK ").append(this.getChannelName())
-				.append(" ").append(this.getKickedNickname()).append(" :").append(this.getText()).toString();
+		return this.raw;
 	}	
 }

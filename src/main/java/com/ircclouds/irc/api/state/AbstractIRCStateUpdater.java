@@ -3,7 +3,6 @@ package com.ircclouds.irc.api.state;
 import com.ircclouds.irc.api.domain.*;
 import com.ircclouds.irc.api.domain.messages.*;
 import com.ircclouds.irc.api.domain.messages.ChannelMode;
-import com.ircclouds.irc.api.domain.messages.interfaces.*;
 import com.ircclouds.irc.api.listeners.*;
 import com.ircclouds.irc.api.utils.*;
 
@@ -61,7 +60,7 @@ public abstract class AbstractIRCStateUpdater extends VariousMessageListenerAdap
 	}
 
 	@Override
-	public void onTopicChange(TopicMessage aMsg)
+	public void onTopicChange(ChannelTopic aMsg)
 	{		
 		WritableIRCChannel _chan = getIRCStateImpl().getWritableChannelByName(aMsg.getChannelName());
 		
@@ -136,7 +135,7 @@ public abstract class AbstractIRCStateUpdater extends VariousMessageListenerAdap
 		return getIRCState().getServerOptions().getUserChanStatuses();
 	}
 	
-	private boolean isForMe(IUserMessage aMsg)
+	private boolean isForMe(AbstractUserMessage aMsg)
 	{
 		return getIRCState().getNickname().equals(aMsg.getSource().getNick());
 	}

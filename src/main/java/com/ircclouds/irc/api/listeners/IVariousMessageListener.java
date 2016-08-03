@@ -16,7 +16,7 @@ public interface IVariousMessageListener extends IMessageListener
 
     void onChannelKick(ChannelKick aMsg);
 
-    void onTopicChange(TopicMessage aMsg);
+    void onTopicChange(ChannelTopic aMsg);
 
     void onUserPrivMessage(UserPrivMsg aMsg);
 

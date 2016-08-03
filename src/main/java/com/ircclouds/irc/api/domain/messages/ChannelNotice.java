@@ -1,23 +1,14 @@
 package com.ircclouds.irc.api.domain.messages;
 
-import com.ircclouds.irc.api.domain.*;
-import com.ircclouds.irc.api.domain.messages.interfaces.*;
-
-public class ChannelNotice extends UserNotice implements IChannelMessage
+public class ChannelNotice extends AbstractChannelMessage
 {
-	public ChannelNotice(Message message)
+	public ChannelNotice(AbstractMessage message)
 	{
 		super(message);
 	}
 
 	@Override
-	public String getChannelName()
-	{
-		return this.params.get(0);
-	}
-
-	@Override
 	public String asRaw() {
-		return new StringBuffer().append(":").append(this.getSource()).append(" NOTICE ").append(this.params.get(0)).append(" :").append(this.getText()).toString();
+		return this.raw;
 	}
 }

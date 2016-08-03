@@ -1,20 +1,16 @@
 package com.ircclouds.irc.api.om;
 
-import java.util.*;
-
-import com.ircclouds.irc.api.domain.*;
 import com.ircclouds.irc.api.domain.messages.*;
-import com.ircclouds.irc.api.utils.*;
 
 /**
  * 
  * @author didry
  * 
  */
-public class TopicMessageBuilder implements IBuilder<TopicMessage>
+public class TopicMessageBuilder implements IBuilder<ChannelTopic>
 {
 	@Override
-    public TopicMessage build(Message aMessage) {
-        return new TopicMessage(aMessage);
+    public ChannelTopic build(AbstractMessage aMessage) {
+        return new ChannelTopic(aMessage);
     }
 }

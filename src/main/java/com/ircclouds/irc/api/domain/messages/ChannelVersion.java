@@ -4,7 +4,7 @@ package com.ircclouds.irc.api.domain.messages;
  * @author
  */
 public class ChannelVersion extends ChannelCTCP {
-    public ChannelVersion(Message message) {
+    public ChannelVersion(AbstractMessage message) {
         super(message);
     }
 

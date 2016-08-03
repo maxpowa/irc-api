@@ -3,9 +3,9 @@ package com.ircclouds.irc.api.domain.messages;
 import com.ircclouds.irc.api.domain.*;
 import com.ircclouds.irc.api.domain.messages.interfaces.*;
 
-public class ServerPing extends Message implements IHasText, IServerMessage
+public class ServerPing extends AbstractMessage
 {
-	public ServerPing(Message message) {
+	public ServerPing(AbstractMessage message) {
 		super(message);
 	}
 
@@ -13,11 +13,5 @@ public class ServerPing extends Message implements IHasText, IServerMessage
 	public IRCServer getSource()
 	{
 		return null;
-	}
-
-	@Override
-	public String asRaw()
-	{
-		return new StringBuffer().append("PING :").append(this.getText()).toString();
 	}
 }

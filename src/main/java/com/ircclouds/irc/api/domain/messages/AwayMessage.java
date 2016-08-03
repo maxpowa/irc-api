@@ -1,7 +1,6 @@
 package com.ircclouds.irc.api.domain.messages;
 
 import com.ircclouds.irc.api.domain.IRCUser;
-import com.ircclouds.irc.api.domain.messages.interfaces.IUserMessage;
 import com.ircclouds.irc.api.utils.ParseUtils;
 
 /**
@@ -14,30 +13,17 @@ import com.ircclouds.irc.api.utils.ParseUtils;
  *
  * @author Danny van Heumen
  */
-public class AwayMessage extends Message implements IUserMessage
-{
+public class AwayMessage extends AbstractUserMessage {
 
-	public AwayMessage(Message message) {
+	public AwayMessage(AbstractMessage message) {
 		super(message);
 
 	}
 
 	@Override
-	public IRCUser getSource()
-	{
-		return ParseUtils.getUser(this.prefix);
-	}
-
-	@Override
 	public String asRaw()
 	{
-		final StringBuilder raw = new StringBuilder(":");
-		raw.append(this.getSource()).append(" AWAY");
-		if (this.getText() != null)
-		{
-			raw.append(" :").append(this.getText());
-		}
-		return raw.toString();
+		return this.raw;
 	}
 
 	/**

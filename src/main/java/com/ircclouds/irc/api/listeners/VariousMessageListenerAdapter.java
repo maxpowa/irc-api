@@ -53,7 +53,7 @@ public class VariousMessageListenerAdapter implements IVariousMessageListener
 	}
 
 	@Override
-	public void onTopicChange(TopicMessage aMsg)
+	public void onTopicChange(ChannelTopic aMsg)
 	{
 	}
 

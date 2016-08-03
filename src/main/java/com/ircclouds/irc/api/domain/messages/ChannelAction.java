@@ -1,9 +1,7 @@
 package com.ircclouds.irc.api.domain.messages;
 
-import com.ircclouds.irc.api.domain.*;
-
-public class ChannelAction extends ChannelPrivMsg {
-    public ChannelAction(Message message) {
+public class ChannelAction extends ChannelCTCP {
+    public ChannelAction(AbstractMessage message) {
         super(message);
     }
 

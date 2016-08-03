@@ -5,7 +5,7 @@ import com.ircclouds.irc.api.domain.messages.*;
 public class ErrorMessageBuilder implements IBuilder<ErrorMessage>
 {
 	@Override
-	public ErrorMessage build(Message aMessage)
+	public ErrorMessage build(AbstractMessage aMessage)
 	{
         return new ErrorMessage(aMessage);
     }

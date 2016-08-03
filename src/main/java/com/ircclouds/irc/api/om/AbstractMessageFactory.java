@@ -5,7 +5,8 @@ import java.util.*;
 import org.slf4j.*;
 
 import com.ircclouds.irc.api.domain.*;
-import com.ircclouds.irc.api.domain.messages.Message;
+import com.ircclouds.irc.api.domain.messages.AbstractMessage;
+import com.ircclouds.irc.api.domain.messages.GenericMessage;
 import com.ircclouds.irc.api.domain.messages.interfaces.*;
 
 /**
@@ -40,7 +41,6 @@ public abstract class AbstractMessageFactory
 	private static final ChanPartBuilder CHAN_PART_BUILDER = new ChanPartBuilder();
 	private static final QuitMessageBuilder QUIT_MESSAGE_BUILDER = new QuitMessageBuilder();
 	private static final ErrorMessageBuilder ERROR_MESSAGE_BUILDER = new ErrorMessageBuilder();
-	private static final UnknownMessageBuilder UNKNOWN_MESSAGE_BUILDER = new UnknownMessageBuilder();
 	private static final AwayMessageBuilder AWAY_MESSAGE_BUILDER = new AwayMessageBuilder();
 	
 	private final AbstractPrivateMessageBuilder PRIVATE_MESSAGE_BUILDER;
@@ -81,7 +81,7 @@ public abstract class AbstractMessageFactory
 		
 		try
 		{
-			Message msg = new Message(aMsg);
+			GenericMessage msg = new GenericMessage(aMsg);
 			if (PING_KEY.equals(msg.command))
 			{
 				return SERVER_PING_MESSAGE_BUILDER.build(msg);
@@ -111,7 +111,8 @@ public abstract class AbstractMessageFactory
                 return ERROR_MESSAGE_BUILDER.build(msg);
 			}
 
-			return UNKNOWN_MESSAGE_BUILDER.build(msg);
+			// If all else fails just return the plain old generic message.
+			return msg;
 		}
 		catch (Exception aExc)
 		{

@@ -7,7 +7,7 @@ package com.ircclouds.irc.api.domain.messages;
  */
 public class UserVersion extends UserCTCP
 {
-	public UserVersion(Message message) {
+	public UserVersion(AbstractMessage message) {
 		super(message);
 	}
 

@@ -93,9 +93,9 @@ public final class MessageDispatcherImpl implements IMessageDispatcher
 		{
 			aListener.onChannelMessage((ChannelPrivMsg) aMessage);
 		}
-		else if (aMessage instanceof TopicMessage)
+		else if (aMessage instanceof ChannelTopic)
 		{
-			aListener.onTopicChange((TopicMessage) aMessage);
+			aListener.onTopicChange((ChannelTopic) aMessage);
 		}
 		else if (aMessage instanceof UserPrivMsg)
 		{

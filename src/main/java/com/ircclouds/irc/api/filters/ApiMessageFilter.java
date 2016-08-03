@@ -23,13 +23,9 @@ public class ApiMessageFilter implements IMessageFilter
 	public MessageFilterResult filter(IMessage aMsg)
 	{
         if (aMsg instanceof ServerNumeric) {
-            String aText = ((ServerNumeric) aMsg).getText();
-            String cmpnts[] = aText.split(" :");
-
-            if (nextValues.remove(cmpnts[0])) {
+            if (nextValues.remove(((ServerNumeric) aMsg).params.get(0))) {
                 return new MessageFilterResult(null, FilterStatus.HALT);
 			}
-
 		}
 		
 		return new MessageFilterResult(aMsg, FilterStatus.PASS);

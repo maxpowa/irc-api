@@ -4,7 +4,7 @@ import java.util.*;
 
 import com.ircclouds.irc.api.domain.messages.*;
 
-public abstract class AbstractPrivateMessageBuilder implements IBuilder<AbstractPrivMsg>
+public abstract class AbstractPrivateMessageBuilder implements IBuilder<AbstractUserMessage>
 {
 	private static final char NUL = '\001';
 	private static final String PING = "PING";
@@ -12,9 +12,8 @@ public abstract class AbstractPrivateMessageBuilder implements IBuilder<Abstract
 	private static final String ACTION = "ACTION";
 
 	@Override
-	public AbstractPrivMsg build(Message aMessage)
+	public AbstractUserMessage build(AbstractMessage aMessage)
 	{
-		final AbstractPrivMsg _msg;
 		String _m = aMessage.getText();
 
 		if (!aMessage.params.get(0).isEmpty() && getChannelTypes().contains(aMessage.params.get(0).charAt(0)))
@@ -24,23 +23,23 @@ public abstract class AbstractPrivateMessageBuilder implements IBuilder<Abstract
 				String _type = aMessage.getText().substring(1, aMessage.getText().length() - 1);
 				if (_type.startsWith(VERSION))
 				{
-					_msg = new ChannelVersion(aMessage);
+					return new ChannelVersion(aMessage);
 				} else if (_type.startsWith(PING))
 				{
-					_msg = new ChannelPing(aMessage);
+					return new ChannelPing(aMessage);
 				}
 				else if (_type.startsWith(ACTION))
 				{
-					_msg = new ChannelAction(aMessage);
+					return new ChannelAction(aMessage);
 				}
 				else
 				{
-					_msg = new ChannelCTCP(aMessage);
+					return new ChannelCTCP(aMessage);
 				}
 			}
 			else
 			{
-				_msg = new ChannelPrivMsg(aMessage);
+				return new ChannelPrivMsg(aMessage);
 			}
 		}
 		else
@@ -51,27 +50,25 @@ public abstract class AbstractPrivateMessageBuilder implements IBuilder<Abstract
 				String _type = aMessage.getText().substring(1, aMessage.getText().length() - 1);
 				if (_type.startsWith(VERSION))
 				{
-					_msg = new UserVersion(aMessage);
+					return new UserVersion(aMessage);
 				} else if (_type.startsWith(PING))
 				{
-					_msg = new UserPing(aMessage);
+					return new UserPing(aMessage);
 				}
 				else if (_type.startsWith(ACTION))
 				{
-					_msg = new UserAction(aMessage);
+					return new UserAction(aMessage);
 				}
 				else
 				{
-					_msg = new UserCTCP(aMessage);
+					return new UserCTCP(aMessage);
 				}
 			}
 			else
 			{
-				_msg = new UserPrivMsg(aMessage);
+				return new UserPrivMsg(aMessage);
 			}
 		}
-
-		return _msg;
 	}
 	
 	protected abstract Set<Character> getChannelTypes();

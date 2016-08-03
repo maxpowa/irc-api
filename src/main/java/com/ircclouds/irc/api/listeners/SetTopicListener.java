@@ -17,9 +17,9 @@ public class SetTopicListener implements IMessageListener
 	@Override
 	public void onMessage(IMessage aMessage)
 	{
-		if (aMessage instanceof TopicMessage)
+		if (aMessage instanceof ChannelTopic)
 		{
-			TopicMessage _topicMsg = (TopicMessage) aMessage;
+			ChannelTopic _topicMsg = (ChannelTopic) aMessage;
 
 			callback.onSuccess(_topicMsg.getTopic().getValue());
 		} else if (aMessage instanceof ServerNumeric) {

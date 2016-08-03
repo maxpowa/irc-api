@@ -43,6 +43,6 @@ public final class ParseUtils
 			return getUser(aString);
 		}
 		
-		return new IRCServer(aString.substring(1));
+		return new IRCServer(aString);
 	}
 }

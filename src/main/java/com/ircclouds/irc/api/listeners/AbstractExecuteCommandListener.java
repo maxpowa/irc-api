@@ -3,7 +3,6 @@ package com.ircclouds.irc.api.listeners;
 import com.ircclouds.irc.api.*;
 import com.ircclouds.irc.api.domain.*;
 import com.ircclouds.irc.api.domain.messages.*;
-import com.ircclouds.irc.api.domain.messages.interfaces.*;
 import com.ircclouds.irc.api.state.*;
 
 public abstract class AbstractExecuteCommandListener extends VariousMessageListenerAdapter implements IStateAccessor
@@ -160,8 +159,8 @@ public abstract class AbstractExecuteCommandListener extends VariousMessageListe
 		kickUserListener.submit(aChannel, aCallback);
 	}
 	
-	private boolean isForMe(IUserMessage aMsg)
+	private boolean isForMe(AbstractUserMessage aMsg)
 	{
-		return getIRCState().getNickname().equals(aMsg.getSource().getNick());
+		return getIRCState().getNickname().equals(((IRCUser)aMsg.getSource()).getNick());
 	}
 }

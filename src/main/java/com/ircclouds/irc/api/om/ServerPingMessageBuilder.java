@@ -4,7 +4,7 @@ import com.ircclouds.irc.api.domain.messages.*;
 
 public class ServerPingMessageBuilder implements IBuilder<ServerPing>
 {
-	public ServerPing build(Message aMessage)
+	public ServerPing build(AbstractMessage aMessage)
 	{
         return new ServerPing(aMessage);
     }

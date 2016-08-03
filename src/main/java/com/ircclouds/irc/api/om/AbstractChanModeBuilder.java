@@ -9,8 +9,9 @@ import com.ircclouds.irc.api.utils.*;
 
 public abstract class AbstractChanModeBuilder implements IBuilder<ChannelMode>
 {
-	public ChannelMode build(Message aMessage)
+	public ChannelMode build(AbstractMessage aMessage)
 	{
+		// TODO: Move this logic into the channel mode message.
 		Stack<String> _params = new Stack<String>();
 		_params.addAll(aMessage.params.subList(2, aMessage.params.size()));
 

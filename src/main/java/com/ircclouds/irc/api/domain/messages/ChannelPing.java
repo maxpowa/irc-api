@@ -4,7 +4,7 @@ package com.ircclouds.irc.api.domain.messages;
  * @author
  */
 public class ChannelPing extends ChannelCTCP {
-    public ChannelPing(Message message) {
+    public ChannelPing(AbstractMessage message) {
         super(message);
     }
 

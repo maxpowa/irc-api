@@ -1,7 +1,7 @@
 package com.ircclouds.irc.api.domain.messages;
 
-public class UserAction extends UserPrivMsg {
-    public UserAction(Message message) {
+public class UserAction extends UserCTCP {
+    public UserAction(AbstractMessage message) {
         super(message);
     }
 

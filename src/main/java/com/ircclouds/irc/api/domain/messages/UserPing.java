@@ -2,7 +2,7 @@ package com.ircclouds.irc.api.domain.messages;
 
 public class UserPing extends UserCTCP
 {
-	public UserPing(Message message) {
+	public UserPing(AbstractMessage message) {
 		super(message);
 	}
 
