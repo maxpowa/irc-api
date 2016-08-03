@@ -54,7 +54,7 @@ public abstract class AbstractMessageFactory
 			@Override
 			protected Set<Character> getChannelTypes()
 			{
-				return getIRCServerOptions().getChanTypes();
+				return AbstractMessageFactory.this.getIRCServerOptions().getChanTypes();
 			}
 		};
 		NOTICE_BUILDER = new AbstractNoticeBuilder()
@@ -62,7 +62,7 @@ public abstract class AbstractMessageFactory
 			@Override
 			protected Set<Character> getChannelTypes()
 			{
-				return getIRCServerOptions().getChanTypes();
+				return AbstractMessageFactory.this.getIRCServerOptions().getChanTypes();
 			}		
 		};
 		CHAN_MODE_BUILDER = new AbstractChanModeBuilder()
@@ -78,46 +78,39 @@ public abstract class AbstractMessageFactory
 	public IMessage build(String aMsg)
 	{
 		LOG.debug(aMsg);
-		
-		try
-		{
-			GenericMessage msg = new GenericMessage(aMsg);
-			if (PING_KEY.equals(msg.command))
-			{
-				return SERVER_PING_MESSAGE_BUILDER.build(msg);
-			} else if (PRIVATE_MESSAGE_KEY.equals(msg.command)) {
-				return PRIVATE_MESSAGE_BUILDER.build(msg);
-			} else if (NOTICE_KEY.equals(msg.command)) {
-				return NOTICE_BUILDER.build(msg);
-			} else if (JOIN_KEY.equals(msg.command)) {
-				return CHAN_JOIN_BUILDER.build(msg);
-			} else if (PART_KEY.equals(msg.command)) {
-				return CHAN_PART_BUILDER.build(msg);
-			} else if (QUIT_MESSAGE_KEY.equals(msg.command)) {
-				return QUIT_MESSAGE_BUILDER.build(msg);
-			} else if (TOPIC_KEY.equals(msg.command)) {
-				return TOPIC_MESSAGE_BUILDER.build(msg);
-			} else if (NICK_KEY.equals(msg.command)) {
-				return NICK_MESSAGE_BUILDER.build(msg);
-			} else if (KICK_KEY.equals(msg.command)) {
-				return KICK_MESSAGE_BUILDER.build(msg);
-			} else if (MODE_KEY.equals(msg.command) && getIRCServerOptions().getChanTypes().contains(msg.params.get(0).charAt(0))) {
-				return CHAN_MODE_BUILDER.build(msg);
-			} else if (AWAY_KEY.equals(msg.command)) {
-				return AWAY_MESSAGE_BUILDER.build(msg);
-			} else if (isNumeric(msg.command)) {
-				return SERVER_MESSAGE_BUILDER.build(msg);
-            } else if (ERROR_KEY.equals(msg.command)) {
-                return ERROR_MESSAGE_BUILDER.build(msg);
-			}
 
-			// If all else fails just return the plain old generic message.
-			return msg;
-		}
-		catch (Exception aExc)
+		GenericMessage msg = new GenericMessage(aMsg);
+		if (PING_KEY.equals(msg.command))
 		{
-			throw new IRCOMException(aExc);
+			return SERVER_PING_MESSAGE_BUILDER.build(msg);
+		} else if (PRIVATE_MESSAGE_KEY.equals(msg.command)) {
+			return PRIVATE_MESSAGE_BUILDER.build(msg);
+		} else if (NOTICE_KEY.equals(msg.command)) {
+			return NOTICE_BUILDER.build(msg);
+		} else if (JOIN_KEY.equals(msg.command)) {
+			return CHAN_JOIN_BUILDER.build(msg);
+		} else if (PART_KEY.equals(msg.command)) {
+			return CHAN_PART_BUILDER.build(msg);
+		} else if (QUIT_MESSAGE_KEY.equals(msg.command)) {
+			return QUIT_MESSAGE_BUILDER.build(msg);
+		} else if (TOPIC_KEY.equals(msg.command)) {
+			return TOPIC_MESSAGE_BUILDER.build(msg);
+		} else if (NICK_KEY.equals(msg.command)) {
+			return NICK_MESSAGE_BUILDER.build(msg);
+		} else if (KICK_KEY.equals(msg.command)) {
+			return KICK_MESSAGE_BUILDER.build(msg);
+		} else if (MODE_KEY.equals(msg.command) && getIRCServerOptions().getChanTypes().contains(msg.params.get(0).charAt(0))) {
+			return CHAN_MODE_BUILDER.build(msg);
+		} else if (AWAY_KEY.equals(msg.command)) {
+			return AWAY_MESSAGE_BUILDER.build(msg);
+		} else if (isNumeric(msg.command)) {
+			return SERVER_MESSAGE_BUILDER.build(msg);
+		} else if (ERROR_KEY.equals(msg.command)) {
+			return ERROR_MESSAGE_BUILDER.build(msg);
 		}
+
+		// If all else fails just return the plain old generic message.
+		return msg;
 	}
 	
 	protected abstract IRCServerOptions getIRCServerOptions();

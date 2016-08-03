@@ -2,14 +2,6 @@
 :chaos.esper.net NOTICE * :*** Checking Ident
 :chaos.esper.net NOTICE * :*** Couldn't look up your hostname
 :chaos.esper.net NOTICE * :*** No Ident response
-:chaos.esper.net CAP * LS :account-notify away-notify extended-join multi-prefix sasl tls
-:chaos.esper.net 451 * :You have not registered
-:chaos.esper.net CAP TestUser123 NAK :server-time
-:chaos.esper.net CAP TestUser123 ACK :multi-prefix
-:chaos.esper.net CAP TestUser123 NAK :=account-notify
-:chaos.esper.net CAP TestUser123 NAK :=extended-join
-:chaos.esper.net CAP TestUser123 NAK :cap-notify
-:chaos.esper.net CAP TestUser123 ACK :away-notify
 :chaos.esper.net 001 TestUser123 :Welcome to the EsperNet Internet Relay Chat Network TestUser123
 :chaos.esper.net 002 TestUser123 :Your host is chaos.esper.net[72.14.191.81/6667], running version charybdis-3.5.0-dev
 :chaos.esper.net 003 TestUser123 :This server was created Sun Oct 11 2015 at 20:24:54 EDT
@@ -43,6 +35,7 @@
 :Nicknames!part@message PART #Test :I didn't want to test anyways.
 :List!quit@message QUIT :I didn't want to test anyways.
 :Channel!topic@change TOPIC #Test :new topic!
+:Channel!topic@change NOTICE #Test :Ayy lmao
 :Channel!topic@change AWAY :away message
 :Channel!topic@change MODE #Test +t
 :Channel!topic@change NICK NewNick

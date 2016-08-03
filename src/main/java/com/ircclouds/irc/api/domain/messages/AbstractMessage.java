@@ -26,7 +26,7 @@ public abstract class AbstractMessage implements IMessage {
     public AbstractMessage(String raw) {
         this.raw = raw;
         this.parse();
-        LOG.info("new " + this.toString());
+        LOG.trace("new " + this.toString());
     }
 
     public AbstractMessage(AbstractMessage msg) {
@@ -36,7 +36,7 @@ public abstract class AbstractMessage implements IMessage {
         this.command = msg.command;
         this.text = msg.text;
         this.params = msg.params;
-        LOG.info("map " + this.toString());
+        LOG.trace("map " + this.toString());
     }
 
     public ISource getSource() {
