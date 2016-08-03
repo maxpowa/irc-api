@@ -14,7 +14,7 @@ public abstract class AbstractMessage implements IMessage {
 
     private static final Logger LOG = LoggerFactory.getLogger(AbstractMessage.class);
 
-    public HashMap<String, Object> tags = new HashMap<String, Object>();
+    private HashMap<String, Object> tags = new HashMap<String, Object>();
     public ArrayList<String> params = new ArrayList<String>();
     public String prefix;
     public String command;
@@ -57,6 +57,10 @@ public abstract class AbstractMessage implements IMessage {
         return this.params.get(this.params.size() - 1);
     }
 
+    public HashMap<String, Object> getTags() {
+        return this.tags;
+    }
+
     public String toString() {
         return this.getClass().getSimpleName() + "(tags=" + tags +
                 ", prefix=" + prefix +
@@ -72,8 +76,7 @@ public abstract class AbstractMessage implements IMessage {
 
             nextspace = raw.indexOf(" ");
             if (nextspace == -1) {
-                LOG.error("Error parsing IRC message! (Expected space after tags)");
-                return;
+                throw new ParseError("Expected space following tag string");
             }
 
             rawTags = raw.substring(1, nextspace).split(";");
@@ -98,8 +101,7 @@ public abstract class AbstractMessage implements IMessage {
         if (raw.charAt(position) == ':') {
             nextspace = raw.indexOf(" ", position);
             if (nextspace == -1) {
-                LOG.error("Error parsing IRC message! (Expected space after prefix)");
-                return;
+                throw new ParseError("Expected space following prefix string");
             }
             prefix = raw.substring(position + 1, nextspace);
             position = nextspace + 1;
@@ -152,6 +154,12 @@ public abstract class AbstractMessage implements IMessage {
                 params.add(param);
                 break;
             }
+        }
+    }
+
+    public static class ParseError extends RuntimeException {
+        public ParseError(String reason) {
+            super(reason);
         }
     }
 }

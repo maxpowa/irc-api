@@ -1,15 +1,19 @@
 package com.ircclouds.irc.api;
 
-import java.io.*;
-import java.util.*;
+import com.ircclouds.irc.api.comms.INeedsConnection;
+import com.ircclouds.irc.api.domain.IRCServerOptions;
+import com.ircclouds.irc.api.domain.messages.AbstractMessage;
+import com.ircclouds.irc.api.domain.messages.interfaces.IMessage;
+import com.ircclouds.irc.api.om.AbstractMessageFactory;
+import com.ircclouds.irc.api.utils.StringUtils;
 
-import org.slf4j.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import com.ircclouds.irc.api.comms.*;
-import com.ircclouds.irc.api.domain.*;
-import com.ircclouds.irc.api.domain.messages.interfaces.*;
-import com.ircclouds.irc.api.om.*;
-import com.ircclouds.irc.api.utils.*;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.Queue;
 
 /**
  * 
@@ -58,7 +62,11 @@ public abstract class AbstractMessageReader implements IMessageReader, INeedsCon
 		IMessage _msg = null;
 		
 		if (ircMessages.peek() != null) {
-			_msg =  msgFactory.build(ircMessages.poll());
+			try {
+				_msg = msgFactory.build(ircMessages.poll());
+			} catch (AbstractMessage.ParseError aExc) {
+				LOG.error("Parse error: " + aExc.getMessage());
+			}
 		}
 		
 		canRead = ircMessages.isEmpty();

@@ -1,22 +1,23 @@
 package com.ircclouds.irc.api.domain.messages;
 
-import com.ircclouds.irc.api.domain.*;
-import com.ircclouds.irc.api.domain.messages.interfaces.*;
-
-/**
- * @author
- */
 public class ServerNumeric extends AbstractMessage {
+
+    private int numeric;
 
     public ServerNumeric(AbstractMessage message) {
         super(message);
+        this.parseCommand();
+    }
+
+    private void parseCommand() {
+        try {
+            numeric = Integer.parseInt(this.command);
+        } catch (NumberFormatException aExc) {
+            throw new ParseError("Expected command to be numeric");
+        }
     }
 
     public Integer getNumericCode() {
-        try {
-            return Integer.parseInt(this.command);
-        } catch (NumberFormatException aExc) {
-            return 0;
-        }
+        return numeric;
     }
 }

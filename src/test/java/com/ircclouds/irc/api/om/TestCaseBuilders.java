@@ -3,10 +3,39 @@ package com.ircclouds.irc.api.om;
 import com.ircclouds.irc.api.domain.IRCServer;
 import com.ircclouds.irc.api.domain.IRCUser;
 import com.ircclouds.irc.api.domain.WritableIRCUser;
-import com.ircclouds.irc.api.domain.messages.*;
+import com.ircclouds.irc.api.domain.messages.AbstractMessage;
+import com.ircclouds.irc.api.domain.messages.ChannelAction;
+import com.ircclouds.irc.api.domain.messages.ChannelCTCP;
+import com.ircclouds.irc.api.domain.messages.ChannelJoin;
+import com.ircclouds.irc.api.domain.messages.ChannelKick;
+import com.ircclouds.irc.api.domain.messages.ChannelNotice;
+import com.ircclouds.irc.api.domain.messages.ChannelPart;
+import com.ircclouds.irc.api.domain.messages.ChannelPing;
+import com.ircclouds.irc.api.domain.messages.ChannelPrivMsg;
+import com.ircclouds.irc.api.domain.messages.ChannelTopic;
+import com.ircclouds.irc.api.domain.messages.ChannelVersion;
+import com.ircclouds.irc.api.domain.messages.ClientErrorMessage;
+import com.ircclouds.irc.api.domain.messages.GenericMessage;
+import com.ircclouds.irc.api.domain.messages.ServerError;
+import com.ircclouds.irc.api.domain.messages.ServerNotice;
+import com.ircclouds.irc.api.domain.messages.ServerNumeric;
+import com.ircclouds.irc.api.domain.messages.ServerPing;
+import com.ircclouds.irc.api.domain.messages.UserAction;
+import com.ircclouds.irc.api.domain.messages.UserAwayMessage;
+import com.ircclouds.irc.api.domain.messages.UserCTCP;
+import com.ircclouds.irc.api.domain.messages.UserNickMessage;
+import com.ircclouds.irc.api.domain.messages.UserNotice;
+import com.ircclouds.irc.api.domain.messages.UserPing;
+import com.ircclouds.irc.api.domain.messages.UserPrivMsg;
+import com.ircclouds.irc.api.domain.messages.UserQuitMessage;
+import com.ircclouds.irc.api.domain.messages.UserVersion;
 import com.ircclouds.irc.api.domain.messages.interfaces.IMessage;
 import com.ircclouds.irc.api.utils.ParseUtils;
+
 import junit.framework.TestCase;
+
+import org.junit.Rule;
+import org.junit.rules.ExpectedException;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -78,6 +107,7 @@ public class TestCaseBuilders extends TestCase {
         IMessage _msg = _builder.build(input);
         assertEquals(ServerNotice.class, _msg.getClass());
         assertEquals(input.raw, _msg.asRaw());
+        assertNull(_msg.getSource());
         assertEquals("Server Shit", ((ServerNotice) _msg).getText());
 
         input = new GenericMessage(USER_STRING + " NOTICE :Something To An User");
@@ -103,6 +133,7 @@ public class TestCaseBuilders extends TestCase {
         GenericMessage input = new GenericMessage("PING :" + TEST_SERVER);
         ServerPing _msg = _builder.build(input);
         assertEquals(input.raw, _msg.asRaw());
+        assertNull(_msg.getSource());
         assertEquals(TEST_SERVER.toString(), _msg.getText());
     }
 
@@ -193,7 +224,14 @@ public class TestCaseBuilders extends TestCase {
             }
         };
 
-        IMessage _msg = _builder.build(new GenericMessage(USER_STRING + " PRIVMSG User :Something To An User"));
+        IMessage _msg = _builder.build(new GenericMessage("@tag=value " + USER_STRING + " PRIVMSG User :Something To An User"));
+        assertEquals(UserPrivMsg.class, _msg.getClass());
+        assertEquals(((UserPrivMsg) _msg).raw, _msg.asRaw());
+        assertEquals(TEST_USER, ((UserPrivMsg) _msg).getSource());
+        assertEquals("value", ((UserPrivMsg) _msg).getTags().get("tag"));
+        assertEquals("Something To An User", ((UserPrivMsg) _msg).getText());
+
+        _msg = _builder.build(new GenericMessage(USER_STRING + " PRIVMSG User :Something To An User"));
         assertEquals(UserPrivMsg.class, _msg.getClass());
         assertEquals(((UserPrivMsg) _msg).raw, _msg.asRaw());
         assertEquals(TEST_USER, ((UserPrivMsg) _msg).getSource());
@@ -221,6 +259,7 @@ public class TestCaseBuilders extends TestCase {
         assertEquals(UserAction.class, _msg.getClass());
         assertEquals(((UserAction) _msg).raw, _msg.asRaw());
         assertEquals(TEST_USER, ((UserAction) _msg).getSource());
+        assertEquals("User", ((UserAction) _msg).getTarget());
         assertEquals("CTCP to a user", ((UserAction) _msg).getText());
 
         _msg = _builder.build(new GenericMessage(USER_STRING + " PRIVMSG " + TEST_CHANNEL + " :Something To a Chan"));
@@ -261,10 +300,31 @@ public class TestCaseBuilders extends TestCase {
         ServerMessageBuilder _builder = new ServerMessageBuilder();
         ServerNumeric _msg = _builder.build(new GenericMessage("421 WTF :Unknown command"));
         assertEquals(421, (int) _msg.getNumericCode());
+        assertNull(_msg.getSource());
         //assertEquals(TEST_USER, _msg.getTarget());
 
         _msg = _builder.build(new GenericMessage(":chaos.esper.net 005 Nickname SAFELIST ELIST=CTU CHANTYPES=# EXCEPTS INVEX CHANMODES=eIbq,k,flj,CFLPQTcgimnprstz CHANLIMIT=#:50 PREFIX=(ov)@+ MAXLIST=bqeI:100 MODES=4 NETWORK=EsperNet KNOCK :are supported by this server"));
         assertEquals(5, (int) _msg.getNumericCode());
+    }
+
+    public void testClientErrorMessage() {
+        Exception tmp = new Exception("Test exception");
+        ClientErrorMessage _msg = new ClientErrorMessage(tmp);
+        assertEquals("java.lang.Exception: Test exception", _msg.asRaw());
+        assertEquals(tmp, _msg.getException());
+        assertNull(_msg.getSource());
+    }
+
+    @Rule
+    public final ExpectedException exception = ExpectedException.none();
+
+    public void testNumericParseError() {
+        try {
+            new ServerNumeric(new GenericMessage("PASS :should throw a ParseError"));
+            fail("ServerNumeric didn't throw exception when created with non-numeric command");
+        } catch (AbstractMessage.ParseError err) {
+            // pass
+        }
     }
 
 }

@@ -1,12 +1,21 @@
 package com.ircclouds.irc.api.om;
 
-import java.util.*;
-
+import com.ircclouds.irc.api.domain.ChannelModeA;
+import com.ircclouds.irc.api.domain.ChannelModeB;
+import com.ircclouds.irc.api.domain.ChannelModeC;
+import com.ircclouds.irc.api.domain.ChannelModeD;
+import com.ircclouds.irc.api.domain.ChannelModes;
+import com.ircclouds.irc.api.domain.IRCServerOptions;
+import com.ircclouds.irc.api.domain.IRCUserStatus;
+import com.ircclouds.irc.api.domain.IRCUserStatuses;
 import com.ircclouds.irc.api.domain.messages.ChannelMode;
-import junit.framework.*;
+import com.ircclouds.irc.api.domain.messages.GenericMessage;
 
-import com.ircclouds.irc.api.domain.*;
-import com.ircclouds.irc.api.domain.messages.*;
+import junit.framework.TestCase;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Properties;
 
 public class TestCaseChanModeBuilder extends TestCase
 {
@@ -150,5 +159,14 @@ public class TestCaseChanModeBuilder extends TestCase
 		
 		assertTrue(_removedModes != null);
 		assertTrue(_removedModes.size() == 3);
+	}
+
+	public void testSourceCapture() {
+		String input = ":krad!~k@unaffiliated/krad MODE #r0b0t +t-l";
+		ChannelMode _msg = chanModeBuilder.build(new GenericMessage(input));
+
+		assertEquals("krad!~k@unaffiliated/krad", _msg.getSource().toString());
+		assertEquals("#r0b0t", _msg.getChannelName());
+		assertEquals(input, _msg.asRaw());
 	}
 }

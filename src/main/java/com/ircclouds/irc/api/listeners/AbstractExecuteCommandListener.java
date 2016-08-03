@@ -1,9 +1,21 @@
 package com.ircclouds.irc.api.listeners;
 
-import com.ircclouds.irc.api.*;
-import com.ircclouds.irc.api.domain.*;
-import com.ircclouds.irc.api.domain.messages.*;
-import com.ircclouds.irc.api.state.*;
+import com.ircclouds.irc.api.Callback;
+import com.ircclouds.irc.api.IIRCSession;
+import com.ircclouds.irc.api.IServerParameters;
+import com.ircclouds.irc.api.domain.IRCChannel;
+import com.ircclouds.irc.api.domain.IRCUserStatuses;
+import com.ircclouds.irc.api.domain.WritableIRCChannel;
+import com.ircclouds.irc.api.domain.messages.AbstractUserMessage;
+import com.ircclouds.irc.api.domain.messages.ChannelJoin;
+import com.ircclouds.irc.api.domain.messages.ChannelKick;
+import com.ircclouds.irc.api.domain.messages.ChannelPart;
+import com.ircclouds.irc.api.domain.messages.ServerError;
+import com.ircclouds.irc.api.domain.messages.ServerNumeric;
+import com.ircclouds.irc.api.domain.messages.UserNickMessage;
+import com.ircclouds.irc.api.state.IIRCState;
+import com.ircclouds.irc.api.state.IRCStateImpl;
+import com.ircclouds.irc.api.state.IStateAccessor;
 
 public abstract class AbstractExecuteCommandListener extends VariousMessageListenerAdapter implements IStateAccessor
 {
@@ -161,6 +173,6 @@ public abstract class AbstractExecuteCommandListener extends VariousMessageListe
 	
 	private boolean isForMe(AbstractUserMessage aMsg)
 	{
-		return getIRCState().getNickname().equals(((IRCUser)aMsg.getSource()).getNick());
+		return getIRCState().getNickname().equals((aMsg.getSource()).getNick());
 	}
 }

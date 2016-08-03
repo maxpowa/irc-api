@@ -1,10 +1,10 @@
 package com.ircclouds.irc.api.domain.messages;
 
-import java.util.*;
+import com.ircclouds.irc.api.domain.messages.interfaces.IMessage;
+import com.ircclouds.irc.api.domain.messages.interfaces.ISource;
+import com.ircclouds.irc.api.utils.StringUtils;
 
-import com.ircclouds.irc.api.domain.*;
-import com.ircclouds.irc.api.domain.messages.interfaces.*;
-import com.ircclouds.irc.api.utils.*;
+import java.util.List;
 
 /**
  * @author
@@ -47,6 +47,13 @@ public class ChannelMode implements IMessage {
     @Override
     public String asRaw() {
         // TODO: Account for modes with parameters
-        return new StringBuffer().append(":").append(user).append(" MODE ").append(channel).append(" +").append(StringUtils.join(addedModes)).append("-").append(StringUtils.join(removedModes)).toString();
+        StringBuffer sb = new StringBuffer().append(":").append(user).append(" MODE ").append(channel).append(" ");
+        if (addedModes.size() > 0) {
+            sb.append("+").append(StringUtils.join(addedModes));
+        }
+        if (removedModes.size() > 0) {
+            sb.append("-").append(StringUtils.join(removedModes));
+        }
+        return sb.toString();
     }
 }
