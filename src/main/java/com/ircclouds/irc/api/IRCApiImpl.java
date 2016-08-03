@@ -1,14 +1,18 @@
 package com.ircclouds.irc.api;
 
-import static com.ircclouds.irc.api.DCCManagerImpl.*;
+import static com.ircclouds.irc.api.dcc.DCCManagerImpl.*;
 
 import java.io.*;
 import java.net.*;
 
+import com.ircclouds.irc.api.dcc.DCCManager;
+import com.ircclouds.irc.api.dcc.DCCManagerImpl;
+import com.ircclouds.irc.api.dcc.DCCReceiveCallback;
+import com.ircclouds.irc.api.dcc.DCCSendCallback;
+import com.ircclouds.irc.api.negotiators.CapabilityNegotiator;
 import org.slf4j.*;
 
 import com.ircclouds.irc.api.commands.*;
-import com.ircclouds.irc.api.ctcp.*;
 import com.ircclouds.irc.api.domain.*;
 import com.ircclouds.irc.api.filters.*;
 import com.ircclouds.irc.api.listeners.*;

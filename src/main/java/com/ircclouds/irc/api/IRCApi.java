@@ -3,10 +3,11 @@ package com.ircclouds.irc.api;
 import java.io.*;
 import java.net.*;
 
-import com.ircclouds.irc.api.ctcp.*;
+import com.ircclouds.irc.api.dcc.*;
 import com.ircclouds.irc.api.domain.*;
 import com.ircclouds.irc.api.filters.*;
 import com.ircclouds.irc.api.listeners.*;
+import com.ircclouds.irc.api.negotiators.CapabilityNegotiator;
 import com.ircclouds.irc.api.state.*;
 
 /** 

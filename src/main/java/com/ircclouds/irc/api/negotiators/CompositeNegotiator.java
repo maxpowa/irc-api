@@ -1,6 +1,5 @@
 package com.ircclouds.irc.api.negotiators;
 
-import com.ircclouds.irc.api.CapabilityNegotiator;
 import com.ircclouds.irc.api.IRCApi;
 import com.ircclouds.irc.api.commands.CapCmd;
 import com.ircclouds.irc.api.commands.CapEndCmd;
@@ -251,7 +250,7 @@ public class CompositeNegotiator implements CapabilityNegotiator, IMessageListen
 					else
 					{
 						LOG.debug("Continuing conversation of capability: {}", cap.getId());
-						continu = cap.converse(this.relay, msg.asRaw());
+						continu = cap.converse(this.relay, msg);
 					}
 					if (continu)
 					{
@@ -717,6 +716,6 @@ public class CompositeNegotiator implements CapabilityNegotiator, IMessageListen
 		 * @return Returns true if conversation will continue, i.e. response
 		 * from server expected, or false if conversation is done.
 		 */
-		boolean converse(Relay relay, String msg);
+		boolean converse(Relay relay, IMessage msg);
 	}
 }

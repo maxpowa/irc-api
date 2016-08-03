@@ -1,13 +1,13 @@
 package com.ircclouds.irc.api.negotiators.capabilities;
 
-import com.ircclouds.irc.api.domain.messages.GenericMessage;
 import com.ircclouds.irc.api.domain.messages.ServerNumeric;
+import com.ircclouds.irc.api.domain.messages.interfaces.IMessage;
 import com.ircclouds.irc.api.listeners.VariousMessageListenerAdapter;
 import com.ircclouds.irc.api.negotiators.CompositeNegotiator;
 import com.ircclouds.irc.api.negotiators.SaslContext;
 import com.ircclouds.irc.api.negotiators.api.Relay;
 import com.ircclouds.irc.api.om.ServerMessageBuilder;
-import com.ircclouds.irc.api.utils.RawMessageUtils;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.slf4j.Logger;
@@ -122,7 +122,7 @@ public class SaslCapability extends VariousMessageListenerAdapter
 	}
 
 	@Override
-	public boolean converse(Relay relay, String msg)
+	public boolean converse(Relay relay, IMessage msg)
 	{
 		if (!this.enable)
 		{
@@ -137,15 +137,15 @@ public class SaslCapability extends VariousMessageListenerAdapter
 			this.state.init();
 			return true;
 		}
-		final Matcher confirmation = AUTHENTICATE_CONFIRMATION.matcher(msg);
+		final Matcher confirmation = AUTHENTICATE_CONFIRMATION.matcher(msg.asRaw());
 		if (confirmation.find())
 		{
 			this.state.confirm(confirmation.group(1), this.authzId, this.user, this.pass);
 			return true;
 		}
-		else if (RawMessageUtils.isServerNumericMessage(msg))
+		else if (msg instanceof ServerNumeric)
 		{
-            final ServerNumeric numMsg = SERVER_MSG_BUILDER.build(new GenericMessage(msg));
+            final ServerNumeric numMsg = (ServerNumeric)msg;
             switch (numMsg.getNumericCode()) {
                 case RPL_LOGGEDIN:
                     this.state.loggedIn();

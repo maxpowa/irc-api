@@ -1,5 +1,6 @@
-package com.ircclouds.irc.api;
+package com.ircclouds.irc.api.negotiators;
 
+import com.ircclouds.irc.api.IRCApi;
 import com.ircclouds.irc.api.commands.*;
 import com.ircclouds.irc.api.listeners.*;
 

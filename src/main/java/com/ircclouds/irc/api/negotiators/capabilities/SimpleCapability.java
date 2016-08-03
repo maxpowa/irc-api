@@ -1,5 +1,6 @@
 package com.ircclouds.irc.api.negotiators.capabilities;
 
+import com.ircclouds.irc.api.domain.messages.interfaces.IMessage;
 import com.ircclouds.irc.api.negotiators.CompositeNegotiator;
 import com.ircclouds.irc.api.negotiators.api.Relay;
 
@@ -66,7 +67,7 @@ public class SimpleCapability implements CompositeNegotiator.Capability
 	}
 
 	@Override
-	public boolean converse(Relay relay, String msg)
+	public boolean converse(Relay relay, IMessage msg)
 	{
 		return false;
 	}

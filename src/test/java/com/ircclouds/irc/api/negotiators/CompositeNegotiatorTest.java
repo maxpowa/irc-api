@@ -3,6 +3,7 @@ package com.ircclouds.irc.api.negotiators;
 import com.ircclouds.irc.api.IRCApi;
 import com.ircclouds.irc.api.commands.CapCmd;
 import com.ircclouds.irc.api.commands.CapLsCmd;
+import com.ircclouds.irc.api.domain.messages.interfaces.IMessage;
 import com.ircclouds.irc.api.negotiators.CompositeNegotiator.Capability;
 import com.ircclouds.irc.api.negotiators.CompositeNegotiator.Host;
 import com.ircclouds.irc.api.negotiators.api.Relay;
@@ -60,7 +61,7 @@ public class CompositeNegotiatorTest
 			public boolean enable() { return true; }
 
 			@Override
-			public boolean converse(Relay relay, String msg) { return false; }
+			public boolean converse(Relay relay, IMessage msg) { return false; }
 		});
 		new CompositeNegotiator(negotiators, null);
 	}
@@ -84,7 +85,7 @@ public class CompositeNegotiatorTest
 			}
 
 			@Override
-			public boolean converse(Relay relay, String msg) { return false; }
+			public boolean converse(Relay relay, IMessage msg) { return false; }
 		});
 		new CompositeNegotiator(negotiators, null);
 	}
@@ -102,7 +103,7 @@ public class CompositeNegotiatorTest
 			public boolean enable() { return false; }
 
 			@Override
-			public boolean converse(Relay relay, String msg) { return false; }
+			public boolean converse(Relay relay, IMessage msg) { return false; }
 		});
 		negotiators.add(new Capability() {
 
@@ -113,7 +114,7 @@ public class CompositeNegotiatorTest
 			public boolean enable() { return false; }
 
 			@Override
-			public boolean converse(Relay relay, String msg) { return false; }
+			public boolean converse(Relay relay, IMessage msg) { return false; }
 		});
 		negotiators.add(new Capability() {
 
@@ -124,7 +125,7 @@ public class CompositeNegotiatorTest
 			public boolean enable() { return true; }
 
 			@Override
-			public boolean converse(Relay relay, String msg) { return false; }
+			public boolean converse(Relay relay, IMessage msg) { return false; }
 		});
 		new CompositeNegotiator(negotiators, null);
 	}
@@ -298,7 +299,7 @@ public class CompositeNegotiatorTest
 			}
 
 			@Override
-			public boolean converse(Relay relay, String msg)
+			public boolean converse(Relay relay, IMessage msg)
 			{
 				return false;
 			}

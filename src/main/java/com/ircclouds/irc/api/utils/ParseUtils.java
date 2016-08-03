@@ -10,20 +10,6 @@ import com.ircclouds.irc.api.domain.messages.interfaces.*;
  */
 public final class ParseUtils
 {
-	private ParseUtils()
-	{
-
-	}
-	
-	public static String getTextWithoutPrefix(String aText, String aPrefix)
-	{
-		if (aText.startsWith(aPrefix)) {
-			return aText.substring(aPrefix.length());
-		}
-		
-		return aText;
-	}
-	
 	public static WritableIRCUser getUser(String aString)
 	{
 		final String[] _cmpnts1 = aString.split("@");
