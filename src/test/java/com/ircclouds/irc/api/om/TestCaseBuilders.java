@@ -34,9 +34,6 @@ import com.ircclouds.irc.api.utils.ParseUtils;
 
 import junit.framework.TestCase;
 
-import org.junit.Rule;
-import org.junit.rules.ExpectedException;
-
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -314,9 +311,6 @@ public class TestCaseBuilders extends TestCase {
         assertEquals(tmp, _msg.getException());
         assertNull(_msg.getSource());
     }
-
-    @Rule
-    public final ExpectedException exception = ExpectedException.none();
 
     public void testNumericParseError() {
         try {
