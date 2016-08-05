@@ -3,7 +3,6 @@ package com.ircclouds.irc.api.domain.messages;
 import com.ircclouds.irc.api.domain.messages.interfaces.IMessage;
 import com.ircclouds.irc.api.domain.messages.interfaces.ISource;
 import com.ircclouds.irc.api.utils.ParseUtils;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -69,6 +68,8 @@ public abstract class AbstractMessage implements IMessage {
     }
 
     protected void parse() {
+        if (this.raw.length() <= 0) throw new ParseError("Expected non-zero input length");
+
         int position = 0;
         int nextspace = 0;
         if (this.raw.charAt(0) == '@') {

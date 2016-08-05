@@ -42,5 +42,6 @@
 :Channel!topic@change KICK KickedPerson :Kick Reason
 ERROR :potatOS booting up
 @funky=spacing;bbb;     :really!funky@spacing     PRIVMSG      #chan       :Why would you do this?!
+
 @cause;a;parse;error
 :cause!another@parse.error
