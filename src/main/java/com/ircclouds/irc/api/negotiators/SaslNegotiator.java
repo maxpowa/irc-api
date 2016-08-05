@@ -1,16 +1,20 @@
 package com.ircclouds.irc.api.negotiators;
 
 
-import com.ircclouds.irc.api.*;
-import com.ircclouds.irc.api.commands.*;
+import com.ircclouds.irc.api.IRCApi;
+import com.ircclouds.irc.api.commands.CapCmd;
+import com.ircclouds.irc.api.commands.CapEndCmd;
+import com.ircclouds.irc.api.commands.CapReqCmd;
 import com.ircclouds.irc.api.domain.messages.ServerNumeric;
-import com.ircclouds.irc.api.domain.messages.interfaces.*;
+import com.ircclouds.irc.api.domain.messages.interfaces.IMessage;
 import com.ircclouds.irc.api.listeners.VariousMessageListenerAdapter;
 import com.ircclouds.irc.api.negotiators.api.Relay;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Implementation of a SASL negotiator. This negotiator will negotiate for the
@@ -106,7 +110,7 @@ public class SaslNegotiator extends VariousMessageListenerAdapter implements Cap
 			}
 			else if (capNak.find())
 			{
-				this.irc.rawMessage(new CapEndCmd().asString());
+				this.irc.rawMessage(new CapEndCmd());
 			}
 			else if (confirmation.find())
 			{
@@ -120,7 +124,7 @@ public class SaslNegotiator extends VariousMessageListenerAdapter implements Cap
 		catch (RuntimeException e)
 		{
 			LOG.error("Error occurred during CAP negotiation. Prematurely ending CAP negotiation phase and continuing IRC registration as is.", e);
-			this.irc.rawMessage(new CapEndCmd().asString());
+			this.irc.rawMessage(new CapEndCmd());
 		}
 	}
 
@@ -152,7 +156,7 @@ public class SaslNegotiator extends VariousMessageListenerAdapter implements Cap
 				break;
 			case RPL_SASLSUCCESS:
 				this.state.success();
-				this.irc.rawMessage(new CapEndCmd().asString());
+				this.irc.rawMessage(new CapEndCmd());
 				break;
 			case ERR_SASLFAIL:
 				this.state.fail();
@@ -160,14 +164,14 @@ public class SaslNegotiator extends VariousMessageListenerAdapter implements Cap
 			case ERR_NICKLOCKED:
 				LOG.error("SASL account locked. Aborting authentication procedure.");
 				this.state.abort();
-				this.irc.rawMessage(new CapEndCmd().asString());
+				this.irc.rawMessage(new CapEndCmd());
 				break;
 			case ERR_SASLTOOLONG:
 				this.state.abort();
 				break;
 			case ERR_SASLABORTED:
 			case ERR_SASLALREADY:
-				this.irc.rawMessage(new CapEndCmd().asString());
+				this.irc.rawMessage(new CapEndCmd());
 				break;
 			default:
 				break;
@@ -176,7 +180,7 @@ public class SaslNegotiator extends VariousMessageListenerAdapter implements Cap
 		catch (RuntimeException e)
 		{
 			LOG.error("Error occurred during CAP negotiation. Ending CAP negotiation phase and continuing registration as is.", e);
-			this.irc.rawMessage(new CapEndCmd().asString());
+			this.irc.rawMessage(new CapEndCmd());
 		}
 	}
 }

@@ -3,13 +3,13 @@ package com.ircclouds.irc.api.commands;
 
 public class QuitCmd implements ICommand
 {
-	private static final String QUIT_ID = "QUIT";
+	public static String DEFAULT_QUIT_MESSAGE = "Leaving";
 
 	private String quitMsg;
 
 	public QuitCmd()
 	{
-		quitMsg = "";
+		quitMsg = DEFAULT_QUIT_MESSAGE;
 	}	
 	
 	public QuitCmd(String aQuitMsg)
@@ -18,8 +18,8 @@ public class QuitCmd implements ICommand
 	}
 
 	@Override
-	public String asString()
+	public String toString()
 	{
-		return QUIT_ID + " :" + quitMsg;
+		return "QUIT :" + quitMsg + CRNL;
 	}
 }

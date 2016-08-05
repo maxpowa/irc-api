@@ -17,6 +17,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Properties;
 
+import static org.junit.Assert.assertNotEquals;
+
 public class TestCaseChanModeBuilder extends TestCase
 {
 	private AbstractChanModeBuilder chanModeBuilder;
@@ -49,6 +51,22 @@ public class TestCaseChanModeBuilder extends TestCase
 				};
 			}		
 		};
+	}
+
+	public void testCompareModes() {
+		assertEquals(new ChannelModeA('c', "a"), new ChannelModeA('c', "a"));
+		assertFalse(new ChannelModeA('c', "a").equals('c'));
+
+		assertEquals(new ChannelModeA('c', "a").toString(), "[ChannelMode[type: c]]");
+
+		assertEquals(new ChannelModeA('c', "a").getParam(), "a");
+		assertNotEquals(new ChannelModeA('c', "a").hashCode(), new ChannelModeA('c', "b").hashCode());
+		assertEquals(new ChannelModeB('c', "a").getParam(), "a");
+		assertNotEquals(new ChannelModeB('c', "a").hashCode(), new ChannelModeB('c', "b").hashCode());
+		assertEquals(new ChannelModeC('c', "a").getParam(), "a");
+		assertNotEquals(new ChannelModeC('c', "a").hashCode(), new ChannelModeC('c', "b").hashCode());
+
+		assertTrue(new ChannelModes(new HashSet<Character>(), new HashSet<Character>(), new HashSet<Character>(), new HashSet<Character>()).isEmpty());
 	}
 	
 	public void testAddModesOnly()

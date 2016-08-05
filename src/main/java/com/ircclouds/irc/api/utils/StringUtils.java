@@ -1,8 +1,8 @@
 package com.ircclouds.irc.api.utils;
 
-import java.util.*;
+import com.ircclouds.irc.api.domain.ChannelMode;
 
-import com.ircclouds.irc.api.domain.*;
+import java.util.List;
 
 /**
  * 
@@ -13,7 +13,7 @@ public final class StringUtils
 {
 	public static String join(List<ChannelMode> aList)
 	{
-		StringBuffer _sb = new StringBuffer();
+		StringBuilder _sb = new StringBuilder();
 		for (ChannelMode _s : aList)
 		{
 			_sb.append(_s.getChannelModeType());

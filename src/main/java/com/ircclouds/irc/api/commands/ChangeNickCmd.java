@@ -10,8 +10,8 @@ public class ChangeNickCmd implements ICommand
 	}
 	
 	@Override
-	public String asString()
+	public String toString()
 	{
-		return "NICK :" + newNick;
+		return "NICK :" + newNick + CRNL;
 	}
 }

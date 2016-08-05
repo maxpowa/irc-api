@@ -47,7 +47,7 @@ public class ChannelMode implements IMessage {
     @Override
     public String asRaw() {
         // TODO: Account for modes with parameters
-        StringBuffer sb = new StringBuffer().append(":").append(user).append(" MODE ").append(channel).append(" ");
+        StringBuilder sb = new StringBuilder(":").append(user).append(" MODE ").append(channel).append(" ");
         if (addedModes.size() > 0) {
             sb.append("+").append(StringUtils.join(addedModes));
         }

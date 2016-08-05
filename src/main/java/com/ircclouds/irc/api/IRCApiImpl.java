@@ -1,23 +1,52 @@
 package com.ircclouds.irc.api;
 
-import static com.ircclouds.irc.api.dcc.DCCManagerImpl.*;
-
-import java.io.*;
-import java.net.*;
-
+import com.ircclouds.irc.api.commands.CapCmd;
+import com.ircclouds.irc.api.commands.ChangeModeCmd;
+import com.ircclouds.irc.api.commands.ChangeNickCmd;
+import com.ircclouds.irc.api.commands.ChangeTopicCmd;
+import com.ircclouds.irc.api.commands.ConnectCmd;
+import com.ircclouds.irc.api.commands.ICommand;
+import com.ircclouds.irc.api.commands.JoinChanCmd;
+import com.ircclouds.irc.api.commands.KickUserCmd;
+import com.ircclouds.irc.api.commands.PartChanCmd;
+import com.ircclouds.irc.api.commands.QuitCmd;
+import com.ircclouds.irc.api.commands.SendActionMessage;
+import com.ircclouds.irc.api.commands.SendNoticeMessage;
+import com.ircclouds.irc.api.commands.SendPrivateMessage;
+import com.ircclouds.irc.api.commands.SendRawMessage;
 import com.ircclouds.irc.api.dcc.DCCManager;
 import com.ircclouds.irc.api.dcc.DCCManagerImpl;
 import com.ircclouds.irc.api.dcc.DCCReceiveCallback;
 import com.ircclouds.irc.api.dcc.DCCSendCallback;
+import com.ircclouds.irc.api.domain.IRCChannel;
+import com.ircclouds.irc.api.domain.IRCServerOptions;
+import com.ircclouds.irc.api.domain.WritableIRCChannel;
+import com.ircclouds.irc.api.filters.AbstractAndMessageFilter;
+import com.ircclouds.irc.api.filters.ApiMessageFilter;
+import com.ircclouds.irc.api.filters.IMessageFilter;
+import com.ircclouds.irc.api.listeners.AbstractExecuteCommandListener;
+import com.ircclouds.irc.api.listeners.ExecuteCommandListenerImpl;
+import com.ircclouds.irc.api.listeners.IMessageListener;
+import com.ircclouds.irc.api.listeners.MESSAGE_VISIBILITY;
+import com.ircclouds.irc.api.listeners.PingVersionListenerImpl;
 import com.ircclouds.irc.api.negotiators.CapabilityNegotiator;
-import org.slf4j.*;
+import com.ircclouds.irc.api.state.AbstractIRCStateUpdater;
+import com.ircclouds.irc.api.state.DisconnectedIRCState;
+import com.ircclouds.irc.api.state.IIRCState;
+import com.ircclouds.irc.api.state.IRCStateImpl;
+import com.ircclouds.irc.api.state.IStateAccessor;
+import com.ircclouds.irc.api.utils.NetUtils;
 
-import com.ircclouds.irc.api.commands.*;
-import com.ircclouds.irc.api.domain.*;
-import com.ircclouds.irc.api.filters.*;
-import com.ircclouds.irc.api.listeners.*;
-import com.ircclouds.irc.api.state.*;
-import com.ircclouds.irc.api.utils.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.Proxy;
+import java.net.SocketAddress;
+import java.net.SocketException;
+
+import static com.ircclouds.irc.api.dcc.DCCManagerImpl.DCC_SEND_TIMEOUT;
 
 /**
  * The main implementation of {@link IRCApi}. It offers the ability to save the
@@ -384,6 +413,11 @@ public class IRCApiImpl implements IRCApi
 	public void rawMessage(String aMessage)
 	{
 		execute(new SendRawMessage(aMessage));
+	}
+
+	@Override
+	public void rawMessage(ICommand aMessage) {
+		execute(new SendRawMessage(aMessage.toString()));
 	}
 
 	@Override

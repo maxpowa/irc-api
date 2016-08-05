@@ -9,8 +9,8 @@ public class CapLsCmd extends CapCmd
 {
 
 	@Override
-	public String asString()
+	public String toString()
 	{
-		return "CAP LS";
+		return "CAP LS" + CRNL;
 	}
 }

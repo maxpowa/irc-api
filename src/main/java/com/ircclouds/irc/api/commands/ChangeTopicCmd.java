@@ -7,8 +7,6 @@ package com.ircclouds.irc.api.commands;
  */
 public class ChangeTopicCmd implements ICommand
 {
-	private static final String TOPIC_KEY = "TOPIC";
-
 	private String channel;
 	private String topic;
 
@@ -19,9 +17,9 @@ public class ChangeTopicCmd implements ICommand
 	}
 
 	@Override
-	public String asString()
+	public String toString()
 	{
-		return new StringBuffer().append(TOPIC_KEY).append(" ").append(channel).append(" :").append(topic).toString();
+		return "TOPIC " + channel + " :" + topic + CRNL;
 	}
 
 }

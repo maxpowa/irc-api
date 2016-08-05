@@ -9,14 +9,16 @@ import com.ircclouds.irc.api.domain.messages.ServerNumeric;
 import com.ircclouds.irc.api.domain.messages.interfaces.IMessage;
 import com.ircclouds.irc.api.listeners.IMessageListener;
 import com.ircclouds.irc.api.negotiators.api.Relay;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Composite Negotiator. A composite negotiator that will handle negotiator for
@@ -555,7 +557,7 @@ public class CompositeNegotiator implements CapabilityNegotiator, IMessageListen
 
 	private static void send(final IRCApi irc, final ICommand cmd)
 	{
-		send(irc, cmd.asString());
+		send(irc, cmd.toString());
 	}
 
 	private static void send(final IRCApi irc, final String msg)

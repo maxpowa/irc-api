@@ -10,8 +10,8 @@ public class ChangeModeCmd implements ICommand
 	}
 	
 	@Override
-	public String asString()
+	public String toString()
 	{
-		return "mode " + changeModesStr;
+		return "MODE " + changeModesStr + CRNL;
 	}
 }

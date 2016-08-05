@@ -1,6 +1,6 @@
 package com.ircclouds.irc.api.commands;
 
-import com.ircclouds.irc.api.utils.*;
+import com.ircclouds.irc.api.utils.StringUtils;
 
 /**
  * 
@@ -9,8 +9,6 @@ import com.ircclouds.irc.api.utils.*;
  */
 public class JoinChanCmd implements ICommand
 {
-	private static final String JOIN = "JOIN";
-
 	private String chanName;
 	private String key;
 
@@ -24,19 +22,14 @@ public class JoinChanCmd implements ICommand
 		chanName = aChanName;
 		key = aKey;
 	}
-	
-	public String asString()
-	{
-		return new StringBuffer().append(JOIN).append(" ").append(getChanName()).append(getKey()).append("\r\n").toString();
+
+	public String toString() {
+		return "JOIN " + chanName + getKey() + CRNL;
 	}
 
 	private String getKey()
 	{
-		return !StringUtils.isEmpty(key) ? " :" + key : "";
-	}
-
-	private String getChanName()
-	{
-		return chanName;
+		if (StringUtils.isEmpty(key)) return "";
+		return " :" + key;
 	}
 }

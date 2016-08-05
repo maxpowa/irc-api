@@ -1,14 +1,21 @@
 package com.ircclouds.irc.api;
 
-import java.io.*;
-import java.net.*;
-
-import com.ircclouds.irc.api.dcc.*;
-import com.ircclouds.irc.api.domain.*;
-import com.ircclouds.irc.api.filters.*;
-import com.ircclouds.irc.api.listeners.*;
+import com.ircclouds.irc.api.commands.ICommand;
+import com.ircclouds.irc.api.dcc.DCCManager;
+import com.ircclouds.irc.api.dcc.DCCReceiveCallback;
+import com.ircclouds.irc.api.dcc.DCCReceiveResult;
+import com.ircclouds.irc.api.dcc.DCCSendCallback;
+import com.ircclouds.irc.api.dcc.DCCSendException;
+import com.ircclouds.irc.api.dcc.DCCSendResult;
+import com.ircclouds.irc.api.domain.IRCChannel;
+import com.ircclouds.irc.api.filters.IMessageFilter;
+import com.ircclouds.irc.api.listeners.IMessageListener;
 import com.ircclouds.irc.api.negotiators.CapabilityNegotiator;
-import com.ircclouds.irc.api.state.*;
+import com.ircclouds.irc.api.state.IIRCState;
+
+import java.io.File;
+import java.net.Proxy;
+import java.net.SocketAddress;
 
 /** 
  * The main interface of IRC-API, where all IRC methods are defined.
@@ -264,10 +271,17 @@ public interface IRCApi
 
 	/**
 	 * Synchronous raw message
-	 * 
+	 *
 	 * @param aMessage A raw text message to be sent to the IRC server
 	 */
 	void rawMessage(String aMessage);
+
+	/**
+	 * Synchronous raw message
+	 *
+	 * @param aMessage A raw text message to be sent to the IRC server, will be stringified
+	 */
+	void rawMessage(ICommand aMessage);
 
 	/**
 	 * 

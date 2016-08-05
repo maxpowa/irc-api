@@ -13,8 +13,8 @@ public class KickUserCmd implements ICommand
 		kickMsg = aKickMessage;
 	}
 
-	public String asString()
+	public String toString()
 	{
-		return new StringBuffer().append("KICK").append(" ").append(channel).append(" ").append(user).append(" :").append(kickMsg).append("\r\n").toString();
+		return "KICK " + channel + " " + user + " :" + kickMsg + CRNL;
 	}
 }

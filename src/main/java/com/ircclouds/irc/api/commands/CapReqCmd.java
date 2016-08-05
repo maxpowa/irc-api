@@ -1,6 +1,8 @@
 package com.ircclouds.irc.api.commands;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * CAP command to request 1 or more capabilities.
@@ -17,13 +19,13 @@ public class CapReqCmd extends CapCmd {
 	}
 
 	@Override
-	public String asString()
+	public String toString()
 	{
 		final StringBuilder req = new StringBuilder("CAP REQ :");
-		for (String ext : extensions)
-		{
+		for (String ext : extensions) {
 			req.append(ext).append(" ");
 		}
-		return req.toString();
+		// Remove trailing space
+		return req.deleteCharAt(req.length() - 1).append(CRNL).toString();
 	}
 }

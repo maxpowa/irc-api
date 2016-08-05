@@ -21,15 +21,15 @@ public class SendNoticeMessage implements ICommand
 	}
 
 	@Override
-	public String asString()
+	public String toString()
 	{
 		if (asyncRandConstant == null)
 		{
-			return NOTICE + channel + " :" + msg;
+			return NOTICE + channel + " :" + msg + CRNL;
 		}
 		else
 		{
-			return NOTICE + channel + "," + asyncRandConstant + " :" + msg;
+			return NOTICE + channel + "," + asyncRandConstant + " :" + msg + CRNL;
 		}
 	}
 }

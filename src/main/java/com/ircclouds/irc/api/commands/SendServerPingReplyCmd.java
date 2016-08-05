@@ -1,18 +1,15 @@
 package com.ircclouds.irc.api.commands;
 
-import com.ircclouds.irc.api.domain.messages.*;
-
 public class SendServerPingReplyCmd implements ICommand
 {
-    private ServerPong pong;
+    private String text;
 
-    public SendServerPingReplyCmd(ServerPong aPong) {
-        pong = aPong;
+    public SendServerPingReplyCmd(String aText) {
+        text = aText;
     }
 
-	public String asString()
-	{
-		return pong.toString();
-	}
+    public String toString() {
+        return "PONG :" + text + CRNL;
+    }
 
 }

@@ -15,9 +15,9 @@ public class PartChanCmd implements ICommand
 	}
 
 	@Override
-	public String asString()
+	public String toString()
 	{
-		return PART_ID + " " + channel + " :" + partMsg;
+		return "PART " + channel + " :" + partMsg + CRNL;
 	}
 
 }

@@ -21,15 +21,15 @@ public class SendPrivateMessage implements ICommand
 	}
 	
 	@Override
-	public String asString()
+	public String toString()
 	{
 		if (asyncRandConstant == null)
 		{
-			return PRIVMSG + target + " :" + msg;
+			return PRIVMSG + target + " :" + msg + CRNL;
 		}
 		else
 		{
-			return PRIVMSG + target + "," + asyncRandConstant + " :" + msg;
+			return PRIVMSG + target + "," + asyncRandConstant + " :" + msg + CRNL;
 		}
 	}
 }

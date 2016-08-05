@@ -20,4 +20,9 @@ public class ChannelModeC extends ChannelMode
 	{
 		return param;
 	}
+
+
+	public int hashCode() {
+		return type.hashCode() + ':' + param.hashCode();
+	}
 }

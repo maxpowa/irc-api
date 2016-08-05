@@ -2,7 +2,7 @@ package com.ircclouds.irc.api.domain;
 
 public class ChannelMode
 {
-	private Character type;
+	protected Character type;
 
 	public ChannelMode(Character aType)
 	{

@@ -2,5 +2,7 @@ package com.ircclouds.irc.api.commands;
 
 public interface ICommand
 {
-	String asString();
+	String CRNL = "\r\n";
+
+	String toString();
 }

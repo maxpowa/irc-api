@@ -1,6 +1,7 @@
 package com.ircclouds.irc.api.domain;
 
-import com.ircclouds.irc.api.domain.messages.interfaces.*;
+import com.ircclouds.irc.api.domain.messages.interfaces.ISource;
+
 import java.net.Proxy;
 
 /**
@@ -40,6 +41,14 @@ public class IRCServer implements ISource
 		isSSL = aSSLServer;
 		proxy = null;
 		resolveByProxy = false;
+	}
+
+	public IRCServer(String aHostname, String aPassword) {
+		this(aHostname, DEFAULT_IRC_SERVER_PORT, aPassword, false, null, false);
+	}
+
+	public IRCServer(String aHostname, int aPort, String aPassword) {
+		this(aHostname, aPort, aPassword, false, null, false);
 	}
 
 	public IRCServer(String aHostname, int aPort)

@@ -3,8 +3,6 @@ package com.ircclouds.irc.api.commands;
 public class SendActionMessage implements ICommand
 {	
 	private static final char NUL = '\001';
-	private static final String PRIVMSG = "PRIVMSG ";
-	private static final String ACTION = "ACTION ";
 
 	private String target;
 	private String msg;
@@ -23,15 +21,15 @@ public class SendActionMessage implements ICommand
 	}	
 	
 	@Override
-	public String asString()
+	public String toString()
 	{
 		if (asyncRandConstant == null)
 		{
-			return PRIVMSG + target + " :" + NUL + ACTION + msg + NUL;
+			return "PRIVMSG " + target + " :" + NUL + "ACTION " + msg + NUL + CRNL;
 		}
 		else
 		{
-			return PRIVMSG + target + "," + asyncRandConstant + " :" + NUL + ACTION + msg + NUL;
+			return "PRIVMSG " + target + "," + asyncRandConstant + " :" + NUL + "ACTION " + msg + NUL + CRNL;
 		}
 	}
 }

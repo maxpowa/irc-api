@@ -10,8 +10,8 @@ public class SendRawMessage implements ICommand
 		text = aText;
 	}
 
-	public String asString()
+	public String toString()
 	{
-		return text;
+		return text + CRNL;
 	}
 }

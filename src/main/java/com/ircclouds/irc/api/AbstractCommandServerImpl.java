@@ -1,11 +1,12 @@
 package com.ircclouds.irc.api;
 
-import java.io.*;
+import com.ircclouds.irc.api.commands.ICommand;
+import com.ircclouds.irc.api.comms.INeedsConnection;
 
-import org.slf4j.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import com.ircclouds.irc.api.commands.*;
-import com.ircclouds.irc.api.comms.*;
+import java.io.IOException;
 
 public abstract class AbstractCommandServerImpl implements ICommandServer, INeedsConnection
 {
@@ -13,9 +14,9 @@ public abstract class AbstractCommandServerImpl implements ICommandServer, INeed
 
 	public void execute(ICommand aCommand) throws IOException
 	{
-		LOG.debug("Executing Command: " + aCommand.asString());
+		LOG.debug("Executing Command: " + aCommand);
 
-		String _str = aCommand.asString() + "\r\n";
+		String _str = aCommand + "\r\n";
 		int _written = getConnection().write(_str);
 		if (_str.length() > _written)
 		{
