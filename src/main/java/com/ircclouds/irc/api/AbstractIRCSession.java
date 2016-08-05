@@ -1,16 +1,21 @@
 package com.ircclouds.irc.api;
 
-import java.io.*;
+import com.ircclouds.irc.api.commands.interfaces.ICommand;
+import com.ircclouds.irc.api.comms.IConnection;
+import com.ircclouds.irc.api.comms.SSLSocketChannelConnection;
+import com.ircclouds.irc.api.comms.SocketChannelConnection;
+import com.ircclouds.irc.api.domain.IRCServer;
+import com.ircclouds.irc.api.domain.IRCServerOptions;
+import com.ircclouds.irc.api.domain.SecureIRCServer;
+import com.ircclouds.irc.api.domain.messages.ClientErrorMessage;
+import com.ircclouds.irc.api.filters.IMessageFilter;
+import com.ircclouds.irc.api.filters.TargetListeners;
+import com.ircclouds.irc.api.listeners.IMessageListener;
+import com.ircclouds.irc.api.listeners.MESSAGE_VISIBILITY;
+import com.ircclouds.irc.api.state.IIRCState;
 
-import javax.net.ssl.*;
-
-import com.ircclouds.irc.api.commands.*;
-import com.ircclouds.irc.api.comms.*;
-import com.ircclouds.irc.api.domain.*;
-import com.ircclouds.irc.api.domain.messages.*;
-import com.ircclouds.irc.api.filters.*;
-import com.ircclouds.irc.api.listeners.*;
-import com.ircclouds.irc.api.state.*;
+import javax.net.ssl.SSLContext;
+import java.io.IOException;
 
 public abstract class AbstractIRCSession implements IIRCSession
 {

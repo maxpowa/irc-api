@@ -1,8 +1,7 @@
 package com.ircclouds.irc.api;
 
-import com.ircclouds.irc.api.commands.ICommand;
+import com.ircclouds.irc.api.commands.interfaces.ICommand;
 import com.ircclouds.irc.api.comms.INeedsConnection;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

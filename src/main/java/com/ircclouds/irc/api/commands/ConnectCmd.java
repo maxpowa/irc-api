@@ -1,6 +1,8 @@
 package com.ircclouds.irc.api.commands;
 
 import com.ircclouds.irc.api.IServerParameters;
+import com.ircclouds.irc.api.commands.interfaces.ICapCmd;
+import com.ircclouds.irc.api.commands.interfaces.ICommand;
 import com.ircclouds.irc.api.utils.StringUtils;
 
 public class ConnectCmd implements ICommand
@@ -9,11 +11,11 @@ public class ConnectCmd implements ICommand
 	private final String ident;
 	private final String realname;
 	private final String password;
-	
-	private final CapCmd capInitCmd;
+
+	private final ICapCmd capInitCmd;
 
 	public ConnectCmd(final IServerParameters aServerParameters,
-			final CapCmd capInitCmd)
+					  final ICapCmd capInitCmd)
 	{
 		nick = aServerParameters.getNickname();
 		ident = aServerParameters.getIdent();

@@ -1,5 +1,7 @@
 package com.ircclouds.irc.api.commands;
 
+import com.ircclouds.irc.api.commands.interfaces.ICapCmd;
+
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -9,7 +11,7 @@ import java.util.List;
  *
  * @author Danny van Heumen
  */
-public class CapReqCmd extends CapCmd {
+public class CapReqCmd implements ICapCmd {
 	private final List<String> extensions = new LinkedList<String>();
 
 	public CapReqCmd(String extension, String... extensions)

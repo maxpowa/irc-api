@@ -16,12 +16,10 @@
 package com.ircclouds.irc.api.negotiators;
 
 import com.ircclouds.irc.api.IRCApi;
-import com.ircclouds.irc.api.commands.CapCmd;
-
+import com.ircclouds.irc.api.commands.interfaces.ICapCmd;
+import mockit.Mocked;
 import org.junit.Before;
 import org.junit.Test;
-
-import mockit.Mocked;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -72,7 +70,7 @@ public class SaslNegotiatorTest {
 	@Test
 	public void testInitiateValid(@Mocked IRCApi irc) {
 		SaslNegotiator neg = new SaslNegotiator("user", "pass", "role");
-		CapCmd cmd = neg.initiate(irc);
+		ICapCmd cmd = neg.initiate(irc);
 		assertNotNull(cmd);
 		assertEquals("CAP REQ :sasl", cmd.toString().trim());
 	}

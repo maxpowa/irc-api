@@ -1,6 +1,8 @@
 package com.ircclouds.irc.api.commands;
 
 
+import com.ircclouds.irc.api.commands.interfaces.ICommand;
+
 public class PartChanCmd implements ICommand
 {
 	private static final String PART_ID = "PART";

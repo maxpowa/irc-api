@@ -1,12 +1,7 @@
 package com.ircclouds.irc.api;
 
-import com.ircclouds.irc.api.commands.ICommand;
-import com.ircclouds.irc.api.dcc.DCCManager;
-import com.ircclouds.irc.api.dcc.DCCReceiveCallback;
-import com.ircclouds.irc.api.dcc.DCCReceiveResult;
-import com.ircclouds.irc.api.dcc.DCCSendCallback;
-import com.ircclouds.irc.api.dcc.DCCSendException;
-import com.ircclouds.irc.api.dcc.DCCSendResult;
+import com.ircclouds.irc.api.commands.interfaces.ICommand;
+import com.ircclouds.irc.api.dcc.*;
 import com.ircclouds.irc.api.domain.IRCChannel;
 import com.ircclouds.irc.api.filters.IMessageFilter;
 import com.ircclouds.irc.api.listeners.IMessageListener;

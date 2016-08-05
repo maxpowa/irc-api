@@ -1,5 +1,7 @@
 package com.ircclouds.irc.api.commands;
 
+import com.ircclouds.irc.api.commands.interfaces.ICommand;
+
 public class SendPrivateMessage implements ICommand
 {
 	private static final String PRIVMSG = "PRIVMSG ";

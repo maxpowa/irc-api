@@ -1,8 +1,9 @@
 package com.ircclouds.irc.api.negotiators;
 
-import com.ircclouds.irc.api.*;
-import com.ircclouds.irc.api.commands.*;
-import com.ircclouds.irc.api.domain.messages.interfaces.*;
+import com.ircclouds.irc.api.IRCApi;
+import com.ircclouds.irc.api.commands.CapEndCmd;
+import com.ircclouds.irc.api.commands.interfaces.ICapCmd;
+import com.ircclouds.irc.api.domain.messages.interfaces.IMessage;
 
 /**
  * NOOP negotiator. This negotiator does not actually enable any of the
@@ -18,7 +19,7 @@ public class NoopNegotiator implements CapabilityNegotiator
 	 * The CAP negotiation initialization command immediately ends negotiation.
 	 */
 	@Override
-	public CapCmd initiate(final IRCApi irc)
+	public ICapCmd initiate(final IRCApi irc)
 	{
 		return new CapEndCmd();
 	}

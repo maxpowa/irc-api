@@ -2,14 +2,13 @@ package com.ircclouds.irc.api.negotiators;
 
 
 import com.ircclouds.irc.api.IRCApi;
-import com.ircclouds.irc.api.commands.CapCmd;
 import com.ircclouds.irc.api.commands.CapEndCmd;
 import com.ircclouds.irc.api.commands.CapReqCmd;
+import com.ircclouds.irc.api.commands.interfaces.ICapCmd;
 import com.ircclouds.irc.api.domain.messages.ServerNumeric;
 import com.ircclouds.irc.api.domain.messages.interfaces.IMessage;
 import com.ircclouds.irc.api.listeners.VariousMessageListenerAdapter;
 import com.ircclouds.irc.api.negotiators.api.Relay;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -69,7 +68,7 @@ public class SaslNegotiator extends VariousMessageListenerAdapter implements Cap
 	}
 
 	@Override
-	public CapCmd initiate(final IRCApi irc)
+	public ICapCmd initiate(final IRCApi irc)
 	{
 		if (irc == null)
 		{

@@ -1,6 +1,8 @@
 package com.ircclouds.irc.api.commands;
 
 
+import com.ircclouds.irc.api.commands.interfaces.ICommand;
+
 public class QuitCmd implements ICommand
 {
 	public static String DEFAULT_QUIT_MESSAGE = "Leaving";

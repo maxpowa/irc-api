@@ -1,8 +1,8 @@
 package com.ircclouds.irc.api.negotiators;
 
 import com.ircclouds.irc.api.IRCApi;
-import com.ircclouds.irc.api.commands.*;
-import com.ircclouds.irc.api.listeners.*;
+import com.ircclouds.irc.api.commands.interfaces.ICapCmd;
+import com.ircclouds.irc.api.listeners.IMessageListener;
 
 /**
  * IRC v3.1 capability negotiation.
@@ -32,5 +32,5 @@ public interface CapabilityNegotiator extends IMessageListener
 	 * @param irc the current IRCApi instance
 	 * @return returns initialization command for CAP negotiation
 	 */
-	CapCmd initiate(IRCApi irc);
+	ICapCmd initiate(IRCApi irc);
 }

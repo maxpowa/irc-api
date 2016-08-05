@@ -1,5 +1,7 @@
 package com.ircclouds.irc.api.commands;
 
+import com.ircclouds.irc.api.commands.interfaces.ICommand;
+
 public class ChangeNickCmd implements ICommand
 {
 	private String newNick;

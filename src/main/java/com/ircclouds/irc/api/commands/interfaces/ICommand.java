@@ -1,4 +1,4 @@
-package com.ircclouds.irc.api.commands;
+package com.ircclouds.irc.api.commands.interfaces;
 
 public interface ICommand
 {

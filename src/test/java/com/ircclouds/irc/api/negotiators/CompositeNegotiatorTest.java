@@ -1,16 +1,18 @@
 package com.ircclouds.irc.api.negotiators;
 
 import com.ircclouds.irc.api.IRCApi;
-import com.ircclouds.irc.api.commands.CapCmd;
 import com.ircclouds.irc.api.commands.CapLsCmd;
+import com.ircclouds.irc.api.commands.interfaces.ICapCmd;
 import com.ircclouds.irc.api.domain.messages.interfaces.IMessage;
 import com.ircclouds.irc.api.negotiators.CompositeNegotiator.Capability;
 import com.ircclouds.irc.api.negotiators.CompositeNegotiator.Host;
 import com.ircclouds.irc.api.negotiators.api.Relay;
-import java.util.Collections;
-import java.util.LinkedList;
 import mockit.Mocked;
 import org.junit.Test;
+
+import java.util.Collections;
+import java.util.LinkedList;
+
 import static org.junit.Assert.*;
 
 /**
@@ -134,14 +136,14 @@ public class CompositeNegotiatorTest
 	public void testInitiateNull() {
 		Capability cap = getCapability("away-notify");
 		CompositeNegotiator negotiator = new CompositeNegotiator(Collections.singletonList(cap), null);
-		CapCmd cmd = negotiator.initiate(null);
+		ICapCmd cmd = negotiator.initiate(null);
 	}
 
 	@Test
 	public void testInitiate(@Mocked IRCApi ircapi) {
 		Capability cap = getCapability("away-notify");
 		CompositeNegotiator negotiator = new CompositeNegotiator(Collections.singletonList(cap), null);
-		CapCmd cmd = negotiator.initiate(ircapi);
+		ICapCmd cmd = negotiator.initiate(ircapi);
 		assertNotNull(cmd);
 		assertEquals(CapLsCmd.class, cmd.getClass());
 	}

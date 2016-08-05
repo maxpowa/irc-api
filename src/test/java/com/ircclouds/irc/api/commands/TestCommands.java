@@ -2,7 +2,6 @@ package com.ircclouds.irc.api.commands;
 
 import com.ircclouds.irc.api.IServerParameters;
 import com.ircclouds.irc.api.domain.IRCServer;
-
 import junit.framework.TestCase;
 
 import java.util.Arrays;
@@ -88,19 +87,23 @@ public class TestCommands extends TestCase {
     }
 
     public void testQuitCommand() {
+        assertStringEquals("QUIT :Leaving\r\n", new QuitCmd());
         assertStringEquals("QUIT :reason\r\n", new QuitCmd("reason"));
     }
 
     public void testActionCommand() {
         assertStringEquals("PRIVMSG #channel :\001ACTION does stuff\001\r\n", new SendActionMessage("#channel", "does stuff"));
+        assertStringEquals("PRIVMSG #channel,1 :\001ACTION does stuff\001\r\n", new SendActionMessage("#channel", "does stuff", 1));
     }
 
     public void testNoticeCommand() {
         assertStringEquals("NOTICE #channel :message\r\n", new SendNoticeMessage("#channel", "message"));
+        assertStringEquals("NOTICE #channel,1 :message\r\n", new SendNoticeMessage("#channel", "message", 1));
     }
 
     public void testPrivateMessageCommand() {
         assertStringEquals("PRIVMSG #channel :message\r\n", new SendPrivateMessage("#channel", "message"));
+        assertStringEquals("PRIVMSG #channel,1 :message\r\n", new SendPrivateMessage("#channel", "message", 1));
     }
 
     public void testRawMessageCommand() {

@@ -1,8 +1,8 @@
 package com.ircclouds.irc.api;
 
-import java.io.*;
+import com.ircclouds.irc.api.commands.interfaces.ICommand;
 
-import com.ircclouds.irc.api.commands.*;
+import java.io.IOException;
 
 public interface ICommandServer
 {
