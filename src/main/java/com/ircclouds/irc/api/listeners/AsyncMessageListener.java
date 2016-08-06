@@ -8,12 +8,12 @@ import com.ircclouds.irc.api.domain.messages.*;
 
 public class AsyncMessageListener
 {
-	private static final List<Integer> NUMERICS = Arrays.asList(IRCServerNumerics.NO_SUCH_NICK_CHANNEL, IRCServerNumerics.NO_EXTERNAL_CHANNEL_MESSAGES);
+	private static final List<Integer> NUMERIC_FILTER = Arrays.asList(IRCNumerics.ERR_NOSUCHNICK, IRCNumerics.ERR_CANNOTSENDTOCHAN);
 	
 	private Queue<AsyncTriple> myQueue = new LinkedList<AsyncTriple>();
 
     public void onServerMsg(ServerNumeric aMsg) {
-        if (NUMERICS.contains(aMsg.getNumericCode())) {
+        if (NUMERIC_FILTER.contains(aMsg.getNumericCode())) {
             String cmpnts[] = aMsg.params.toArray(new String[0]);
 
 			AsyncTriple _aTrip = myQueue.peek();

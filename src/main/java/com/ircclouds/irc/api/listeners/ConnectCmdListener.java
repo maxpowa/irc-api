@@ -36,65 +36,46 @@ public class ConnectCmdListener
 	}
 
     public void onServerMessage(ServerNumeric aServMsg) {
-        if (aServMsg.getNumericCode() == IRCServerNumerics.NICKNAME_IN_USE) {
-            String _altNick = null;
-			if (!altNicks.isEmpty())
-			{
-				_altNick = altNicks.poll();
-			}
-			else
-			{
-				throw new RuntimeException("Found no more altnicks!");
-			}
-
-			try
-			{
-				session.getCommandServer().execute(new SendRawMessage("NICK " + _altNick + "\r\n"));
-			}
-			catch (IOException aExc)
-			{
-				throw new RuntimeException(aExc);
-			}
-		}
-		else if (aServMsg.getNumericCode() == IRCServerNumerics.ERRONEUS_NICKNAME)
-		{
-			throw new RuntimeException("Errorneus nickname");
-		}
-		else if (aServMsg.getNumericCode() == IRCServerNumerics.SERVER_WELCOME_MESSAGE)
-		{
-			nick = getNick(aServMsg.getText());
-		}
-		else if (aServMsg.getNumericCode().equals(IRCServerNumerics.SERVER_OPTIONS))
-		{
-            for (String _opt : aServMsg.params) {
-                if (_opt.contains("=")) {
-                    String _kv[] = _opt.split("=");
-					properties.put(_kv[0], _kv[1]);
+        switch (aServMsg.getNumericCode()) {
+			case IRCNumerics.ERR_NICKNAMEINUSE:
+				String _altNick = null;
+				if (!altNicks.isEmpty()) {
+					_altNick = altNicks.poll();
+				} else {
+					throw new RuntimeException("Found no more altnicks!");
 				}
-			}
-		}
-		else if (aServMsg.getNumericCode().equals(IRCServerNumerics.MOTD_FILE_MISSING) || aServMsg.getNumericCode().equals(IRCServerNumerics.END_OF_MOTD))
-		{
-			callback.onSuccess(new IRCStateImpl(nick, params.getIdent(), params.getRealname(), params.getAlternativeNicknames(), params.getServer(), new IRCServerOptions(
-					properties)));
+
+				try {
+					session.getCommandServer().execute(new SendRawMessage("NICK " + _altNick + "\r\n"));
+				} catch (IOException aExc) {
+					throw new RuntimeException(aExc);
+				}
+				break;
+			case IRCNumerics.ERR_ERRONEUSNICKNAME:
+				throw new RuntimeException("Errorneus nickname");
+			case IRCNumerics.RPL_WELCOME:
+				nick = aServMsg.getParams().get(0);
+				break;
+			case IRCNumerics.RPL_ISUPPORT:
+				for (String _opt : aServMsg.params) {
+					if (_opt.contains("=")) {
+						String _kv[] = _opt.split("=");
+						properties.put(_kv[0], _kv[1]);
+					}
+				}
+				break;
+			case IRCNumerics.RPL_ENDOFMOTD:
+			case IRCNumerics.ERR_NOMOTD:
+				callback.onSuccess(new IRCStateImpl(
+						nick, params.getIdent(), params.getRealname(), params.getAlternativeNicknames(),
+						params.getServer(), new IRCServerOptions(properties))
+				);
+				break;
 		}
 	}
 
 	public void onError(ServerError aMsg)
 	{
 		callback.onFailure(new IRCException(aMsg.getText()));
-	}
-
-	private String getNick(String aText)
-	{
-		String _cmpnt[] = aText.split(" ");
-		String _nick = _cmpnt[_cmpnt.length - 1];
-
-		if (_nick.contains("!"))
-		{
-			_nick = _nick.substring(0, _nick.indexOf("!"));
-		}
-
-		return _nick;
 	}
 }

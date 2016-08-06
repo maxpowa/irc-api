@@ -13,6 +13,18 @@ public abstract class AbstractChannelJoinListener
 {
 	private static final Logger LOG = LoggerFactory.getLogger(AbstractChannelJoinListener.class);
 
+    private static List<Integer> NUMERIC_FILTER = Arrays.asList(
+            IRCNumerics.ERR_LINKCHANNEL,
+            IRCNumerics.RPL_TOPICWHOTIME,
+            IRCNumerics.RPL_NAMREPLY,
+            IRCNumerics.RPL_TOPIC,
+            IRCNumerics.RPL_ENDOFNAMES,
+            IRCNumerics.ERR_INVITEONLYCHAN,
+            IRCNumerics.ERR_BADCHANNELKEY,
+            IRCNumerics.ERR_CHANNELISFULL,
+            IRCNumerics.ERR_BANNEDFROMCHAN
+    );
+
 	private final Map<String, Callback<IRCChannel>> callbacks = new HashMap<String, Callback<IRCChannel>>();
 
 	private WritableIRCChannel channel;
@@ -20,7 +32,7 @@ public abstract class AbstractChannelJoinListener
 
 	public void submit(String aChannelName, Callback<IRCChannel> aCallback)
 	{
-		callbacks.put(aChannelName, aCallback);
+		callbacks.put(aChannelName.toLowerCase(), aCallback);
 	}
 
     public void onChanJoinMessage(ChannelJoin aMsg) {
@@ -29,54 +41,62 @@ public abstract class AbstractChannelJoinListener
 
     public void onServerMessage(ServerNumeric aServerMessage) {
         int _numcode = aServerMessage.getNumericCode();
-        if (_numcode == IRCServerNumerics.CHANNEL_FORWARD || _numcode == IRCServerNumerics.TOPIC_USER_DATE || _numcode == IRCServerNumerics.CHANNEL_NICKS_LIST
-                || _numcode == IRCServerNumerics.CHANNEL_TOPIC || _numcode == IRCServerNumerics.CHANNEL_NICKS_END_OF_LIST
-				|| _numcode == IRCServerNumerics.CHANNEL_CANNOT_JOIN_INVITE || _numcode == IRCServerNumerics.CHANNEL_CANNOT_JOIN_KEYED
-				|| _numcode == IRCServerNumerics.CHANNEL_CANNOT_JOIN_FULL || _numcode == IRCServerNumerics.CHANNEL_CANNOT_JOIN_BANNED)
-		{
-			if (channel != null)
-			{
-				if (_numcode == IRCServerNumerics.CHANNEL_NICKS_LIST)
-				{
+
+        // If the filter doesn't have the numcode in this message, we're just gonna return.
+        if (!NUMERIC_FILTER.contains(_numcode)) return;
+
+        // Are we in the process of joining a channel?
+        if (channel != null) {
+            switch (_numcode) {
+                case IRCNumerics.RPL_NAMREPLY: {
                     String _nicks[] = aServerMessage.getText().split(" "); // reviewed
                     for (String _nick : _nicks) {
                         add(_nick);
                     }
-				}
-				else if (_numcode == IRCServerNumerics.CHANNEL_TOPIC)
-				{
-					topic = new WritableIRCTopic(getTopic(aServerMessage));
-				}
-				else if (_numcode == IRCServerNumerics.TOPIC_USER_DATE)
-				{
+                    break;
+                }
+                case IRCNumerics.RPL_TOPIC: {
+                    topic = new WritableIRCTopic(aServerMessage.getText());
+                    break;
+                }
+                case IRCNumerics.RPL_TOPICWHOTIME: {
                     topic.setSetBy(aServerMessage.params.get(2));
                     topic.setDate(new Date(Long.parseLong(aServerMessage.params.get(3) + "000")));
                     channel.setTopic(topic);
-                } else if (_numcode == IRCServerNumerics.CHANNEL_NICKS_END_OF_LIST) {
-					Callback<IRCChannel> _chanCallback = callbacks.remove(channel.getName());
-					if (_chanCallback != null)
-					{
-						_chanCallback.onSuccess(channel);
-					}
-					channel = null;
-					topic = null;
-				}
-            } else if (callbacks.containsKey(aServerMessage.params.get(0))) {
-                if (_numcode == IRCServerNumerics.CHANNEL_CANNOT_JOIN_INVITE) {
-                    callbacks.remove(aServerMessage.params.get(0)).onFailure(new IRCException(aServerMessage.getText()));
-                } else if (_numcode == IRCServerNumerics.CHANNEL_CANNOT_JOIN_KEYED) {
-                    callbacks.remove(aServerMessage.params.get(0)).onFailure(new IRCException(aServerMessage.getText()));
-                } else if (_numcode == IRCServerNumerics.CHANNEL_CANNOT_JOIN_BANNED) {
-                    callbacks.remove(aServerMessage.params.get(0)).onFailure(new IRCException(aServerMessage.getText()));
-                } else if (_numcode == IRCServerNumerics.CHANNEL_CANNOT_JOIN_FULL) {
-                    callbacks.remove(aServerMessage.params.get(0)).onFailure(new IRCException(aServerMessage.getText()));
-                } else if (_numcode == IRCServerNumerics.CHANNEL_FORWARD) {
-                    Callback<IRCChannel> callback = callbacks.remove(aServerMessage.params.get(1));
-                    if (callback != null) {
-                        callbacks.put(aServerMessage.params.get(1), callback);
+                    break;
+                }
+                case IRCNumerics.RPL_ENDOFNAMES: {
+                    Callback<IRCChannel> _chanCallback = callbacks.remove(channel.getName().toLowerCase());
+                    if (_chanCallback != null)
+                    {
+                        _chanCallback.onSuccess(channel);
                     }
+                    channel = null;
+                    topic = null;
+                    break;
                 }
             }
+        } else if (_numcode == IRCNumerics.ERR_LINKCHANNEL) {
+            // return if channel we were forwarded from isn't in callbacks
+            if (!callbacks.containsKey(aServerMessage.params.get(1).toLowerCase())) return;
+
+            Callback<IRCChannel> callback = callbacks.remove(aServerMessage.params.get(1).toLowerCase());
+            if (callback != null) {
+                callbacks.put(aServerMessage.params.get(2).toLowerCase(), callback);
+            }
+        } else if (callbacks.containsKey(aServerMessage.params.get(0).toLowerCase())) {
+
+            String channelName = aServerMessage.params.get(0).toLowerCase();
+            switch (_numcode) {
+                case IRCNumerics.ERR_CHANNELISFULL:
+                case IRCNumerics.ERR_BANNEDFROMCHAN:
+                case IRCNumerics.ERR_BADCHANNELKEY:
+                case IRCNumerics.ERR_INVITEONLYCHAN:
+                    callbacks.remove(channelName).onFailure(new IRCException(aServerMessage.getText()));
+                    break;
+
+            }
+
         }
 	}
 
@@ -106,10 +126,6 @@ public abstract class AbstractChannelJoinListener
 		}
 		channel.addUser(user, new SynchronizedUnmodifiableSet<IRCUserStatus>(active));
 	}
-
-    private String getTopic(ServerNumeric aServMsg) {
-        return aServMsg.getText().substring(aServMsg.getText().indexOf(":") + 1);
-    }
 
 	private static Map<Character, IRCUserStatus> mapPrefixes(final IRCUserStatuses statuses) {
 		final HashMap<Character, IRCUserStatus> map = new HashMap<Character, IRCUserStatus>();

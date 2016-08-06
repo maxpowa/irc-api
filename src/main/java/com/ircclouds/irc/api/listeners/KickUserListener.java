@@ -20,11 +20,13 @@ public abstract class KickUserListener
 	}
 
     public void onServerMessage(ServerNumeric aServerMessage) {
-        if (aServerMessage.getNumericCode() == IRCServerNumerics.NO_SUCH_CHANNEL || aServerMessage.getNumericCode() == IRCServerNumerics.NOT_CHANNEL_OP) {
-            String _chan = aServerMessage.params.get(0);
-            if (callbacks.containsKey(_chan)) {
-                callbacks.remove(_chan).onFailure(new IRCException(aServerMessage.getText()));
-            }
+        switch (aServerMessage.getNumericCode()) {
+            case IRCNumerics.ERR_NOSUCHCHANNEL:
+            case IRCNumerics.ERR_CHANOPRIVSNEEDED:
+                String _chan = aServerMessage.params.get(0);
+                if (callbacks.containsKey(_chan)) {
+                    callbacks.remove(_chan).onFailure(new IRCException(aServerMessage.getText()));
+                }
 		}
 	}
 

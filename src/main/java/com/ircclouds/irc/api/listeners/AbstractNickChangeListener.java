@@ -20,31 +20,23 @@ public abstract class AbstractNickChangeListener
 	public void onNickChange(UserNickMessage aMsg)
 	{
 		Callback<String> _callback = callbacks.get(aMsg.getNewNick());
-		if (_callback != null)
-		{
+		if (_callback != null) {
 			_callback.onSuccess(aMsg.getNewNick());
-		}
-		else
-		{
+		} else {
 			changeNick(aMsg.getNewNick());
 		}
 	}
 
 	public void onServerMessage(ServerNumeric aServerMessage) {
 		Callback<String> _callback = callbacks.remove(aServerMessage.params.get(0));
-		if (_callback != null)
-		{
-			if (aServerMessage.getNumericCode().equals(IRCServerNumerics.NICKNAME_IN_USE))
-			{
-				_callback.onFailure(new IRCException(aServerMessage.getText()));
-			}
-			else if (aServerMessage.getNumericCode().equals(IRCServerNumerics.ERRONEUS_NICKNAME))
-			{
-				_callback.onFailure(new IRCException(aServerMessage.getText()));
-			}
-			else if (aServerMessage.getNumericCode().equals(IRCServerNumerics.ERR_NICKTOOFAST))
-			{
-				_callback.onFailure(new IRCException(aServerMessage.getText()));
+		if (_callback != null) {
+			switch (aServerMessage.getNumericCode()) {
+				case IRCNumerics.ERR_NICKNAMEINUSE:
+				case IRCNumerics.ERR_ERRONEUSNICKNAME:
+				case IRCNumerics.ERR_NICKTOOFAST:
+					_callback.onFailure(new IRCException(aServerMessage.getText()));
+					break;
+
 			}
 		}
 	}

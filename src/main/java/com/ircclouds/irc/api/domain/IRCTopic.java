@@ -45,4 +45,8 @@ public class IRCTopic implements Serializable
 	{
 		return date;
 	}
+
+	public String toString() {
+		return value + " - " + setBy + " on " + date.toString();
+	}
 }
