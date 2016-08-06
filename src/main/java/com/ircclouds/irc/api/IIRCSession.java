@@ -11,7 +11,7 @@ public interface IIRCSession
 {
 	ICommandServer getCommandServer();
 
-	void addListeners(MESSAGE_VISIBILITY aLevel, IMessageListener... aListener);
+	void addListeners(Visibility aLevel, IMessageListener... aListener);
 	
 	void removeListener(IMessageListener aListener);
 	

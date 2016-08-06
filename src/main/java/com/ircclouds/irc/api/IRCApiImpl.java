@@ -90,7 +90,7 @@ public class IRCApiImpl implements IRCApi
 			}
 		};
 
-		session.addListeners(MESSAGE_VISIBILITY.PRIVATE, executeCmdListener = new ExecuteCommandListenerImpl(session, getStateUpdater(aSaveIRCState)), new PingVersionListenerImpl(
+		session.addListeners(Visibility.PRIVATE, executeCmdListener = new ExecuteCommandListenerImpl(session, getStateUpdater(aSaveIRCState)), new PingVersionListenerImpl(
 				session));
 
 		dccManager = new DCCManagerImpl(this);
@@ -127,7 +127,7 @@ public class IRCApiImpl implements IRCApi
 				}
 				else
 				{
-					session.addListeners(MESSAGE_VISIBILITY.PRIVATE, negotiator);
+					session.addListeners(Visibility.PRIVATE, negotiator);
 					initCmd = negotiator.initiate(this);
 				}
 				executeAsync(new ConnectCmd(aServerParameters, initCmd), aCallback, _d);
@@ -403,7 +403,7 @@ public class IRCApiImpl implements IRCApi
 	@Override
 	public void addListener(IMessageListener aListener)
 	{
-		session.addListeners(MESSAGE_VISIBILITY.PUBLIC, aListener);
+		session.addListeners(Visibility.PUBLIC, aListener);
 	}
 
 	@Override
@@ -594,7 +594,7 @@ public class IRCApiImpl implements IRCApi
 				}
 			};
 
-			session.addListeners(MESSAGE_VISIBILITY.PRIVATE, _stateUpdater);
+			session.addListeners(Visibility.PRIVATE, _stateUpdater);
 
 			return _stateUpdater;
 		}

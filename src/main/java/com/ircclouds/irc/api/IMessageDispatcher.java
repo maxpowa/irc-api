@@ -10,7 +10,7 @@ public interface IMessageDispatcher
 
 	void dispatchToPrivateListeners(IMessage aMessage);
 	
-	void register(IMessageListener aListener, MESSAGE_VISIBILITY aVisibility);
+	void register(IMessageListener aListener, Visibility aVisibility);
 
 	void unregister(IMessageListener aListener);
 }

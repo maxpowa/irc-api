@@ -13,12 +13,12 @@ public final class MessageDispatcherImpl implements IMessageDispatcher
 {
 	private static final Logger LOG = LoggerFactory.getLogger(MessageDispatcherImpl.class);
 	
-	private final Map<MESSAGE_VISIBILITY, List<IMessageListener>> listenersMap = new EnumMap<MESSAGE_VISIBILITY, List<IMessageListener>>(MESSAGE_VISIBILITY.class);
+	private final Map<Visibility, List<IMessageListener>> listenersMap = new EnumMap<Visibility, List<IMessageListener>>(Visibility.class);
 	
 	public MessageDispatcherImpl()
 	{
-		listenersMap.put(MESSAGE_VISIBILITY.PRIVATE, new ArrayList<IMessageListener>());
-		listenersMap.put(MESSAGE_VISIBILITY.PUBLIC, new ArrayList<IMessageListener>());		
+		listenersMap.put(Visibility.PRIVATE, new ArrayList<IMessageListener>());
+		listenersMap.put(Visibility.PUBLIC, new ArrayList<IMessageListener>());
 	}
 
 	@Override
@@ -26,7 +26,7 @@ public final class MessageDispatcherImpl implements IMessageDispatcher
 	{
 		if (aTargetListeners.getHowMany().equals(HowMany.ALL))
 		{
-			dispatchTo(aMessage, new ArrayList<IMessageListener>(listenersMap.get(MESSAGE_VISIBILITY.PUBLIC)));
+			dispatchTo(aMessage, new ArrayList<IMessageListener>(listenersMap.get(Visibility.PUBLIC)));
 		}
 		else
 		{
@@ -37,11 +37,11 @@ public final class MessageDispatcherImpl implements IMessageDispatcher
 	@Override
 	public void dispatchToPrivateListeners(IMessage aMessage)
 	{
-		dispatchTo(aMessage, new ArrayList<IMessageListener>(listenersMap.get(MESSAGE_VISIBILITY.PRIVATE)));
+		dispatchTo(aMessage, new ArrayList<IMessageListener>(listenersMap.get(Visibility.PRIVATE)));
 	}	
 	
 	@Override
-	public void register(IMessageListener aListener, MESSAGE_VISIBILITY aVisibility)
+	public void register(IMessageListener aListener, Visibility aVisibility)
 	{
 		listenersMap.get(aVisibility).add(aListener);
 	}
@@ -49,8 +49,8 @@ public final class MessageDispatcherImpl implements IMessageDispatcher
 	@Override
 	public void unregister(IMessageListener aListener)
 	{
-		listenersMap.get(MESSAGE_VISIBILITY.PRIVATE).remove(aListener);
-		listenersMap.get(MESSAGE_VISIBILITY.PUBLIC).remove(aListener);
+		listenersMap.get(Visibility.PRIVATE).remove(aListener);
+		listenersMap.get(Visibility.PUBLIC).remove(aListener);
 	}
 	
 	private void dispatchTo(IMessage aMessage, List<IMessageListener> aListeners)

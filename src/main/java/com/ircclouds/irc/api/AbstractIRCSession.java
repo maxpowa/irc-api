@@ -11,7 +11,7 @@ import com.ircclouds.irc.api.domain.messages.ClientErrorMessage;
 import com.ircclouds.irc.api.filters.IMessageFilter;
 import com.ircclouds.irc.api.filters.TargetListeners;
 import com.ircclouds.irc.api.listeners.IMessageListener;
-import com.ircclouds.irc.api.listeners.MESSAGE_VISIBILITY;
+import com.ircclouds.irc.api.listeners.Visibility;
 import com.ircclouds.irc.api.state.IIRCState;
 
 import javax.net.ssl.SSLContext;
@@ -87,7 +87,7 @@ public abstract class AbstractIRCSession implements IIRCSession
 	}
 
 	@Override
-	public void addListeners(MESSAGE_VISIBILITY aListenerLevel, IMessageListener... aListeners)
+	public void addListeners(Visibility aListenerLevel, IMessageListener... aListeners)
 	{
 		for (IMessageListener _listener : aListeners)
 		{
