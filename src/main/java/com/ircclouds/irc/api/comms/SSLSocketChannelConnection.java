@@ -139,7 +139,7 @@ public class SSLSocketChannelConnection implements IConnection
 	
 	private synchronized boolean processHandshake() throws IOException
 	{
-		LOG.debug(Thread.currentThread().getName() + " " + hStatus);
+		LOG.trace(Thread.currentThread().getName() + " " + hStatus);
 		switch (hStatus)
 		{
 			case NEED_WRAP:
@@ -177,7 +177,7 @@ public class SSLSocketChannelConnection implements IConnection
 				throw new EndOfStreamException();					
 			}
 			remaingUnwraps += _readCount;
-			LOG.debug("Reading: " + _readCount);
+			LOG.trace("Reading: " + _readCount);
 			cipherRecvBuffer.flip();
 		}
 
