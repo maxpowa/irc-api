@@ -3,6 +3,9 @@ package com.ircclouds.irc.api.domain.messages;
 import com.ircclouds.irc.api.domain.messages.interfaces.IMessage;
 import com.ircclouds.irc.api.domain.messages.interfaces.ISource;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * A client error message. The IRC server manages the clients. Therefore almost
  * every error will arrive via the IRC server. A clear exception to this case is
@@ -19,6 +22,10 @@ public class ClientErrorMessage implements IMessage
 	public ClientErrorMessage(final Exception aExc)
 	{
 		this.exception = aExc;
+	}
+
+	public List<String> getParams() {
+		return new ArrayList<String>();
 	}
 
 	/**

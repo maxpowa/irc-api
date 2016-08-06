@@ -37,10 +37,6 @@ public class CompositeNegotiator implements CapabilityNegotiator, IMessageListen
 	 */
 	private static final Logger LOG = LoggerFactory.getLogger(CompositeNegotiator.class);
 
-	private static final Pattern CAPABILITY_LS = Pattern.compile("\\sCAP\\s+([^\\s]+)\\s+LS\\s+:([-\\w_]+(?:\\s+[-\\w_]+)*)\\s*$", 0);
-	private static final Pattern CAPABILITY_ACK = Pattern.compile("\\sCAP\\s+([^\\s]+)\\s+ACK\\s+:([-\\w_]+(?:\\s+[-\\w_]+)*)\\s*$", 0);
-	private static final Pattern CAPABILITY_NAK = Pattern.compile("\\sCAP\\s+([^\\s]+)\\s+NAK");
-
 	/**
 	 * List of requested capabilities.
 	 */
@@ -175,15 +171,15 @@ public class CompositeNegotiator implements CapabilityNegotiator, IMessageListen
 				return;
 			}
 		}
-		final String raw = msg.asRaw();
-		final Matcher capLs = CAPABILITY_LS.matcher(raw);
-		final Matcher capAck = CAPABILITY_ACK.matcher(raw);
-		final Matcher capNak = CAPABILITY_NAK.matcher(raw);
+//		final String raw = msg.asRaw();
+//		final Matcher capLs = CAPABILITY_LS.matcher(raw);
+//		final Matcher capAck = CAPABILITY_ACK.matcher(raw);
+//		final Matcher capNak = CAPABILITY_NAK.matcher(raw);
 		try
 		{
-			if (capLs.find())
+			if (msg.getParams().get(1).equalsIgnoreCase("LS"))
 			{
-				final LinkedList<Cap> responseCaps = parseResponseCaps(capLs.group(2));
+				final LinkedList<Cap> responseCaps = parseResponseCaps(msg.getParams().get(2));
 				final List<Capability> reject = unsupportedCapabilities(responseCaps);
 				feedbackRejection(reject);
 				final List<Capability> request = requestedCapabilities(reject);
@@ -199,9 +195,9 @@ public class CompositeNegotiator implements CapabilityNegotiator, IMessageListen
 				}
 				return;
 			}
-			else if (capAck.find())
+			else if (msg.getParams().get(1).equalsIgnoreCase("ACK"))
 			{
-				final LinkedList<Cap> responseCaps = parseResponseCaps(capAck.group(2));
+				final LinkedList<Cap> responseCaps = parseResponseCaps(msg.getParams().get(2));
 				final List<Capability> confirms = acknowledgeCapabilities(responseCaps);
 				if (!confirms.isEmpty())
 				{
@@ -216,9 +212,9 @@ public class CompositeNegotiator implements CapabilityNegotiator, IMessageListen
 				// but do clean the message, since it has already been handled.
 				msg = null;
 			}
-			else if (capNak.find())
+			else if (msg.getParams().get(1).equalsIgnoreCase("NAK"))
 			{
-				LOG.error("Capability request NOT Acknowledged: {} (this may be due to inconsistent server responses)", raw);
+				LOG.error("Capability request NOT Acknowledged: {} (this may be due to inconsistent server responses)", msg.getParams().get(2));
 				endNegotiation();
 				return;
 			}

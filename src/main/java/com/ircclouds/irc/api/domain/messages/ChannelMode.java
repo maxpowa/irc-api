@@ -4,6 +4,7 @@ import com.ircclouds.irc.api.domain.messages.interfaces.IMessage;
 import com.ircclouds.irc.api.domain.messages.interfaces.ISource;
 import com.ircclouds.irc.api.utils.StringUtils;
 
+import javax.naming.OperationNotSupportedException;
 import java.util.List;
 
 /**
@@ -22,6 +23,10 @@ public class ChannelMode implements IMessage {
         modeStr = aModeStr;
         addedModes = aAddedModes;
         removedModes = aRemModes;
+    }
+
+    public List<String> getParams() {
+        throw new UnsupportedOperationException();
     }
 
     public String getChannelName() {

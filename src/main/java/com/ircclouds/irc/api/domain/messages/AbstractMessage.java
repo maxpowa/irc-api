@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public abstract class AbstractMessage implements IMessage {
 
@@ -43,6 +44,10 @@ public abstract class AbstractMessage implements IMessage {
             return ParseUtils.getSource(this.prefix);
         }
         return null;
+    }
+
+    public List<String> getParams() {
+        return this.params;
     }
 
     public String asRaw() {
