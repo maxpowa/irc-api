@@ -5,9 +5,9 @@ import java.util.*;
 import com.ircclouds.irc.api.domain.messages.*;
 import com.ircclouds.irc.api.domain.messages.interfaces.*;
 
-public abstract class AbstractNoticeBuilder implements IBuilder<IMessage>
+public abstract class AbstractNoticeBuilder implements IBuilder<AbstractMessage>
 {
-	public IMessage build(AbstractMessage aMessage)
+	public AbstractMessage build(AbstractMessage aMessage)
 	{
         if (aMessage.prefix == null || !aMessage.prefix.contains("@")) {
             return new ServerNotice(aMessage);
