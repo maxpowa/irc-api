@@ -3,9 +3,7 @@ package com.ircclouds.irc.api.domain;
 @SuppressWarnings("unused")
 public final class IRCNumerics {
 
-	private IRCNumerics() {}
-
-	// Standard replies
+    // Standard replies
     public static final int RPL_WELCOME = 001;
     public static final int RPL_YOURHOST = 002;
     public static final int RPL_CREATED = 003;
@@ -174,4 +172,5 @@ public final class IRCNumerics {
     public static final int RPL_STATSBLINE = 247;
     public static final int RPL_STATSDLINE = 250;
     public static final int ERR_NOSERVICEHOST = 492;
+
 }
