@@ -1,13 +1,13 @@
 package com.ircclouds.irc.api.om;
 
-import java.util.*;
-
-import org.slf4j.*;
-
-import com.ircclouds.irc.api.domain.*;
+import com.ircclouds.irc.api.domain.IRCServerOptions;
 import com.ircclouds.irc.api.domain.messages.AbstractMessage;
 import com.ircclouds.irc.api.domain.messages.GenericMessage;
-import com.ircclouds.irc.api.domain.messages.interfaces.*;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.Set;
 
 /**
  * 
@@ -75,7 +75,7 @@ public abstract class AbstractMessageFactory
 		};
 	}
 
-	public IMessage build(String aMsg)
+	public AbstractMessage build(String aMsg)
 	{
 		LOG.debug(aMsg);
 

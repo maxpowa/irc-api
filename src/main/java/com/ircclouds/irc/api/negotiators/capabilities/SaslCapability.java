@@ -1,12 +1,13 @@
 package com.ircclouds.irc.api.negotiators.capabilities;
 
 import com.ircclouds.irc.api.domain.IRCNumerics;
+import com.ircclouds.irc.api.domain.messages.AbstractMessage;
 import com.ircclouds.irc.api.domain.messages.ServerNumeric;
-import com.ircclouds.irc.api.domain.messages.interfaces.IMessage;
 import com.ircclouds.irc.api.listeners.VariousMessageListenerAdapter;
 import com.ircclouds.irc.api.negotiators.CompositeNegotiator;
 import com.ircclouds.irc.api.negotiators.SaslContext;
 import com.ircclouds.irc.api.negotiators.api.Relay;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -92,7 +93,7 @@ public class SaslCapability extends VariousMessageListenerAdapter
     }
 
     @Override
-    public boolean converse(Relay relay, IMessage msg) {
+    public boolean converse(Relay relay, AbstractMessage msg) {
         if (!this.enable) {
             // Nothing to do, since we're negotiating disabling sasl. By now it
             // is acknowledged that it is disabled, so we're done here.

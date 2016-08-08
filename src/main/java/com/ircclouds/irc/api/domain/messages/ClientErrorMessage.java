@@ -1,10 +1,6 @@
 package com.ircclouds.irc.api.domain.messages;
 
-import com.ircclouds.irc.api.domain.messages.interfaces.IMessage;
 import com.ircclouds.irc.api.domain.messages.interfaces.ISource;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * A client error message. The IRC server manages the clients. Therefore almost
@@ -15,43 +11,30 @@ import java.util.List;
  *
  * @author Danny van Heumen
  */
-public class ClientErrorMessage implements IMessage
-{
-	private final Exception exception;
+public class ClientErrorMessage extends AbstractMessage {
+    private final Exception exception;
 
-	public ClientErrorMessage(final Exception aExc)
-	{
-		this.exception = aExc;
-	}
-
-	public List<String> getParams() {
-		return new ArrayList<String>();
-	}
-
-	/**
-	 * This is a client error message, hence the source will be null.
-	 *
-	 * @return returns null
-	 */
-	@Override
-	public ISource getSource()
-	{
-		return null;
-	}
-
-    @Override
-    public String getCommand() {
-        return "ERROR";
+    public ClientErrorMessage(final Exception aExc) {
+        super("ERROR :" + aExc.getMessage());
+        this.exception = aExc;
     }
 
-	@Override
-	public String asRaw()
-	{
-		return this.exception.toString();
-	}
+    /**
+     * This is a client error message, hence the source will be null.
+     *
+     * @return returns null
+     */
+    @Override
+    public ISource getSource() {
+        return null;
+    }
 
-	public Exception getException()
-	{
-		return this.exception;
-	}
+    @Override
+    public String asRaw() {
+        return this.exception.toString();
+    }
+
+    public Exception getException() {
+        return this.exception;
+    }
 }

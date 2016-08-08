@@ -1,14 +1,14 @@
 package com.ircclouds.irc.api;
 
-import java.io.*;
+import com.ircclouds.irc.api.domain.messages.AbstractMessage;
 
-import com.ircclouds.irc.api.domain.messages.interfaces.*;
+import java.io.IOException;
 
 public interface IMessageReader
 {
 	boolean available() throws IOException;
 
-	IMessage readMessage();
+	AbstractMessage readMessage();
 	
 	void reset();
 }

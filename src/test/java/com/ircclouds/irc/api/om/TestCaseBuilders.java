@@ -29,7 +29,6 @@ import com.ircclouds.irc.api.domain.messages.UserPing;
 import com.ircclouds.irc.api.domain.messages.UserPrivMsg;
 import com.ircclouds.irc.api.domain.messages.UserQuitMessage;
 import com.ircclouds.irc.api.domain.messages.UserVersion;
-import com.ircclouds.irc.api.domain.messages.interfaces.IMessage;
 import com.ircclouds.irc.api.utils.ParseUtils;
 
 import junit.framework.TestCase;
@@ -101,7 +100,7 @@ public class TestCaseBuilders extends TestCase {
             }
         };
         GenericMessage input = new GenericMessage("NOTICE :Server Shit");
-        IMessage _msg = _builder.build(input);
+        AbstractMessage _msg = _builder.build(input);
         assertEquals(ServerNotice.class, _msg.getClass());
         assertEquals(input.raw, _msg.asRaw());
         assertNull(_msg.getSource());
@@ -221,7 +220,7 @@ public class TestCaseBuilders extends TestCase {
             }
         };
 
-        IMessage _msg = _builder.build(new GenericMessage("@tag=value " + USER_STRING + " PRIVMSG User :Something To An User"));
+        AbstractMessage _msg = _builder.build(new GenericMessage("@tag=value " + USER_STRING + " PRIVMSG User :Something To An User"));
         assertEquals(UserPrivMsg.class, _msg.getClass());
         assertEquals(((UserPrivMsg) _msg).raw, _msg.asRaw());
         assertEquals(TEST_USER, ((UserPrivMsg) _msg).getSource());

@@ -1,9 +1,11 @@
 package com.ircclouds.irc.api.listeners;
 
-import com.ircclouds.irc.api.*;
-import com.ircclouds.irc.api.domain.*;
-import com.ircclouds.irc.api.domain.messages.*;
-import com.ircclouds.irc.api.domain.messages.interfaces.*;
+import com.ircclouds.irc.api.Callback;
+import com.ircclouds.irc.api.IRCException;
+import com.ircclouds.irc.api.domain.IRCNumerics;
+import com.ircclouds.irc.api.domain.messages.AbstractMessage;
+import com.ircclouds.irc.api.domain.messages.ChannelTopic;
+import com.ircclouds.irc.api.domain.messages.ServerNumeric;
 
 public class SetTopicListener implements IMessageListener
 {
@@ -15,7 +17,7 @@ public class SetTopicListener implements IMessageListener
 	}
 
 	@Override
-	public void onMessage(IMessage aMessage)
+	public void onMessage(AbstractMessage aMessage)
 	{
 		if (aMessage instanceof ChannelTopic)
 		{

@@ -1,9 +1,10 @@
 package com.ircclouds.irc.api.filters;
 
-import java.util.*;
+import com.ircclouds.irc.api.domain.messages.AbstractMessage;
+import com.ircclouds.irc.api.domain.messages.ServerNumeric;
 
-import com.ircclouds.irc.api.domain.messages.*;
-import com.ircclouds.irc.api.domain.messages.interfaces.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ApiMessageFilter implements IMessageFilter
 {
@@ -20,7 +21,7 @@ public class ApiMessageFilter implements IMessageFilter
 	}
 	
 	@Override
-	public MessageFilterResult filter(IMessage aMsg)
+	public MessageFilterResult filter(AbstractMessage aMsg)
 	{
         if (aMsg instanceof ServerNumeric) {
             if (nextValues.remove(((ServerNumeric) aMsg).params.get(0))) {

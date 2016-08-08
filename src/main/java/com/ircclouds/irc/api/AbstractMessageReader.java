@@ -3,7 +3,6 @@ package com.ircclouds.irc.api;
 import com.ircclouds.irc.api.comms.INeedsConnection;
 import com.ircclouds.irc.api.domain.IRCServerOptions;
 import com.ircclouds.irc.api.domain.messages.AbstractMessage;
-import com.ircclouds.irc.api.domain.messages.interfaces.IMessage;
 import com.ircclouds.irc.api.om.AbstractMessageFactory;
 import com.ircclouds.irc.api.utils.StringUtils;
 
@@ -57,9 +56,9 @@ public abstract class AbstractMessageReader implements IMessageReader, INeedsCon
 		return true;
 	}
 
-	public IMessage readMessage()
+	public AbstractMessage readMessage()
 	{
-		IMessage _msg = null;
+		AbstractMessage _msg = null;
 		
 		if (ircMessages.peek() != null) {
 			try {

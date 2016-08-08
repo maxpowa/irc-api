@@ -1,13 +1,17 @@
 package com.ircclouds.irc.api;
 
-import java.io.*;
-
-import org.slf4j.*;
-
 import com.ircclouds.irc.api.comms.IConnection.EndOfStreamException;
+import com.ircclouds.irc.api.domain.messages.AbstractMessage;
 import com.ircclouds.irc.api.domain.messages.ClientErrorMessage;
-import com.ircclouds.irc.api.domain.messages.interfaces.*;
-import com.ircclouds.irc.api.filters.*;
+import com.ircclouds.irc.api.filters.FilterStatus;
+import com.ircclouds.irc.api.filters.IMessageFilter;
+import com.ircclouds.irc.api.filters.MessageFilterResult;
+import com.ircclouds.irc.api.filters.TargetListeners;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
 
 public abstract class AbstractApiDaemon extends Thread
 {
@@ -31,7 +35,7 @@ public abstract class AbstractApiDaemon extends Thread
 		{
 			while (reader.available())
 			{
-				IMessage _msg = reader.readMessage();
+				AbstractMessage _msg = reader.readMessage();
 				if (_msg != null)
 				{
 					dispatcher.dispatchToPrivateListeners(_msg);

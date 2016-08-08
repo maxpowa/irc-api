@@ -6,10 +6,11 @@ import com.ircclouds.irc.api.commands.CapEndCmd;
 import com.ircclouds.irc.api.commands.CapReqCmd;
 import com.ircclouds.irc.api.commands.interfaces.ICapCmd;
 import com.ircclouds.irc.api.domain.IRCNumerics;
+import com.ircclouds.irc.api.domain.messages.AbstractMessage;
 import com.ircclouds.irc.api.domain.messages.ServerNumeric;
-import com.ircclouds.irc.api.domain.messages.interfaces.IMessage;
 import com.ircclouds.irc.api.listeners.VariousMessageListenerAdapter;
 import com.ircclouds.irc.api.negotiators.api.Relay;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -68,7 +69,7 @@ public class SaslNegotiator extends VariousMessageListenerAdapter implements Cap
     }
 
     @Override
-    public void onMessage(IMessage msg) {
+    public void onMessage(AbstractMessage msg) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("SERVER: {}", msg.asRaw());
         }

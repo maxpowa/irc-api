@@ -1,8 +1,8 @@
 package com.ircclouds.irc.api.domain.messages;
 
-import com.ircclouds.irc.api.domain.messages.interfaces.IMessage;
 import com.ircclouds.irc.api.domain.messages.interfaces.ISource;
 import com.ircclouds.irc.api.utils.ParseUtils;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public abstract class AbstractMessage implements IMessage {
+public abstract class AbstractMessage {
 
     private static final Logger LOG = LoggerFactory.getLogger(AbstractMessage.class);
 

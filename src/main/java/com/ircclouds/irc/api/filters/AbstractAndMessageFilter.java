@@ -1,8 +1,9 @@
 package com.ircclouds.irc.api.filters;
 
-import java.util.*;
+import com.ircclouds.irc.api.domain.messages.AbstractMessage;
 
-import com.ircclouds.irc.api.domain.messages.interfaces.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class AbstractAndMessageFilter implements IMessageFilter
 {
@@ -14,7 +15,7 @@ public abstract class AbstractAndMessageFilter implements IMessageFilter
 	}
 
 	@Override
-	public MessageFilterResult filter(IMessage aMessage)
+	public MessageFilterResult filter(AbstractMessage aMessage)
 	{
 		MessageFilterResult _fr1 = filterOne.filter(aMessage);
 		if (_fr1.getFilterStatus().equals(FilterStatus.PASS))

@@ -1,7 +1,27 @@
 package com.ircclouds.irc.api.listeners;
 
-import com.ircclouds.irc.api.domain.messages.*;
-import com.ircclouds.irc.api.domain.messages.interfaces.*;
+import com.ircclouds.irc.api.domain.messages.AbstractMessage;
+import com.ircclouds.irc.api.domain.messages.ChannelAction;
+import com.ircclouds.irc.api.domain.messages.ChannelJoin;
+import com.ircclouds.irc.api.domain.messages.ChannelKick;
+import com.ircclouds.irc.api.domain.messages.ChannelMode;
+import com.ircclouds.irc.api.domain.messages.ChannelNotice;
+import com.ircclouds.irc.api.domain.messages.ChannelPart;
+import com.ircclouds.irc.api.domain.messages.ChannelPrivMsg;
+import com.ircclouds.irc.api.domain.messages.ChannelTopic;
+import com.ircclouds.irc.api.domain.messages.ClientErrorMessage;
+import com.ircclouds.irc.api.domain.messages.ServerError;
+import com.ircclouds.irc.api.domain.messages.ServerNotice;
+import com.ircclouds.irc.api.domain.messages.ServerNumeric;
+import com.ircclouds.irc.api.domain.messages.ServerPing;
+import com.ircclouds.irc.api.domain.messages.UserAction;
+import com.ircclouds.irc.api.domain.messages.UserAwayMessage;
+import com.ircclouds.irc.api.domain.messages.UserNickMessage;
+import com.ircclouds.irc.api.domain.messages.UserNotice;
+import com.ircclouds.irc.api.domain.messages.UserPing;
+import com.ircclouds.irc.api.domain.messages.UserPrivMsg;
+import com.ircclouds.irc.api.domain.messages.UserQuitMessage;
+import com.ircclouds.irc.api.domain.messages.UserVersion;
 
 public class VariousMessageListenerAdapter implements IVariousMessageListener
 {
@@ -21,7 +41,7 @@ public class VariousMessageListenerAdapter implements IVariousMessageListener
 	}
 
 	@Override
-	public void onMessage(IMessage aMessage)
+	public void onMessage(AbstractMessage aMessage)
 	{
 	}
 

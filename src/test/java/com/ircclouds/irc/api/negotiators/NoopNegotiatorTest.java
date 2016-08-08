@@ -2,10 +2,12 @@ package com.ircclouds.irc.api.negotiators;
 
 import com.ircclouds.irc.api.IRCApi;
 import com.ircclouds.irc.api.commands.interfaces.ICapCmd;
-import com.ircclouds.irc.api.domain.messages.interfaces.IMessage;
+import com.ircclouds.irc.api.domain.messages.AbstractMessage;
+
+import org.junit.Test;
+
 import mockit.Mocked;
 import mockit.Tested;
-import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
@@ -30,7 +32,7 @@ public class NoopNegotiatorTest
 	}
 
 	@Test
-	public void testOnMessage(@Mocked IMessage msg)
+	public void testOnMessage(@Mocked AbstractMessage msg)
 	{
 		neg.onMessage(msg);
 	}

@@ -5,10 +5,11 @@ import com.ircclouds.irc.api.commands.CapEndCmd;
 import com.ircclouds.irc.api.commands.CapLsCmd;
 import com.ircclouds.irc.api.commands.interfaces.ICapCmd;
 import com.ircclouds.irc.api.commands.interfaces.ICommand;
+import com.ircclouds.irc.api.domain.messages.AbstractMessage;
 import com.ircclouds.irc.api.domain.messages.ServerNumeric;
-import com.ircclouds.irc.api.domain.messages.interfaces.IMessage;
 import com.ircclouds.irc.api.listeners.IMessageListener;
 import com.ircclouds.irc.api.negotiators.api.Relay;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -146,7 +147,7 @@ public class CompositeNegotiator implements CapabilityNegotiator, IMessageListen
 	}
 
 	@Override
-	public void onMessage(IMessage msg)
+	public void onMessage(AbstractMessage msg)
 	{
 		if (!this.negotiationInProgress)
 		{
@@ -707,6 +708,6 @@ public class CompositeNegotiator implements CapabilityNegotiator, IMessageListen
 		 * @return Returns true if conversation will continue, i.e. response
 		 * from server expected, or false if conversation is done.
 		 */
-		boolean converse(Relay relay, IMessage msg);
+		boolean converse(Relay relay, AbstractMessage msg);
 	}
 }

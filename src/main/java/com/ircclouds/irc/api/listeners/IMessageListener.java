@@ -1,7 +1,7 @@
 package com.ircclouds.irc.api.listeners;
 
-import com.ircclouds.irc.api.*;
-import com.ircclouds.irc.api.domain.messages.interfaces.*;
+import com.ircclouds.irc.api.IRCApi;
+import com.ircclouds.irc.api.domain.messages.AbstractMessage;
 
 /**
  * The IRC message listener interface that can be registered via {@link IRCApi}.
@@ -11,5 +11,5 @@ import com.ircclouds.irc.api.domain.messages.interfaces.*;
  */
 public interface IMessageListener
 {
-	void onMessage(IMessage aMessage);
+	void onMessage(AbstractMessage aMessage);
 }

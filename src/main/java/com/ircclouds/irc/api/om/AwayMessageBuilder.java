@@ -1,7 +1,7 @@
 package com.ircclouds.irc.api.om;
 
-import com.ircclouds.irc.api.domain.messages.UserAwayMessage;
 import com.ircclouds.irc.api.domain.messages.AbstractMessage;
+import com.ircclouds.irc.api.domain.messages.UserAwayMessage;
 
 /**
  * Away message builder.
