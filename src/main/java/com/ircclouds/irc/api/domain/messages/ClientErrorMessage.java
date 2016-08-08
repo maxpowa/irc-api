@@ -39,6 +39,11 @@ public class ClientErrorMessage implements IMessage
 		return null;
 	}
 
+    @Override
+    public String getCommand() {
+        return "ERROR";
+    }
+
 	@Override
 	public String asRaw()
 	{

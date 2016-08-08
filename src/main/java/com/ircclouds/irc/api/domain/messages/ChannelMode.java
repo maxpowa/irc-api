@@ -4,7 +4,6 @@ import com.ircclouds.irc.api.domain.messages.interfaces.IMessage;
 import com.ircclouds.irc.api.domain.messages.interfaces.ISource;
 import com.ircclouds.irc.api.utils.StringUtils;
 
-import javax.naming.OperationNotSupportedException;
 import java.util.List;
 
 /**
@@ -35,6 +34,10 @@ public class ChannelMode implements IMessage {
 
     public ISource getSource() {
         return user;
+    }
+
+    public String getCommand() {
+        return "MODE";
     }
 
     public List<com.ircclouds.irc.api.domain.ChannelMode> getAddedModes() {

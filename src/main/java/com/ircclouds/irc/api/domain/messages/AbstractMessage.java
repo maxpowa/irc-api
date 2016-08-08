@@ -14,7 +14,7 @@ public abstract class AbstractMessage implements IMessage {
 
     private static final Logger LOG = LoggerFactory.getLogger(AbstractMessage.class);
 
-    private HashMap<String, Object> tags = new HashMap<String, Object>();
+    protected HashMap<String, Object> tags = new HashMap<String, Object>();
     public ArrayList<String> params = new ArrayList<String>();
     public String prefix;
     public String command;
@@ -52,6 +52,10 @@ public abstract class AbstractMessage implements IMessage {
 
     public String asRaw() {
         return this.raw;
+    }
+
+    public String getCommand() {
+        return this.command;
     }
 
     public String getText() {
