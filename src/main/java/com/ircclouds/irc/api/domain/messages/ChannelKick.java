@@ -10,10 +10,4 @@ public class ChannelKick extends AbstractChannelMessage
 	{
 		return this.params.get(1);
 	}
-	
-	@Override
-	public String asRaw()
-	{
-		return this.raw;
-	}	
 }

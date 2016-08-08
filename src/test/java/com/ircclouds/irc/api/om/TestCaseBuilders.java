@@ -72,7 +72,6 @@ public class TestCaseBuilders extends TestCase {
         ChanJoinBuilder _builder = new ChanJoinBuilder();
         GenericMessage input = new GenericMessage(USER_STRING + " JOIN " + TEST_CHANNEL);
         ChannelJoin _msg = _builder.build(input);
-        assertEquals(input.raw, _msg.asRaw());
         checkChannelAndUser(_msg.getSource(), _msg.getChannelName(), true);
     }
 
@@ -83,7 +82,6 @@ public class TestCaseBuilders extends TestCase {
         ChanPartBuilder _builder = new ChanPartBuilder();
         GenericMessage input = new GenericMessage(USER_STRING + " PART " + TEST_CHANNEL);
         ChannelPart _msg = _builder.build(input);
-        assertEquals(input.raw, _msg.asRaw());
         checkChannelAndUser(_msg.getSource(), _msg.getChannelName(), true);
     }
 
@@ -102,21 +100,18 @@ public class TestCaseBuilders extends TestCase {
         GenericMessage input = new GenericMessage("NOTICE :Server Shit");
         AbstractMessage _msg = _builder.build(input);
         assertEquals(ServerNotice.class, _msg.getClass());
-        assertEquals(input.raw, _msg.asRaw());
         assertNull(_msg.getSource());
         assertEquals("Server Shit", ((ServerNotice) _msg).getText());
 
         input = new GenericMessage(USER_STRING + " NOTICE :Something To An User");
         _msg = _builder.build(input);
         assertEquals(UserNotice.class, _msg.getClass());
-        assertEquals(input.raw, _msg.asRaw());
         assertEquals(TEST_USER, ((UserNotice) _msg).getSource());
         assertEquals("Something To An User", ((UserNotice) _msg).getText());
 
         input = new GenericMessage(USER_STRING + " NOTICE " + TEST_CHANNEL + " :Something To a Chan");
         _msg = _builder.build(input);
         assertEquals(ChannelNotice.class, _msg.getClass());
-        assertEquals(input.raw, _msg.asRaw());
         checkChannelAndUser(((ChannelNotice) _msg).getSource(), ((ChannelNotice) _msg).getChannelName(), false);
         assertEquals("Something To a Chan", ((ChannelNotice) _msg).getText());
     }
@@ -128,7 +123,6 @@ public class TestCaseBuilders extends TestCase {
         ServerPingMessageBuilder _builder = new ServerPingMessageBuilder();
         GenericMessage input = new GenericMessage("PING :" + TEST_SERVER);
         ServerPing _msg = _builder.build(input);
-        assertEquals(input.raw, _msg.asRaw());
         assertNull(_msg.getSource());
         assertEquals(TEST_SERVER.toString(), _msg.getText());
     }
@@ -137,12 +131,10 @@ public class TestCaseBuilders extends TestCase {
         ErrorMessageBuilder _builder = new ErrorMessageBuilder();
         GenericMessage input = new GenericMessage("ERROR :Unfortunately, something broke");
         ServerError _msg = _builder.build(input);
-        assertEquals(input.raw, _msg.asRaw());
         assertEquals("Unfortunately, something broke", _msg.getText());
 
         input = new GenericMessage(":" + TEST_SERVER + " ERROR :Unfortunately, something broke");
         _msg = _builder.build(input);
-        assertEquals(input.raw, _msg.asRaw());
         assertEquals(TEST_SERVER.toString(), _msg.getSource().toString());
         assertEquals("Unfortunately, something broke", _msg.getText());
     }
@@ -162,14 +154,12 @@ public class TestCaseBuilders extends TestCase {
         AwayMessageBuilder _builder = new AwayMessageBuilder();
         GenericMessage input = new GenericMessage(USER_STRING + " AWAY :user is away");
         UserAwayMessage _msg = _builder.build(input);
-        assertEquals(input.raw, _msg.asRaw());
         assertEquals(true, _msg.isAway());
         assertEquals("user is away", _msg.getText());
         assertEquals(TEST_USER, _msg.getSource());
 
         input = new GenericMessage(USER_STRING + " AWAY");
         _msg = _builder.build(input);
-        assertEquals(input.raw, _msg.asRaw());
         assertEquals(false, _msg.isAway());
         assertEquals(null, _msg.getText());
         assertEquals(TEST_USER, _msg.getSource());
@@ -179,7 +169,6 @@ public class TestCaseBuilders extends TestCase {
         NickMessageBuilder _builder = new NickMessageBuilder();
         GenericMessage input = new GenericMessage(USER_STRING + " NICK :soka|away");
         UserNickMessage _msg = _builder.build(input);
-        assertEquals(input.raw, _msg.asRaw());
         assertEquals("soka|away", _msg.getNewNick());
         assertEquals(TEST_USER, _msg.getSource());
     }
@@ -188,7 +177,6 @@ public class TestCaseBuilders extends TestCase {
         KickMessageBuilder _builder = new KickMessageBuilder();
         GenericMessage input = new GenericMessage(USER_STRING + " KICK " + TEST_CHANNEL + " akos :reason");
         ChannelKick _msg = _builder.build(input);
-        assertEquals(input.raw, _msg.asRaw());
         assertEquals(TEST_CHANNEL, _msg.getChannelName());
         assertEquals("reason", _msg.getText());
         assertEquals("akos", _msg.getKickedNickname());
@@ -222,69 +210,58 @@ public class TestCaseBuilders extends TestCase {
 
         AbstractMessage _msg = _builder.build(new GenericMessage("@tag=value " + USER_STRING + " PRIVMSG User :Something To An User"));
         assertEquals(UserPrivMsg.class, _msg.getClass());
-        assertEquals(((UserPrivMsg) _msg).raw, _msg.asRaw());
         assertEquals(TEST_USER, ((UserPrivMsg) _msg).getSource());
         assertEquals("value", ((UserPrivMsg) _msg).getTags().get("tag"));
         assertEquals("Something To An User", ((UserPrivMsg) _msg).getText());
 
         _msg = _builder.build(new GenericMessage(USER_STRING + " PRIVMSG User :Something To An User"));
         assertEquals(UserPrivMsg.class, _msg.getClass());
-        assertEquals(((UserPrivMsg) _msg).raw, _msg.asRaw());
         assertEquals(TEST_USER, ((UserPrivMsg) _msg).getSource());
         assertEquals("Something To An User", ((UserPrivMsg) _msg).getText());
 
         _msg = _builder.build(new GenericMessage(USER_STRING + " PRIVMSG User :\001generic CTCP to a user\001"));
         assertEquals(UserCTCP.class, _msg.getClass());
-        assertEquals(((UserCTCP) _msg).raw, _msg.asRaw());
         assertEquals(TEST_USER, ((UserCTCP) _msg).getSource());
         assertEquals("generic CTCP to a user", ((UserCTCP) _msg).getText());
 
         _msg = _builder.build(new GenericMessage(USER_STRING + " PRIVMSG User :\001PING CTCP to a user\001"));
         assertEquals(UserPing.class, _msg.getClass());
-        assertEquals(((UserPing) _msg).raw, _msg.asRaw());
         assertEquals(TEST_USER, ((UserPing) _msg).getSource());
         assertEquals("CTCP to a user", ((UserPing) _msg).getText());
 
         _msg = _builder.build(new GenericMessage(USER_STRING + " PRIVMSG User :\001VERSION CTCP to a user\001"));
         assertEquals(UserVersion.class, _msg.getClass());
-        assertEquals(((UserVersion) _msg).raw, _msg.asRaw());
         assertEquals(TEST_USER, ((UserVersion) _msg).getSource());
         assertEquals("CTCP to a user", ((UserVersion) _msg).getText());
 
         _msg = _builder.build(new GenericMessage(USER_STRING + " PRIVMSG User :\001ACTION CTCP to a user\001"));
         assertEquals(UserAction.class, _msg.getClass());
-        assertEquals(((UserAction) _msg).raw, _msg.asRaw());
         assertEquals(TEST_USER, ((UserAction) _msg).getSource());
         assertEquals("User", ((UserAction) _msg).getTarget());
         assertEquals("CTCP to a user", ((UserAction) _msg).getText());
 
         _msg = _builder.build(new GenericMessage(USER_STRING + " PRIVMSG " + TEST_CHANNEL + " :Something To a Chan"));
         assertEquals(ChannelPrivMsg.class, _msg.getClass());
-        assertEquals(((ChannelPrivMsg) _msg).raw, _msg.asRaw());
         checkChannelAndUser(((ChannelPrivMsg) _msg).getSource(), ((ChannelPrivMsg) _msg).getChannelName(), false);
         assertEquals("Something To a Chan", ((ChannelPrivMsg) _msg).getText());
 
         _msg = _builder.build(new GenericMessage(USER_STRING + " PRIVMSG " + TEST_CHANNEL + " :\001generic CTCP to a chan\001"));
         assertEquals(ChannelCTCP.class, _msg.getClass());
-        assertEquals(((ChannelCTCP) _msg).raw, _msg.asRaw());
         checkChannelAndUser(((ChannelCTCP) _msg).getSource(), ((ChannelCTCP) _msg).getChannelName(), false);
         assertEquals("generic CTCP to a chan", ((ChannelCTCP) _msg).getText());
 
         _msg = _builder.build(new GenericMessage(USER_STRING + " PRIVMSG " + TEST_CHANNEL + " :\001PING CTCP to a chan\001"));
         assertEquals(ChannelPing.class, _msg.getClass());
-        assertEquals(((ChannelPing) _msg).raw, _msg.asRaw());
         checkChannelAndUser(((ChannelPing) _msg).getSource(), ((ChannelPing) _msg).getChannelName(), false);
         assertEquals("CTCP to a chan", ((ChannelPing) _msg).getText());
 
         _msg = _builder.build(new GenericMessage(USER_STRING + " PRIVMSG " + TEST_CHANNEL + " :\001VERSION CTCP to a chan\001"));
         assertEquals(ChannelVersion.class, _msg.getClass());
-        assertEquals(((ChannelVersion) _msg).raw, _msg.asRaw());
         checkChannelAndUser(((ChannelVersion) _msg).getSource(), ((ChannelVersion) _msg).getChannelName(), false);
         assertEquals("CTCP to a chan", ((ChannelVersion) _msg).getText());
 
         _msg = _builder.build(new GenericMessage(USER_STRING + " PRIVMSG " + TEST_CHANNEL + " :\001ACTION CTCP to a chan\001"));
         assertEquals(ChannelAction.class, _msg.getClass());
-        assertEquals(((ChannelAction) _msg).raw, _msg.asRaw());
         checkChannelAndUser(((ChannelAction) _msg).getSource(), ((ChannelAction) _msg).getChannelName(), false);
         assertEquals("CTCP to a chan", ((ChannelAction) _msg).getText());
     }

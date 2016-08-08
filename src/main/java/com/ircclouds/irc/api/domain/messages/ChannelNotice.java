@@ -6,9 +6,4 @@ public class ChannelNotice extends AbstractChannelMessage
 	{
 		super(message);
 	}
-
-	@Override
-	public String asRaw() {
-		return this.raw;
-	}
 }

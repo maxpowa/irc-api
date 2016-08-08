@@ -12,9 +12,4 @@ public class UserCTCP extends UserPrivMsg {
         // Get the text between the NULs
         return super.getText().substring(1, super.getText().length() - 1);
     }
-
-    @Override
-    public String asRaw() {
-        return this.raw;
-    }
 }

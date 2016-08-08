@@ -13,14 +13,14 @@ public abstract class AbstractMessage {
 
     private static final Logger LOG = LoggerFactory.getLogger(AbstractMessage.class);
 
-    protected HashMap<String, Object> tags = new HashMap<String, Object>();
     public ArrayList<String> params = new ArrayList<String>();
     public String prefix;
     public String command;
 
-    private boolean text = false;
+    protected HashMap<String, Object> tags = new HashMap<String, Object>();
 
-    public String raw;
+    private boolean text = false;
+    private String raw;
 
     public AbstractMessage(String raw) {
         this.raw = raw;

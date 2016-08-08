@@ -1,8 +1,5 @@
 package com.ircclouds.irc.api.domain.messages;
 
-import com.ircclouds.irc.api.domain.IRCUser;
-import com.ircclouds.irc.api.utils.ParseUtils;
-
 /**
  * Away notification message. (IRCv3 "away-notify" capability)
  *
@@ -18,12 +15,6 @@ public class UserAwayMessage extends AbstractUserMessage {
 	public UserAwayMessage(AbstractMessage message) {
 		super(message);
 
-	}
-
-	@Override
-	public String asRaw()
-	{
-		return this.raw;
 	}
 
 	/**
