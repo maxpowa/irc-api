@@ -5,8 +5,6 @@ import com.ircclouds.irc.api.commands.interfaces.ICommand;
 
 public class PartChanCmd implements ICommand
 {
-	private static final String PART_ID = "PART";
-
 	private String channel;
 	private String partMsg;
 

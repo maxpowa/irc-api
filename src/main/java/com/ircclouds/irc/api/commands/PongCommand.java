@@ -2,11 +2,11 @@ package com.ircclouds.irc.api.commands;
 
 import com.ircclouds.irc.api.commands.interfaces.ICommand;
 
-public class SendServerPingReplyCmd implements ICommand
+public class PongCommand implements ICommand
 {
     private String text;
 
-    public SendServerPingReplyCmd(String aText) {
+    public PongCommand(String aText) {
         text = aText;
     }
 

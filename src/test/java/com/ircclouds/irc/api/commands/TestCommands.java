@@ -111,6 +111,6 @@ public class TestCommands extends TestCase {
     }
 
     public void testPingReplyCommand() {
-        assertStringEquals("PONG :data identifier\r\n", new SendServerPingReplyCmd("data identifier"));
+        assertStringEquals("PONG :data identifier\r\n", new PongCommand("data identifier"));
     }
 }

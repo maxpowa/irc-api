@@ -1,7 +1,7 @@
 package com.ircclouds.irc.api.listeners;
 
 import com.ircclouds.irc.api.IIRCSession;
-import com.ircclouds.irc.api.commands.SendServerPingReplyCmd;
+import com.ircclouds.irc.api.commands.PongCommand;
 import com.ircclouds.irc.api.commands.interfaces.ICommand;
 import com.ircclouds.irc.api.domain.messages.ServerPing;
 import org.slf4j.Logger;
@@ -16,8 +16,8 @@ public abstract class AbstractPingVersionListener extends VariousMessageListener
 	@Override
 	public void onServerPing(ServerPing aMsg)
 	{
-		execute(new SendServerPingReplyCmd(aMsg.getText()));
-	}
+        execute(new PongCommand(aMsg.getText()));
+    }
 
 	protected abstract IIRCSession getSession();
 	
