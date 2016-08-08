@@ -16,8 +16,6 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Composite Negotiator. A composite negotiator that will handle negotiator for
@@ -171,14 +169,14 @@ public class CompositeNegotiator implements CapabilityNegotiator, IMessageListen
 				return;
 			}
 		}
-//		final String raw = msg.asRaw();
-//		final Matcher capLs = CAPABILITY_LS.matcher(raw);
-//		final Matcher capAck = CAPABILITY_ACK.matcher(raw);
-//		final Matcher capNak = CAPABILITY_NAK.matcher(raw);
+
 		try
 		{
-			if (msg.getParams().get(1).equalsIgnoreCase("LS"))
-			{
+            String subCommand = "";
+            if (msg.getParams().size() > 1) {
+                subCommand = msg.getParams().get(1);
+            }
+            if (subCommand.equalsIgnoreCase("LS")) {
 				final LinkedList<Cap> responseCaps = parseResponseCaps(msg.getParams().get(2));
 				final List<Capability> reject = unsupportedCapabilities(responseCaps);
 				feedbackRejection(reject);
@@ -194,9 +192,7 @@ public class CompositeNegotiator implements CapabilityNegotiator, IMessageListen
 					sendCapabilityRequest();
 				}
 				return;
-			}
-			else if (msg.getParams().get(1).equalsIgnoreCase("ACK"))
-			{
+			} else if (subCommand.equalsIgnoreCase("ACK")) {
 				final LinkedList<Cap> responseCaps = parseResponseCaps(msg.getParams().get(2));
 				final List<Capability> confirms = acknowledgeCapabilities(responseCaps);
 				if (!confirms.isEmpty())
@@ -211,9 +207,7 @@ public class CompositeNegotiator implements CapabilityNegotiator, IMessageListen
 				// fall through to start capability conversations immediately,
 				// but do clean the message, since it has already been handled.
 				msg = null;
-			}
-			else if (msg.getParams().get(1).equalsIgnoreCase("NAK"))
-			{
+			} else if (subCommand.equalsIgnoreCase("NAK")) {
 				LOG.error("Capability request NOT Acknowledged: {} (this may be due to inconsistent server responses)", msg.getParams().get(2));
 				endNegotiation();
 				return;
