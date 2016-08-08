@@ -90,6 +90,41 @@ public final class IRCNumerics {
     public static final int RPL_ADMINEMAIL = 259;
     public static final int RPL_TRYAGAIN = 263;
 
+    // START IRCv3 Extensions
+    // TLS
+    public static final int RPL_STARTTLS = 670;
+    public static final int ERR_STARTTLS = 691;
+
+    // Monitor
+    public static final int RPL_MONONLINE = 730;
+    public static final int RPL_MONOFFLINE = 731;
+    public static final int RPL_MONLIST = 732;
+    public static final int RPL_ENDOFMONLIST = 733;
+    public static final int ERR_MONLISTFULL = 734;
+
+    // Metadata
+    public static final int RPL_WHOISKEYVALUE = 760;
+    public static final int RPL_KEYVALUE = 761;
+    public static final int RPL_METADATAEND = 762;
+    public static final int ERR_METADATALIMIT = 764;
+    public static final int ERR_TARGETINVALID = 765;
+    public static final int ERR_NOMATCHINGKEY = 766;
+    public static final int ERR_KEYINVALID = 767;
+    public static final int ERR_KEYNOTSET = 768;
+    public static final int ERR_KEYNOPERMISSION = 769;
+
+    // SASL replies
+    public static final int RPL_LOGGEDIN = 900;
+    public static final int RPL_LOGGEDOUT = 901;
+    public static final int ERR_NICKLOCKED = 902;
+    public static final int RPL_SASLSUCCESS = 903;
+    public static final int ERR_SASLFAIL = 904;
+    public static final int ERR_SASLTOOLONG = 905;
+    public static final int ERR_SASLABORTED = 906;
+    public static final int ERR_SASLALREADY = 907;
+    public static final int RPL_SASLMECHS = 908;
+    // END IRCv3 Extensions
+
     // Error replies
     public static final int ERR_NOSUCHNICK = 401;
     public static final int ERR_NOSUCHSERVER = 402;
@@ -100,6 +135,7 @@ public final class IRCNumerics {
     public static final int ERR_TOOMANYTARGETS = 407;
     public static final int ERR_NOSUCHSERVICE = 408;
     public static final int ERR_NOORIGIN = 409;
+    public static final int ERR_INVALIDCAPCMD = 410;
     public static final int ERR_NORECIPIENT = 411;
     public static final int ERR_NOTEXTTOSEND = 412;
     public static final int ERR_NOTOPLEVEL = 413;
