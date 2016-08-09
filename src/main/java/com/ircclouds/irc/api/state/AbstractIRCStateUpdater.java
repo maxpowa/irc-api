@@ -3,12 +3,13 @@ package com.ircclouds.irc.api.state;
 import com.ircclouds.irc.api.domain.*;
 import com.ircclouds.irc.api.domain.messages.*;
 import com.ircclouds.irc.api.domain.messages.ChannelMode;
-import com.ircclouds.irc.api.listeners.*;
-import com.ircclouds.irc.api.utils.*;
+import com.ircclouds.irc.api.utils.StateUtils;
+import com.ircclouds.irc.api.utils.SynchronizedUnmodifiableSet;
+import net.engio.mbassy.listener.Handler;
 
-public abstract class AbstractIRCStateUpdater extends VariousMessageListenerAdapter implements IStateAccessor
+public abstract class AbstractIRCStateUpdater implements IStateAccessor
 {
-	@Override
+	@Handler
     public void onChannelJoin(ChannelJoin aMsg) {
         if (!isForMe(aMsg)) {
             IRCUser _user = aMsg.getSource();
@@ -20,7 +21,7 @@ public abstract class AbstractIRCStateUpdater extends VariousMessageListenerAdap
 		}
 	}
 
-	@Override
+	@Handler
     public void onChannelPart(ChannelPart aMsg) {
         if (!isForMe(aMsg)) {
             WritableIRCChannel _chan = getIRCStateImpl().getWritableChannelByName(aMsg.getChannelName());
@@ -31,7 +32,7 @@ public abstract class AbstractIRCStateUpdater extends VariousMessageListenerAdap
 		}
 	}
 
-	@Override
+	@Handler
 	public void onNickChange(UserNickMessage aMsg)
 	{
 		WritableIRCUser _old = new WritableIRCUser(aMsg.getSource().getNick());
@@ -48,7 +49,7 @@ public abstract class AbstractIRCStateUpdater extends VariousMessageListenerAdap
 		}
 	}
 
-	@Override
+	@Handler
 	public void onUserQuit(UserQuitMessage aMsg)
 	{
 		for (WritableIRCChannel _chan : getIRCStateImpl().getChannelsMutable())
@@ -59,7 +60,7 @@ public abstract class AbstractIRCStateUpdater extends VariousMessageListenerAdap
 		}
 	}
 
-	@Override
+	@Handler
 	public void onTopicChange(ChannelTopic aMsg)
 	{		
 		WritableIRCChannel _chan = getIRCStateImpl().getWritableChannelByName(aMsg.getChannelName());
@@ -72,7 +73,7 @@ public abstract class AbstractIRCStateUpdater extends VariousMessageListenerAdap
 		_wit.setValue(aMsg.getTopic().getValue());
 	}
 
-	@Override
+	@Handler
 	public void onChannelKick(ChannelKick aMsg)
 	{
 		WritableIRCChannel _chan = getIRCStateImpl().getWritableChannelByName(aMsg.getChannelName());
@@ -82,7 +83,7 @@ public abstract class AbstractIRCStateUpdater extends VariousMessageListenerAdap
 		_chan.removeUser(new WritableIRCUser(aMsg.getKickedNickname()));
 	}
 
-	@Override
+	@Handler
     public void onChannelMode(ChannelMode aMsg) {
         String _chanName = aMsg.getChannelName();
         WritableIRCChannel _chan = getIRCStateImpl().getWritableChannelByName(_chanName);

@@ -1,8 +1,6 @@
 package com.ircclouds.irc.api;
 
 import com.ircclouds.irc.api.domain.IRCServer;
-import com.ircclouds.irc.api.listeners.IMessageListener;
-import com.ircclouds.irc.api.listeners.Visibility;
 import com.ircclouds.irc.api.state.IIRCState;
 
 import java.io.IOException;
@@ -11,9 +9,9 @@ public interface IIRCSession
 {
 	ICommandServer getCommandServer();
 
-	void addListeners(Visibility aLevel, IMessageListener... aListener);
+	void register(Object... aListener);
 	
-	void removeListener(IMessageListener aListener);
+	void unregister(Object aListener);
 	
 	boolean open(IRCServer aServer, Callback<IIRCState> aCallback) throws IOException;
 	

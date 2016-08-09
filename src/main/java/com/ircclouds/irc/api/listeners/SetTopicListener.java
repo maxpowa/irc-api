@@ -6,8 +6,9 @@ import com.ircclouds.irc.api.domain.IRCNumerics;
 import com.ircclouds.irc.api.domain.messages.AbstractMessage;
 import com.ircclouds.irc.api.domain.messages.ChannelTopic;
 import com.ircclouds.irc.api.domain.messages.ServerNumeric;
+import net.engio.mbassy.listener.Handler;
 
-public class SetTopicListener implements IMessageListener
+public class SetTopicListener
 {
 	private Callback<String> callback;
 
@@ -16,7 +17,7 @@ public class SetTopicListener implements IMessageListener
 		callback = aCallback;
 	}
 
-	@Override
+	@Handler
 	public void onMessage(AbstractMessage aMessage)
 	{
 		if (aMessage instanceof ChannelTopic)

@@ -3,11 +3,9 @@ package com.ircclouds.irc.api.negotiators.capabilities;
 import com.ircclouds.irc.api.domain.IRCNumerics;
 import com.ircclouds.irc.api.domain.messages.AbstractMessage;
 import com.ircclouds.irc.api.domain.messages.ServerNumeric;
-import com.ircclouds.irc.api.listeners.VariousMessageListenerAdapter;
 import com.ircclouds.irc.api.negotiators.CompositeNegotiator;
 import com.ircclouds.irc.api.negotiators.SaslContext;
 import com.ircclouds.irc.api.negotiators.api.Relay;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,8 +21,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author Danny van Heumen
  */
-public class SaslCapability extends VariousMessageListenerAdapter
-        implements CompositeNegotiator.Capability {
+public class SaslCapability implements CompositeNegotiator.Capability {
     /**
      * Logger.
      */
@@ -105,7 +102,7 @@ public class SaslCapability extends VariousMessageListenerAdapter
             this.state.init();
             return true;
         }
-        if (msg.getCommand().equalsIgnoreCase("AUTHENTICATE")) {
+        if (msg.command.equalsIgnoreCase("AUTHENTICATE")) {
             if (msg.getParams().size() >= 1) {
                 this.state.confirm(msg.getParams().get(0), this.authzId, this.user, this.pass);
             }

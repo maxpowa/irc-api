@@ -1,10 +1,15 @@
 package com.ircclouds.irc.api.listeners;
 
-import java.util.*;
+import com.ircclouds.irc.api.Callback;
+import com.ircclouds.irc.api.IRCException;
+import com.ircclouds.irc.api.domain.IRCNumerics;
+import com.ircclouds.irc.api.domain.messages.ServerNumeric;
+import net.engio.mbassy.listener.Handler;
 
-import com.ircclouds.irc.api.*;
-import com.ircclouds.irc.api.domain.*;
-import com.ircclouds.irc.api.domain.messages.*;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
 
 public class AsyncMessageListener
 {
@@ -12,6 +17,7 @@ public class AsyncMessageListener
 	
 	private Queue<AsyncTriple> myQueue = new LinkedList<AsyncTriple>();
 
+	@Handler
     public void onServerMsg(ServerNumeric aMsg) {
         if (NUMERIC_FILTER.contains(aMsg.getNumericCode())) {
             String cmpnts[] = aMsg.params.toArray(new String[0]);

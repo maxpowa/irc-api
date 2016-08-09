@@ -2,7 +2,6 @@ package com.ircclouds.irc.api.negotiators;
 
 import com.ircclouds.irc.api.IRCApi;
 import com.ircclouds.irc.api.commands.interfaces.ICapCmd;
-import com.ircclouds.irc.api.listeners.IMessageListener;
 
 /**
  * IRC v3.1 capability negotiation.
@@ -13,7 +12,7 @@ import com.ircclouds.irc.api.listeners.IMessageListener;
  *
  * @author Danny van Heumen
  */
-public interface CapabilityNegotiator extends IMessageListener
+public interface CapabilityNegotiator
 {
 
 	/**

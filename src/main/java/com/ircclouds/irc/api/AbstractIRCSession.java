@@ -8,16 +8,16 @@ import com.ircclouds.irc.api.domain.IRCServer;
 import com.ircclouds.irc.api.domain.IRCServerOptions;
 import com.ircclouds.irc.api.domain.SecureIRCServer;
 import com.ircclouds.irc.api.domain.messages.ClientErrorMessage;
-import com.ircclouds.irc.api.listeners.IMessageListener;
-import com.ircclouds.irc.api.listeners.Visibility;
 import com.ircclouds.irc.api.state.IIRCState;
+import net.engio.mbassy.bus.MBassador;
 
 import javax.net.ssl.SSLContext;
 import java.io.IOException;
 
 public abstract class AbstractIRCSession implements IIRCSession
 {
-	private final IMessageDispatcher dispatcher = new MessageDispatcherImpl();
+	private final MBassador eventBus = new MBassador();
+
 	private final ICommandServer cmdServ;
 	private final IMessageReader reader;
 	private final AbstractApiDaemon daemon;
@@ -50,7 +50,7 @@ public abstract class AbstractIRCSession implements IIRCSession
 			}
 		};
 		
-		daemon = new AbstractApiDaemon(reader, dispatcher)
+		daemon = new AbstractApiDaemon(reader, eventBus)
 		{
 			@Override
 			protected void onExit()
@@ -79,11 +79,11 @@ public abstract class AbstractIRCSession implements IIRCSession
 	}
 
 	@Override
-	public void addListeners(Visibility aListenerLevel, IMessageListener... aListeners)
+	public void register(Object... aListeners)
 	{
-		for (IMessageListener _listener : aListeners)
+		for (Object _listener : aListeners)
 		{
-			dispatcher.register(_listener, aListenerLevel);
+			eventBus.subscribe(_listener);
 		}
 	}
 	
@@ -94,9 +94,9 @@ public abstract class AbstractIRCSession implements IIRCSession
 	}
 
 	@Override
-	public void removeListener(IMessageListener aListener)
+	public void unregister(Object aListener)
 	{
-		dispatcher.unregister(aListener);
+		eventBus.unsubscribe(aListener);
 	}
 
 	@Override
@@ -145,7 +145,7 @@ public abstract class AbstractIRCSession implements IIRCSession
 	@Override
 	public void dispatchClientError(final Exception e)
 	{
-		final IMessageDispatcher currentDispatcher = this.dispatcher;
+		final MBassador currentDispatcher = this.eventBus;
 		new Thread()
 		{
 
@@ -153,7 +153,7 @@ public abstract class AbstractIRCSession implements IIRCSession
 			public void run()
 			{
 				final ClientErrorMessage errorMsg = new ClientErrorMessage(e);
-				currentDispatcher.dispatch(errorMsg);
+				currentDispatcher.post(errorMsg).asynchronously();
 			}
 		}.start();
 	}

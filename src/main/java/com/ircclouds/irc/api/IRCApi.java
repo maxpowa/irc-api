@@ -3,7 +3,6 @@ package com.ircclouds.irc.api;
 import com.ircclouds.irc.api.commands.interfaces.ICommand;
 import com.ircclouds.irc.api.dcc.*;
 import com.ircclouds.irc.api.domain.IRCChannel;
-import com.ircclouds.irc.api.listeners.IMessageListener;
 import com.ircclouds.irc.api.negotiators.CapabilityNegotiator;
 import com.ircclouds.irc.api.state.IIRCState;
 
@@ -20,6 +19,7 @@ import java.net.SocketAddress;
  * 
  *  @author miguel@lebane.se  
  */
+@SuppressWarnings("unused")
 public interface IRCApi
 {
 	/**
@@ -225,7 +225,7 @@ public interface IRCApi
 	 * 
 	 * @param aChannel A channel name
 	 * @param aNick A nick to be kicked
-	 * @param aKickMessage
+	 * @param aKickMessage A kick message
 	 */
 	void kick(String aChannel, String aNick, String aKickMessage);
 
@@ -384,12 +384,12 @@ public interface IRCApi
 	 * 
 	 * @param aListener A message listener
 	 */
-	void addListener(IMessageListener aListener);
+	void register(Object aListener);
 
 	/**
 	 * Deletes a message listener
 	 * 
 	 * @param aListener A message listener
 	 */
-	void deleteListener(IMessageListener aListener);
+	void unregister(Object aListener);
 }

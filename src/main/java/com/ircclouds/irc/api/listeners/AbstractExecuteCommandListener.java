@@ -6,18 +6,13 @@ import com.ircclouds.irc.api.IServerParameters;
 import com.ircclouds.irc.api.domain.IRCChannel;
 import com.ircclouds.irc.api.domain.IRCUserStatuses;
 import com.ircclouds.irc.api.domain.WritableIRCChannel;
-import com.ircclouds.irc.api.domain.messages.AbstractUserMessage;
-import com.ircclouds.irc.api.domain.messages.ChannelJoin;
-import com.ircclouds.irc.api.domain.messages.ChannelKick;
-import com.ircclouds.irc.api.domain.messages.ChannelPart;
-import com.ircclouds.irc.api.domain.messages.ServerError;
-import com.ircclouds.irc.api.domain.messages.ServerNumeric;
-import com.ircclouds.irc.api.domain.messages.UserNickMessage;
+import com.ircclouds.irc.api.domain.messages.*;
 import com.ircclouds.irc.api.state.IIRCState;
 import com.ircclouds.irc.api.state.IRCStateImpl;
 import com.ircclouds.irc.api.state.IStateAccessor;
+import net.engio.mbassy.listener.Handler;
 
-public abstract class AbstractExecuteCommandListener extends VariousMessageListenerAdapter implements IStateAccessor
+public abstract class AbstractExecuteCommandListener implements IStateAccessor
 {
 	private AbstractChannelJoinListener chanJoinListener;
 	private AbstractChannelPartListener chanPartListener;
@@ -70,21 +65,21 @@ public abstract class AbstractExecuteCommandListener extends VariousMessageListe
 		messsageListener = new AsyncMessageListener();
 	}
 
-	@Override
+	@Handler
     public void onChannelJoin(ChannelJoin aMsg) {
         if (isForMe(aMsg)) {
             chanJoinListener.onChanJoinMessage(aMsg);
 		}
 	}
 
-	@Override
+	@Handler
     public void onChannelPart(ChannelPart aMsg) {
         if (isForMe(aMsg)) {
             chanPartListener.onChannelPart(aMsg);
 		}
 	}
 
-	@Override
+	@Handler
 	public void onChannelKick(ChannelKick aChanKick)
 	{
 		if (isForMe(aChanKick))
@@ -92,8 +87,8 @@ public abstract class AbstractExecuteCommandListener extends VariousMessageListe
 			kickUserListener.onChannelKick(aChanKick);
 		}
 	}
-	
-	@Override
+
+	@Handler
     public void onServerNumericMessage(ServerNumeric aMsg) {
         chanJoinListener.onServerMessage(aMsg);
         chanPartListener.onServerMessage(aMsg);
@@ -116,7 +111,7 @@ public abstract class AbstractExecuteCommandListener extends VariousMessageListe
 	 *
 	 * @param aMsg the error message
 	 */
-	@Override
+	@Handler
 	public void onError(ServerError aMsg)
 	{
 		if (!getIRCState().isConnected())
@@ -129,8 +124,8 @@ public abstract class AbstractExecuteCommandListener extends VariousMessageListe
 			((IRCStateImpl) (getIRCState())).setConnected(false);
 		}
 	}
-	
-	@Override
+
+	@Handler
 	public void onNickChange(UserNickMessage aMsg)
 	{
 		if (isForMe(aMsg))
@@ -139,7 +134,7 @@ public abstract class AbstractExecuteCommandListener extends VariousMessageListe
 			
 			updateNick(aMsg.getNewNick());
 		}
-	}	
+	}
 	
 	public void submitConnectCallback(Callback<IIRCState> aCallback, IServerParameters aServerParameters)
 	{

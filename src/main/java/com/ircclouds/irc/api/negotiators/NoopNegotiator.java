@@ -4,6 +4,7 @@ import com.ircclouds.irc.api.IRCApi;
 import com.ircclouds.irc.api.commands.CapEndCmd;
 import com.ircclouds.irc.api.commands.interfaces.ICapCmd;
 import com.ircclouds.irc.api.domain.messages.AbstractMessage;
+import net.engio.mbassy.listener.Handler;
 
 /**
  * NOOP negotiator. This negotiator does not actually enable any of the
@@ -24,7 +25,7 @@ public class NoopNegotiator implements CapabilityNegotiator
 		return new CapEndCmd();
 	}
 
-	@Override
+	@Handler
 	public void onMessage(final AbstractMessage aMessage)
 	{
 	}

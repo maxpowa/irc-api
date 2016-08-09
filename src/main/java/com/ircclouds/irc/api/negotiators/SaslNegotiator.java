@@ -8,9 +8,8 @@ import com.ircclouds.irc.api.commands.interfaces.ICapCmd;
 import com.ircclouds.irc.api.domain.IRCNumerics;
 import com.ircclouds.irc.api.domain.messages.AbstractMessage;
 import com.ircclouds.irc.api.domain.messages.ServerNumeric;
-import com.ircclouds.irc.api.listeners.VariousMessageListenerAdapter;
 import com.ircclouds.irc.api.negotiators.api.Relay;
-
+import net.engio.mbassy.listener.Handler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,7 +23,7 @@ import java.util.List;
  *
  * @author Danny van Heumen
  */
-public class SaslNegotiator extends VariousMessageListenerAdapter implements CapabilityNegotiator {
+public class SaslNegotiator implements CapabilityNegotiator {
     private static final Logger LOG = LoggerFactory.getLogger(SaslNegotiator.class);
 
     private static final String SASL_CAPABILITY_ID = "sasl";
@@ -68,7 +67,7 @@ public class SaslNegotiator extends VariousMessageListenerAdapter implements Cap
         return new CapReqCmd(SASL_CAPABILITY_ID);
     }
 
-    @Override
+    @Handler
     public void onMessage(AbstractMessage msg) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("SERVER: {}", msg.asRaw());
@@ -83,7 +82,7 @@ public class SaslNegotiator extends VariousMessageListenerAdapter implements Cap
                 this.state.init();
             } else if (subCommand.equalsIgnoreCase("NAK")) {
                 this.irc.rawMessage(new CapEndCmd());
-            } else if (msg.getCommand().equalsIgnoreCase("AUTHENTICATE")) {
+            } else if (msg.command.equalsIgnoreCase("AUTHENTICATE")) {
                 if (msg.getParams().size() >= 1) {
                     this.state.confirm(params.get(0), this.authzid, this.user, this.pass);
                 }
@@ -106,7 +105,7 @@ public class SaslNegotiator extends VariousMessageListenerAdapter implements Cap
         return false;
     }
 
-    @Override
+    @Handler
     public void onServerNumericMessage(ServerNumeric msg) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("SERVER: {}", msg.asRaw());

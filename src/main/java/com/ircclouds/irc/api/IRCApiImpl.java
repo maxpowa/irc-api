@@ -10,7 +10,9 @@ import com.ircclouds.irc.api.dcc.DCCSendCallback;
 import com.ircclouds.irc.api.domain.IRCChannel;
 import com.ircclouds.irc.api.domain.IRCServerOptions;
 import com.ircclouds.irc.api.domain.WritableIRCChannel;
-import com.ircclouds.irc.api.listeners.*;
+import com.ircclouds.irc.api.listeners.AbstractExecuteCommandListener;
+import com.ircclouds.irc.api.listeners.ExecuteCommandListenerImpl;
+import com.ircclouds.irc.api.listeners.PingVersionListenerImpl;
 import com.ircclouds.irc.api.negotiators.CapabilityNegotiator;
 import com.ircclouds.irc.api.state.*;
 import com.ircclouds.irc.api.utils.NetUtils;
@@ -63,8 +65,10 @@ public class IRCApiImpl implements IRCApi
 			}
 		};
 
-		session.addListeners(Visibility.PRIVATE, executeCmdListener = new ExecuteCommandListenerImpl(session, getStateUpdater(aSaveIRCState)), new PingVersionListenerImpl(
-				session));
+		session.register(
+				executeCmdListener = new ExecuteCommandListenerImpl(session, getStateUpdater(aSaveIRCState)),
+				new PingVersionListenerImpl(session)
+		);
 
 		dccManager = new DCCManagerImpl(this);
 	}
@@ -100,7 +104,7 @@ public class IRCApiImpl implements IRCApi
 				}
 				else
 				{
-					session.addListeners(Visibility.PRIVATE, negotiator);
+					session.register(negotiator);
 					initCmd = negotiator.initiate(this);
 				}
 				executeAsync(new ConnectCmd(aServerParameters, initCmd), aCallback, _d);
@@ -369,15 +373,15 @@ public class IRCApiImpl implements IRCApi
 	}
 
 	@Override
-	public void addListener(IMessageListener aListener)
+	public void register(Object aListener)
 	{
-		session.addListeners(Visibility.PUBLIC, aListener);
+		session.register(aListener);
 	}
 
 	@Override
-	public void deleteListener(IMessageListener aListener)
+	public void unregister(Object aListener)
 	{
-		session.removeListener(aListener);
+		session.unregister(aListener);
 	}
 
 	@Override
@@ -556,7 +560,7 @@ public class IRCApiImpl implements IRCApi
 				}
 			};
 
-			session.addListeners(Visibility.PRIVATE, _stateUpdater);
+			session.register(_stateUpdater);
 
 			return _stateUpdater;
 		}

@@ -7,9 +7,8 @@ import com.ircclouds.irc.api.commands.interfaces.ICapCmd;
 import com.ircclouds.irc.api.commands.interfaces.ICommand;
 import com.ircclouds.irc.api.domain.messages.AbstractMessage;
 import com.ircclouds.irc.api.domain.messages.ServerNumeric;
-import com.ircclouds.irc.api.listeners.IMessageListener;
 import com.ircclouds.irc.api.negotiators.api.Relay;
-
+import net.engio.mbassy.listener.Handler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,7 +28,7 @@ import java.util.List;
  *
  * @author Danny van Heumen
  */
-public class CompositeNegotiator implements CapabilityNegotiator, IMessageListener
+public class CompositeNegotiator implements CapabilityNegotiator
 {
 	/**
 	 * Logger.
@@ -146,7 +145,7 @@ public class CompositeNegotiator implements CapabilityNegotiator, IMessageListen
 		return new CapLsCmd();
 	}
 
-	@Override
+	@Handler
 	public void onMessage(AbstractMessage msg)
 	{
 		if (!this.negotiationInProgress)

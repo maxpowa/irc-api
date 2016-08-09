@@ -2,7 +2,6 @@ package com.ircclouds.irc.api.domain.messages;
 
 import com.ircclouds.irc.api.domain.messages.interfaces.ISource;
 import com.ircclouds.irc.api.utils.ParseUtils;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,10 +51,6 @@ public abstract class AbstractMessage {
 
     public String asRaw() {
         return this.raw;
-    }
-
-    public String getCommand() {
-        return this.command;
     }
 
     public String getText() {
