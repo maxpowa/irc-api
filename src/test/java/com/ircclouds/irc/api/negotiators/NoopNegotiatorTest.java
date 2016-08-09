@@ -1,8 +1,8 @@
 package com.ircclouds.irc.api.negotiators;
 
-import com.ircclouds.irc.api.IRCApi;
 import com.ircclouds.irc.api.commands.interfaces.ICapCmd;
 import com.ircclouds.irc.api.domain.messages.AbstractMessage;
+import com.ircclouds.irc.api.interfaces.IRCApi;
 
 import org.junit.Test;
 

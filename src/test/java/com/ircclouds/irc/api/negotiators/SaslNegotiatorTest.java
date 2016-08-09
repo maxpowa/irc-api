@@ -15,11 +15,13 @@
  */
 package com.ircclouds.irc.api.negotiators;
 
-import com.ircclouds.irc.api.IRCApi;
 import com.ircclouds.irc.api.commands.interfaces.ICapCmd;
-import mockit.Mocked;
+import com.ircclouds.irc.api.interfaces.IRCApi;
+
 import org.junit.Before;
 import org.junit.Test;
+
+import mockit.Mocked;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;

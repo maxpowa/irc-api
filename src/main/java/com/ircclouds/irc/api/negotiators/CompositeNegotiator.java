@@ -1,14 +1,16 @@
 package com.ircclouds.irc.api.negotiators;
 
-import com.ircclouds.irc.api.IRCApi;
 import com.ircclouds.irc.api.commands.CapEndCmd;
 import com.ircclouds.irc.api.commands.CapLsCmd;
 import com.ircclouds.irc.api.commands.interfaces.ICapCmd;
 import com.ircclouds.irc.api.commands.interfaces.ICommand;
 import com.ircclouds.irc.api.domain.messages.AbstractMessage;
 import com.ircclouds.irc.api.domain.messages.ServerNumeric;
+import com.ircclouds.irc.api.interfaces.IRCApi;
 import com.ircclouds.irc.api.negotiators.api.Relay;
+
 import net.engio.mbassy.listener.Handler;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

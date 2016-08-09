@@ -1,11 +1,24 @@
 package com.ircclouds.irc.api.dcc;
 
-import java.io.*;
-import java.net.*;
-import java.nio.*;
-import java.nio.channels.*;
+import com.ircclouds.irc.api.dcc.interfaces.IDCCSendCallback;
+import com.ircclouds.irc.api.dcc.interfaces.IDCCSendProgressCallback;
+import com.ircclouds.irc.api.dcc.interfaces.IDCCSendResult;
 
-import org.slf4j.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.Closeable;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.channels.FileChannel;
+import java.nio.channels.SelectionKey;
+import java.nio.channels.Selector;
+import java.nio.channels.ServerSocketChannel;
+import java.nio.channels.SocketChannel;
 
 public class DCCSender
 {
@@ -16,19 +29,19 @@ public class DCCSender
 	private Integer listeningPort;
 	private Integer resumePos;
 
-	private DCCSendCallback callback;
+	private IDCCSendCallback callback;
 	private int totalBytesTransferred;
 	private int totalAcksRead;
 	
 	private Exception readerExc;
 	private Exception writerExc;
 	
-	public DCCSender(Integer aPort, Integer aTimeout, DCCSendCallback aCallback)
+	public DCCSender(Integer aPort, Integer aTimeout, IDCCSendCallback aCallback)
 	{
 		this(aTimeout, aPort, 0, aCallback);
 	}
 
-	public DCCSender(int aTimeout, Integer aPort, Integer aResumePosition, DCCSendCallback aCallback)
+	public DCCSender(int aTimeout, Integer aPort, Integer aResumePosition, IDCCSendCallback aCallback)
 	{
 		timeout = aTimeout;
 		listeningPort = aPort;
@@ -100,7 +113,7 @@ public class DCCSender
 
 	private void callBack(File aFile, final long aTotalTime)
 	{
-		DCCSendResult _dccSendRes = new DCCSendResult()
+		IDCCSendResult _dccSendRes = new IDCCSendResult()
 		{				
 			@Override
 			public int totalBytesSent()
@@ -225,9 +238,9 @@ public class DCCSender
 	{
 		ProgressReader _pr = null;
 		
-		if (callback instanceof DCCSendProgressCallback)
+		if (callback instanceof IDCCSendProgressCallback)
 		{
-			_pr = new ProgressReaderImpl((DCCSendProgressCallback) callback);
+			_pr = new ProgressReaderImpl((IDCCSendProgressCallback) callback);
 		}
 		else
 		{
@@ -266,9 +279,9 @@ public class DCCSender
 	
 	class ProgressReaderImpl implements ProgressReader
 	{
-		DCCSendProgressCallback callback;
+		IDCCSendProgressCallback callback;
 		
-		ProgressReaderImpl(DCCSendProgressCallback aCallback)
+		ProgressReaderImpl(IDCCSendProgressCallback aCallback)
 		{
 			callback = aCallback;
 		}

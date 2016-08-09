@@ -1,14 +1,21 @@
 package com.ircclouds.irc.api.listeners;
 
-import java.io.*;
-import java.util.*;
-import java.util.concurrent.*;
+import com.ircclouds.irc.api.IRCException;
+import com.ircclouds.irc.api.commands.SendRawMessage;
+import com.ircclouds.irc.api.domain.IRCNumerics;
+import com.ircclouds.irc.api.domain.IRCServerOptions;
+import com.ircclouds.irc.api.domain.messages.ServerError;
+import com.ircclouds.irc.api.domain.messages.ServerNumeric;
+import com.ircclouds.irc.api.interfaces.Callback;
+import com.ircclouds.irc.api.interfaces.IIRCSession;
+import com.ircclouds.irc.api.interfaces.IServerParameters;
+import com.ircclouds.irc.api.state.IIRCState;
+import com.ircclouds.irc.api.state.IRCStateImpl;
 
-import com.ircclouds.irc.api.*;
-import com.ircclouds.irc.api.commands.*;
-import com.ircclouds.irc.api.domain.*;
-import com.ircclouds.irc.api.domain.messages.*;
-import com.ircclouds.irc.api.state.*;
+import java.io.IOException;
+import java.util.Properties;
+import java.util.Queue;
+import java.util.concurrent.ArrayBlockingQueue;
 
 public class ConnectCmdListener
 {

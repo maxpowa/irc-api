@@ -1,21 +1,42 @@
 package com.ircclouds.irc.api;
 
-import com.ircclouds.irc.api.commands.*;
+import com.ircclouds.irc.api.commands.ChangeModeCmd;
+import com.ircclouds.irc.api.commands.ChangeNickCmd;
+import com.ircclouds.irc.api.commands.ChangeTopicCmd;
+import com.ircclouds.irc.api.commands.ConnectCmd;
+import com.ircclouds.irc.api.commands.JoinChanCmd;
+import com.ircclouds.irc.api.commands.KickUserCmd;
+import com.ircclouds.irc.api.commands.PartChanCmd;
+import com.ircclouds.irc.api.commands.QuitCmd;
+import com.ircclouds.irc.api.commands.SendActionMessage;
+import com.ircclouds.irc.api.commands.SendNoticeMessage;
+import com.ircclouds.irc.api.commands.SendPrivateMessage;
+import com.ircclouds.irc.api.commands.SendRawMessage;
 import com.ircclouds.irc.api.commands.interfaces.ICapCmd;
 import com.ircclouds.irc.api.commands.interfaces.ICommand;
 import com.ircclouds.irc.api.dcc.DCCManager;
-import com.ircclouds.irc.api.dcc.DCCManagerImpl;
-import com.ircclouds.irc.api.dcc.DCCReceiveCallback;
-import com.ircclouds.irc.api.dcc.DCCSendCallback;
+import com.ircclouds.irc.api.dcc.interfaces.IDCCManager;
+import com.ircclouds.irc.api.dcc.interfaces.IDCCReceiveCallback;
+import com.ircclouds.irc.api.dcc.interfaces.IDCCSendCallback;
 import com.ircclouds.irc.api.domain.IRCChannel;
 import com.ircclouds.irc.api.domain.IRCServerOptions;
 import com.ircclouds.irc.api.domain.WritableIRCChannel;
+import com.ircclouds.irc.api.interfaces.Callback;
+import com.ircclouds.irc.api.interfaces.ICommandServer;
+import com.ircclouds.irc.api.interfaces.IIRCSession;
+import com.ircclouds.irc.api.interfaces.IRCApi;
+import com.ircclouds.irc.api.interfaces.IServerParameters;
 import com.ircclouds.irc.api.listeners.AbstractExecuteCommandListener;
 import com.ircclouds.irc.api.listeners.ExecuteCommandListenerImpl;
 import com.ircclouds.irc.api.listeners.PingVersionListenerImpl;
 import com.ircclouds.irc.api.negotiators.CapabilityNegotiator;
-import com.ircclouds.irc.api.state.*;
+import com.ircclouds.irc.api.state.AbstractIRCStateUpdater;
+import com.ircclouds.irc.api.state.DisconnectedIRCState;
+import com.ircclouds.irc.api.state.IIRCState;
+import com.ircclouds.irc.api.state.IRCStateImpl;
+import com.ircclouds.irc.api.state.IStateAccessor;
 import com.ircclouds.irc.api.utils.NetUtils;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,7 +46,7 @@ import java.net.Proxy;
 import java.net.SocketAddress;
 import java.net.SocketException;
 
-import static com.ircclouds.irc.api.dcc.DCCManagerImpl.DCC_SEND_TIMEOUT;
+import static com.ircclouds.irc.api.dcc.DCCManager.DCC_SEND_TIMEOUT;
 
 /**
  * The main implementation of {@link IRCApi}. It offers the ability to save the
@@ -45,7 +66,7 @@ public class IRCApiImpl implements IRCApi
 	private IIRCState state;
 	private int asyncId = 0;
 
-	private final DCCManagerImpl dccManager;
+	private final DCCManager dccManager;
 
 	/**
 	 * 
@@ -70,7 +91,7 @@ public class IRCApiImpl implements IRCApi
 				new PingVersionListenerImpl(session)
 		);
 
-		dccManager = new DCCManagerImpl(this);
+		dccManager = new DCCManager(this);
 	}
 
 	@Override
@@ -385,67 +406,67 @@ public class IRCApiImpl implements IRCApi
 	}
 
 	@Override
-	public void dccSend(final String aNick, final File aFile, DCCSendCallback aCallback)
+	public void dccSend(final String aNick, final File aFile, IDCCSendCallback aCallback)
 	{
 		dccSend(aNick, aFile, NetUtils.getRandDccPort(), DCC_SEND_TIMEOUT, aCallback);
 	}
 
 	@Override
-	public void dccSend(String aNick, Integer aListeningPort, File aFile, DCCSendCallback aCallback)
+	public void dccSend(String aNick, Integer aListeningPort, File aFile, IDCCSendCallback aCallback)
 	{
 		dccSend(aNick, aFile, aListeningPort, DCC_SEND_TIMEOUT, aCallback);
 	}
 
 	@Override
-	public void dccSend(String aNick, File aFile, Integer aTimeout, DCCSendCallback aCallback)
+	public void dccSend(String aNick, File aFile, Integer aTimeout, IDCCSendCallback aCallback)
 	{
 		dccSend(aNick, aFile, NetUtils.getRandDccPort(), aTimeout, aCallback);
 	}
 
 	@Override
-	public void dccSend(String aNick, File aFile, Integer aListeningPort, Integer aTimeout, DCCSendCallback aCallback)
+	public void dccSend(String aNick, File aFile, Integer aListeningPort, Integer aTimeout, IDCCSendCallback aCallback)
 	{
 		dccManager.dccSend(aNick, aFile, aListeningPort, aTimeout, aCallback);
 	}
 
 	@Override
-	public void dccAccept(String aNick, File aFile, Integer aPort, Integer aResumePosition, DCCSendCallback aCallback)
+	public void dccAccept(String aNick, File aFile, Integer aPort, Integer aResumePosition, IDCCSendCallback aCallback)
 	{
 		dccAccept(aNick, aFile, aPort, aResumePosition, DCC_SEND_TIMEOUT, aCallback);
 	}
 
 	@Override
-	public void dccAccept(String aNick, File aFile, Integer aPort, Integer aResumePosition, Integer aTimeout, DCCSendCallback aCallback)
+	public void dccAccept(String aNick, File aFile, Integer aPort, Integer aResumePosition, Integer aTimeout, IDCCSendCallback aCallback)
 	{
 		dccManager.dccAccept(aNick, aFile, aPort, aResumePosition, aTimeout, aCallback);
 	}
 
 	@Override
-	public void dccReceive(File aFile, Integer aSize, SocketAddress aAddress, DCCReceiveCallback aCallback)
+	public void dccReceive(File aFile, Integer aSize, SocketAddress aAddress, IDCCReceiveCallback aCallback)
 	{
 		dccResume(aFile, 0, aSize, aAddress, aCallback);
 	}
 
 	@Override
-	public void dccReceive(File aFile, Integer aSize, SocketAddress aAddress, DCCReceiveCallback aCallback, Proxy aProxy)
+	public void dccReceive(File aFile, Integer aSize, SocketAddress aAddress, IDCCReceiveCallback aCallback, Proxy aProxy)
 	{
 		dccResume(aFile, 0, aSize, aAddress, aCallback, aProxy);
 	}
 
 	@Override
-	public void dccResume(File aFile, Integer aResumePosition, Integer aSize, SocketAddress aAddress, DCCReceiveCallback aCallback)
+	public void dccResume(File aFile, Integer aResumePosition, Integer aSize, SocketAddress aAddress, IDCCReceiveCallback aCallback)
 	{
 		dccManager.dccResume(aFile, aResumePosition, aSize, aAddress, aCallback);
 	}
 
 	@Override
-	public void dccResume(File aFile, Integer aResumePosition, Integer aSize, SocketAddress aAddress, DCCReceiveCallback aCallback, Proxy aProxy)
+	public void dccResume(File aFile, Integer aResumePosition, Integer aSize, SocketAddress aAddress, IDCCReceiveCallback aCallback, Proxy aProxy)
 	{
 		dccManager.dccResume(aFile, aResumePosition, aSize, aAddress, aCallback, aProxy);
 	}
 
 	@Override
-	public DCCManager getDCCManager()
+	public IDCCManager getDCCManager()
 	{
 		return dccManager;
 	}

@@ -3,6 +3,7 @@ package com.ircclouds.irc.api;
 import com.ircclouds.irc.api.comms.INeedsConnection;
 import com.ircclouds.irc.api.domain.IRCServerOptions;
 import com.ircclouds.irc.api.domain.messages.AbstractMessage;
+import com.ircclouds.irc.api.interfaces.IMessageReader;
 import com.ircclouds.irc.api.om.AbstractMessageFactory;
 import com.ircclouds.irc.api.utils.StringUtils;
 

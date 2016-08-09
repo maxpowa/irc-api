@@ -1,16 +1,17 @@
 package com.ircclouds.irc.api.dcc;
 
-import java.io.*;
+import com.ircclouds.irc.api.ApiException;
+import com.ircclouds.irc.api.dcc.interfaces.IDCCReceiveResult;
 
-import com.ircclouds.irc.api.*;
+import java.io.IOException;
 
 public class DCCReceiveException extends ApiException
 {
-	private DCCReceiveResult result;
+	private IDCCReceiveResult result;
 	
 	private IOException exc;
 	
-	public DCCReceiveException(DCCReceiveResult aResult, IOException aException)
+	public DCCReceiveException(IDCCReceiveResult aResult, IOException aException)
 	{
 		super(DCCReceiveException.class.getName());
 		
@@ -23,7 +24,7 @@ public class DCCReceiveException extends ApiException
 		return exc;
 	}
 	
-	public DCCReceiveResult getDCCReceiveResult()
+	public IDCCReceiveResult getDCCReceiveResult()
 	{
 		return result;
 	}

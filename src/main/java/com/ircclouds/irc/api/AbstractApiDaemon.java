@@ -3,7 +3,10 @@ package com.ircclouds.irc.api;
 import com.ircclouds.irc.api.comms.IConnection.EndOfStreamException;
 import com.ircclouds.irc.api.domain.messages.AbstractMessage;
 import com.ircclouds.irc.api.domain.messages.ClientErrorMessage;
+import com.ircclouds.irc.api.interfaces.IMessageReader;
+
 import net.engio.mbassy.bus.MBassador;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

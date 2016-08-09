@@ -1,7 +1,8 @@
 package com.ircclouds.irc.api.commands;
 
-import com.ircclouds.irc.api.IServerParameters;
 import com.ircclouds.irc.api.domain.IRCServer;
+import com.ircclouds.irc.api.interfaces.IServerParameters;
+
 import junit.framework.TestCase;
 
 import java.util.Arrays;

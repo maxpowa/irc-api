@@ -1,15 +1,22 @@
 package com.ircclouds.irc.api.listeners;
 
-import com.ircclouds.irc.api.Callback;
-import com.ircclouds.irc.api.IIRCSession;
-import com.ircclouds.irc.api.IServerParameters;
 import com.ircclouds.irc.api.domain.IRCChannel;
 import com.ircclouds.irc.api.domain.IRCUserStatuses;
 import com.ircclouds.irc.api.domain.WritableIRCChannel;
-import com.ircclouds.irc.api.domain.messages.*;
+import com.ircclouds.irc.api.domain.messages.AbstractUserMessage;
+import com.ircclouds.irc.api.domain.messages.ChannelJoin;
+import com.ircclouds.irc.api.domain.messages.ChannelKick;
+import com.ircclouds.irc.api.domain.messages.ChannelPart;
+import com.ircclouds.irc.api.domain.messages.ServerError;
+import com.ircclouds.irc.api.domain.messages.ServerNumeric;
+import com.ircclouds.irc.api.domain.messages.UserNickMessage;
+import com.ircclouds.irc.api.interfaces.Callback;
+import com.ircclouds.irc.api.interfaces.IIRCSession;
+import com.ircclouds.irc.api.interfaces.IServerParameters;
 import com.ircclouds.irc.api.state.IIRCState;
 import com.ircclouds.irc.api.state.IRCStateImpl;
 import com.ircclouds.irc.api.state.IStateAccessor;
+
 import net.engio.mbassy.listener.Handler;
 
 public abstract class AbstractExecuteCommandListener implements IStateAccessor

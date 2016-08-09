@@ -1,10 +1,13 @@
 package com.ircclouds.irc.api.listeners;
 
-import java.util.*;
+import com.ircclouds.irc.api.IRCException;
+import com.ircclouds.irc.api.domain.IRCNumerics;
+import com.ircclouds.irc.api.domain.messages.ChannelKick;
+import com.ircclouds.irc.api.domain.messages.ServerNumeric;
+import com.ircclouds.irc.api.interfaces.Callback;
 
-import com.ircclouds.irc.api.*;
-import com.ircclouds.irc.api.domain.*;
-import com.ircclouds.irc.api.domain.messages.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public abstract class KickUserListener
 {

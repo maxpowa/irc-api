@@ -1,15 +1,16 @@
 package com.ircclouds.irc.api.dcc;
 
-import com.ircclouds.irc.api.*;
+import com.ircclouds.irc.api.ApiException;
+import com.ircclouds.irc.api.dcc.interfaces.IDCCSendResult;
 
 public class DCCSendException extends ApiException
 {
-	private DCCSendResult result;
+	private IDCCSendResult result;
 	
 	private Exception readerExc;
 	private Exception writerExc;
 	
-	public DCCSendException(DCCSendResult aResult, Exception aReaderException, Exception aWriterException)
+	public DCCSendException(IDCCSendResult aResult, Exception aReaderException, Exception aWriterException)
 	{
 		super(DCCSendException.class.getName());
 		
@@ -19,7 +20,7 @@ public class DCCSendException extends ApiException
 		writerExc = aWriterException;
 	}
 	
-	public DCCSendResult getDCCSendResult()
+	public IDCCSendResult getDCCSendResult()
 	{
 		return result;
 	}

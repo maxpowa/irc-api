@@ -1,8 +1,8 @@
 package com.ircclouds.irc.api.commands;
 
-import com.ircclouds.irc.api.IServerParameters;
 import com.ircclouds.irc.api.commands.interfaces.ICapCmd;
 import com.ircclouds.irc.api.commands.interfaces.ICommand;
+import com.ircclouds.irc.api.interfaces.IServerParameters;
 import com.ircclouds.irc.api.utils.StringUtils;
 
 public class ConnectCmd implements ICommand

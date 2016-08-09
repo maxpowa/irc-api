@@ -1,7 +1,7 @@
 package com.ircclouds.irc.api.negotiators;
 
-import com.ircclouds.irc.api.IRCApi;
 import com.ircclouds.irc.api.commands.interfaces.ICapCmd;
+import com.ircclouds.irc.api.interfaces.IRCApi;
 
 /**
  * IRC v3.1 capability negotiation.

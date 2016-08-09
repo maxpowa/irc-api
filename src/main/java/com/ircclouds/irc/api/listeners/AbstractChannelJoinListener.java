@@ -1,13 +1,28 @@
 package com.ircclouds.irc.api.listeners;
 
-import java.util.*;
+import com.ircclouds.irc.api.IRCException;
+import com.ircclouds.irc.api.domain.IRCChannel;
+import com.ircclouds.irc.api.domain.IRCNumerics;
+import com.ircclouds.irc.api.domain.IRCUser;
+import com.ircclouds.irc.api.domain.IRCUserStatus;
+import com.ircclouds.irc.api.domain.IRCUserStatuses;
+import com.ircclouds.irc.api.domain.WritableIRCChannel;
+import com.ircclouds.irc.api.domain.WritableIRCTopic;
+import com.ircclouds.irc.api.domain.WritableIRCUser;
+import com.ircclouds.irc.api.domain.messages.ChannelJoin;
+import com.ircclouds.irc.api.domain.messages.ServerNumeric;
+import com.ircclouds.irc.api.interfaces.Callback;
+import com.ircclouds.irc.api.utils.SynchronizedUnmodifiableSet;
 
-import com.ircclouds.irc.api.*;
-import com.ircclouds.irc.api.domain.*;
-import com.ircclouds.irc.api.domain.messages.*;
-import com.ircclouds.irc.api.utils.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 
 public abstract class AbstractChannelJoinListener
 {

@@ -1,6 +1,6 @@
-package com.ircclouds.irc.api.dcc;
+package com.ircclouds.irc.api.dcc.interfaces;
 
-public interface DCCReceiveResult
+public interface IDCCReceiveResult
 {
 	int getNumberOfAcksSent();
 	

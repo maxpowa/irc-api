@@ -1,8 +1,9 @@
 package com.ircclouds.irc.api;
 
-import java.util.*;
+import com.ircclouds.irc.api.domain.IRCServer;
+import com.ircclouds.irc.api.interfaces.IServerParameters;
 
-import com.ircclouds.irc.api.domain.*;
+import java.util.List;
 
 class MockServerParametersImpl implements IServerParameters
 {

@@ -8,11 +8,17 @@ import com.ircclouds.irc.api.domain.IRCServer;
 import com.ircclouds.irc.api.domain.IRCServerOptions;
 import com.ircclouds.irc.api.domain.SecureIRCServer;
 import com.ircclouds.irc.api.domain.messages.ClientErrorMessage;
+import com.ircclouds.irc.api.interfaces.Callback;
+import com.ircclouds.irc.api.interfaces.ICommandServer;
+import com.ircclouds.irc.api.interfaces.IIRCSession;
+import com.ircclouds.irc.api.interfaces.IMessageReader;
 import com.ircclouds.irc.api.state.IIRCState;
+
 import net.engio.mbassy.bus.MBassador;
 
-import javax.net.ssl.SSLContext;
 import java.io.IOException;
+
+import javax.net.ssl.SSLContext;
 
 public abstract class AbstractIRCSession implements IIRCSession
 {

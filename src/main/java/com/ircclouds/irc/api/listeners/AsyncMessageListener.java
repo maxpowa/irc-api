@@ -1,9 +1,10 @@
 package com.ircclouds.irc.api.listeners;
 
-import com.ircclouds.irc.api.Callback;
 import com.ircclouds.irc.api.IRCException;
 import com.ircclouds.irc.api.domain.IRCNumerics;
 import com.ircclouds.irc.api.domain.messages.ServerNumeric;
+import com.ircclouds.irc.api.interfaces.Callback;
+
 import net.engio.mbassy.listener.Handler;
 
 import java.util.Arrays;

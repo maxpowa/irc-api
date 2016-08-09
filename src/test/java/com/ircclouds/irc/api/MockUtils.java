@@ -1,9 +1,13 @@
 package com.ircclouds.irc.api;
 
-import java.util.concurrent.*;
+import com.ircclouds.irc.api.comms.IConnection;
+import com.ircclouds.irc.api.interfaces.Callback;
+import com.ircclouds.irc.api.interfaces.IRCApi;
+import com.ircclouds.irc.api.interfaces.IServerParameters;
+import com.ircclouds.irc.api.state.IIRCState;
 
-import com.ircclouds.irc.api.comms.*;
-import com.ircclouds.irc.api.state.*;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 public class MockUtils
 {

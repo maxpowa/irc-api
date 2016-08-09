@@ -1,12 +1,24 @@
 package com.ircclouds.irc.api.dcc;
 
-import java.io.*;
-import java.net.*;
-import java.nio.*;
-import java.nio.channels.*;
-import nl.dannyvanheumen.nio.ProxiedSocketChannel;
+import com.ircclouds.irc.api.dcc.interfaces.IDCCReceiveCallback;
+import com.ircclouds.irc.api.dcc.interfaces.IDCCReceiveProgressCallback;
+import com.ircclouds.irc.api.dcc.interfaces.IDCCReceiveResult;
 
-import org.slf4j.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.Closeable;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.net.Proxy;
+import java.net.SocketAddress;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.channels.FileChannel;
+import java.nio.channels.SocketChannel;
+
+import nl.dannyvanheumen.nio.ProxiedSocketChannel;
 
 public class DCCReceiver
 {
@@ -14,7 +26,7 @@ public class DCCReceiver
 
 	private final ByteBuffer bb = ByteBuffer.allocate(4).order(ByteOrder.BIG_ENDIAN);
 
-	private final DCCReceiveCallback callback;
+	private final IDCCReceiveCallback callback;
 
 	private final Proxy proxy;
 
@@ -23,7 +35,7 @@ public class DCCReceiver
 
 	private IOException exc;
 
-	public DCCReceiver(DCCReceiveCallback aCallback, Proxy aProxy)
+	public DCCReceiver(IDCCReceiveCallback aCallback, Proxy aProxy)
 	{
 		proxy = aProxy;
 		callback = aCallback;
@@ -86,7 +98,7 @@ public class DCCReceiver
 
 	private void callBack(int aPromisedFileSize, final long aTimeTaken)
 	{
-		DCCReceiveResult _dccRecRes = new DCCReceiveResult()
+		IDCCReceiveResult _dccRecRes = new IDCCReceiveResult()
 		{
 			@Override
 			public long totalTime()
@@ -123,9 +135,9 @@ public class DCCReceiver
 		bb.putInt(aCount);
 		
 		aSocketChannel.write(bb);
-		if (callback instanceof DCCReceiveProgressCallback)
+		if (callback instanceof IDCCReceiveProgressCallback)
 		{
-			((DCCReceiveProgressCallback) callback).onProgress(aCount);
+			((IDCCReceiveProgressCallback) callback).onProgress(aCount);
 		}
 	}
 
