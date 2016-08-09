@@ -3,11 +3,6 @@ package com.ircclouds.irc.api;
 import com.ircclouds.irc.api.comms.IConnection.EndOfStreamException;
 import com.ircclouds.irc.api.domain.messages.AbstractMessage;
 import com.ircclouds.irc.api.domain.messages.ClientErrorMessage;
-import com.ircclouds.irc.api.filters.FilterStatus;
-import com.ircclouds.irc.api.filters.IMessageFilter;
-import com.ircclouds.irc.api.filters.MessageFilterResult;
-import com.ircclouds.irc.api.filters.TargetListeners;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,19 +34,7 @@ public abstract class AbstractApiDaemon extends Thread
 				if (_msg != null)
 				{
 					dispatcher.dispatchToPrivateListeners(_msg);
-					
-					if (getMessageFilter() != null)
-					{
-						MessageFilterResult _fr = getMessageFilter().filter(_msg);
-						if (_fr.getFilterStatus().equals(FilterStatus.PASS))
-						{
-							dispatcher.dispatch(_fr.getFilteredMessage(), getMessageFilter().getTargetListeners());
-						}
-					}
-					else
-					{
-						dispatcher.dispatch(_msg, TargetListeners.ALL);
-					}
+					dispatcher.dispatch(_msg);
 				}
 			}
 		}
@@ -63,13 +46,13 @@ public abstract class AbstractApiDaemon extends Thread
 			// (or rather IRC registration process) is finished. Otherwise,
 			// there would be no feedback of the connection failure.
 			signalExceptionToApi(aExc);
-			dispatcher.dispatch(new ClientErrorMessage(aExc), TargetListeners.ALL);
+			dispatcher.dispatch(new ClientErrorMessage(aExc));
 		}
 		catch (IOException aExc)
 		{
 			LOG.error(this.getName(), aExc);
 			signalExceptionToApi(aExc);
-			dispatcher.dispatch(new ClientErrorMessage(aExc), TargetListeners.ALL);
+			dispatcher.dispatch(new ClientErrorMessage(aExc));
 		}
 		finally
 		{
@@ -82,6 +65,4 @@ public abstract class AbstractApiDaemon extends Thread
 	protected abstract void signalExceptionToApi(Exception aExc);
 
 	protected abstract void onExit();
-	
-	protected abstract IMessageFilter getMessageFilter();
 }

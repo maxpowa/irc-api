@@ -1,11 +1,11 @@
 package com.ircclouds.irc.api;
 
-import java.io.*;
+import com.ircclouds.irc.api.domain.IRCServer;
+import com.ircclouds.irc.api.listeners.IMessageListener;
+import com.ircclouds.irc.api.listeners.Visibility;
+import com.ircclouds.irc.api.state.IIRCState;
 
-import com.ircclouds.irc.api.domain.*;
-import com.ircclouds.irc.api.filters.*;
-import com.ircclouds.irc.api.listeners.*;
-import com.ircclouds.irc.api.state.*;
+import java.io.IOException;
 
 public interface IIRCSession
 {
@@ -18,8 +18,6 @@ public interface IIRCSession
 	boolean open(IRCServer aServer, Callback<IIRCState> aCallback) throws IOException;
 	
 	void close() throws IOException;
-
-	IMessageFilter getMessageFilter();
 
 	void dispatchClientError(Exception e);
 }

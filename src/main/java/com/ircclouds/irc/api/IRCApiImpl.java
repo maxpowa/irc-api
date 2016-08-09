@@ -10,9 +10,6 @@ import com.ircclouds.irc.api.dcc.DCCSendCallback;
 import com.ircclouds.irc.api.domain.IRCChannel;
 import com.ircclouds.irc.api.domain.IRCServerOptions;
 import com.ircclouds.irc.api.domain.WritableIRCChannel;
-import com.ircclouds.irc.api.filters.AbstractAndMessageFilter;
-import com.ircclouds.irc.api.filters.ApiMessageFilter;
-import com.ircclouds.irc.api.filters.IMessageFilter;
 import com.ircclouds.irc.api.listeners.*;
 import com.ircclouds.irc.api.negotiators.CapabilityNegotiator;
 import com.ircclouds.irc.api.state.*;
@@ -46,17 +43,6 @@ public class IRCApiImpl implements IRCApi
 	private IIRCState state;
 	private int asyncId = 0;
 
-	private IMessageFilter filter;
-	private ApiMessageFilter apiFilter = new ApiMessageFilter(asyncId);
-	private IMessageFilter abstractAndMsgFilter = new AbstractAndMessageFilter(apiFilter)
-	{
-		@Override
-		protected IMessageFilter getSecondFilter()
-		{
-			return filter;
-		}
-	};
-
 	private final DCCManagerImpl dccManager;
 
 	/**
@@ -74,19 +60,6 @@ public class IRCApiImpl implements IRCApi
 			protected IRCServerOptions getIRCServerOptions()
 			{
 				return state.getServerOptions();
-			}
-
-			@Override
-			public IMessageFilter getMessageFilter()
-			{
-				if (filter != null)
-				{
-					return abstractAndMsgFilter;
-				}
-				else
-				{
-					return apiFilter;
-				}
 			}
 		};
 
@@ -260,7 +233,6 @@ public class IRCApiImpl implements IRCApi
 
 		Dirty _d = new Dirty();
 		executeCmdListener.submitSendMessageCallback(asyncId, getDirtyCallback(aCallback, _d));
-		apiFilter.addValue(asyncId);
 
 		executeAsync(new SendPrivateMessage(aTarget, aMessage, asyncId++), aCallback, _d);
 	}
@@ -284,7 +256,6 @@ public class IRCApiImpl implements IRCApi
 
 		Dirty _d = new Dirty();
 		executeCmdListener.submitSendMessageCallback(asyncId, getDirtyCallback(aCallback, _d));
-		apiFilter.addValue(asyncId);
 
 		executeAsync(new SendActionMessage(aTarget, aActionMessage, asyncId++), aCallback, _d);
 	}
@@ -308,7 +279,6 @@ public class IRCApiImpl implements IRCApi
 
 		Dirty _d = new Dirty();
 		executeCmdListener.submitSendMessageCallback(asyncId, getDirtyCallback(aCallback, _d));
-		apiFilter.addValue(asyncId);
 
 		executeAsync(new SendNoticeMessage(aTarget, aText, asyncId++), aCallback, _d);
 	}
@@ -368,8 +338,6 @@ public class IRCApiImpl implements IRCApi
 		Dirty _d = new Dirty();
 		executeCmdListener.submitChangeNickCallback(aNewNickname, getDirtyCallback(aCallback, _d));
 
-		apiFilter.addValue(asyncId);
-
 		executeAsync(new ChangeNickCmd(aNewNickname), aCallback, _d);
 	}
 
@@ -410,12 +378,6 @@ public class IRCApiImpl implements IRCApi
 	public void deleteListener(IMessageListener aListener)
 	{
 		session.removeListener(aListener);
-	}
-
-	@Override
-	public void setMessageFilter(IMessageFilter aFilter)
-	{
-		filter = aFilter;
 	}
 
 	@Override

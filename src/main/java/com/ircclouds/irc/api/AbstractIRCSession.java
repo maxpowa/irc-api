@@ -8,8 +8,6 @@ import com.ircclouds.irc.api.domain.IRCServer;
 import com.ircclouds.irc.api.domain.IRCServerOptions;
 import com.ircclouds.irc.api.domain.SecureIRCServer;
 import com.ircclouds.irc.api.domain.messages.ClientErrorMessage;
-import com.ircclouds.irc.api.filters.IMessageFilter;
-import com.ircclouds.irc.api.filters.TargetListeners;
 import com.ircclouds.irc.api.listeners.IMessageListener;
 import com.ircclouds.irc.api.listeners.Visibility;
 import com.ircclouds.irc.api.state.IIRCState;
@@ -65,12 +63,6 @@ public abstract class AbstractIRCSession implements IIRCSession
 				{
 					throw new RuntimeException(aExc);
 				}
-			}
-
-			@Override
-			protected IMessageFilter getMessageFilter()
-			{
-				return AbstractIRCSession.this.getMessageFilter();
 			}
 
 			@Override
@@ -161,7 +153,7 @@ public abstract class AbstractIRCSession implements IIRCSession
 			public void run()
 			{
 				final ClientErrorMessage errorMsg = new ClientErrorMessage(e);
-				currentDispatcher.dispatch(errorMsg, TargetListeners.ALL);
+				currentDispatcher.dispatch(errorMsg);
 			}
 		}.start();
 	}

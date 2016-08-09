@@ -28,6 +28,7 @@ dependencies {
     testCompile 'org.jmockit:jmockit:1.26'
     testCompile 'junit:junit:4.12'
     testCompile 'org.slf4j:slf4j-simple:1.7.21'
+    compile 'com.google.guava:guava:19.0'
     compile 'commons-codec:commons-codec:1.4'
     compile 'org.slf4j:slf4j-api:1.7.21'
 }

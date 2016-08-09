@@ -1,33 +1,9 @@
 package com.ircclouds.irc.api;
 
-import com.ircclouds.irc.api.domain.messages.AbstractMessage;
-import com.ircclouds.irc.api.domain.messages.ChannelAction;
-import com.ircclouds.irc.api.domain.messages.ChannelJoin;
-import com.ircclouds.irc.api.domain.messages.ChannelKick;
-import com.ircclouds.irc.api.domain.messages.ChannelMode;
-import com.ircclouds.irc.api.domain.messages.ChannelNotice;
-import com.ircclouds.irc.api.domain.messages.ChannelPart;
-import com.ircclouds.irc.api.domain.messages.ChannelPrivMsg;
-import com.ircclouds.irc.api.domain.messages.ChannelTopic;
-import com.ircclouds.irc.api.domain.messages.ClientErrorMessage;
-import com.ircclouds.irc.api.domain.messages.ServerError;
-import com.ircclouds.irc.api.domain.messages.ServerNotice;
-import com.ircclouds.irc.api.domain.messages.ServerNumeric;
-import com.ircclouds.irc.api.domain.messages.ServerPing;
-import com.ircclouds.irc.api.domain.messages.UserAction;
-import com.ircclouds.irc.api.domain.messages.UserAwayMessage;
-import com.ircclouds.irc.api.domain.messages.UserNickMessage;
-import com.ircclouds.irc.api.domain.messages.UserNotice;
-import com.ircclouds.irc.api.domain.messages.UserPing;
-import com.ircclouds.irc.api.domain.messages.UserPrivMsg;
-import com.ircclouds.irc.api.domain.messages.UserQuitMessage;
-import com.ircclouds.irc.api.domain.messages.UserVersion;
-import com.ircclouds.irc.api.filters.HowMany;
-import com.ircclouds.irc.api.filters.TargetListeners;
+import com.ircclouds.irc.api.domain.messages.*;
 import com.ircclouds.irc.api.listeners.IMessageListener;
 import com.ircclouds.irc.api.listeners.IVariousMessageListener;
 import com.ircclouds.irc.api.listeners.Visibility;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,16 +25,9 @@ public final class MessageDispatcherImpl implements IMessageDispatcher
 	}
 
 	@Override
-	public void dispatch(AbstractMessage aMessage, TargetListeners aTargetListeners)
+	public void dispatch(AbstractMessage aMessage)
 	{
-		if (aTargetListeners.getHowMany().equals(HowMany.ALL))
-		{
-			dispatchTo(aMessage, new ArrayList<IMessageListener>(listenersMap.get(Visibility.PUBLIC)));
-		}
-		else
-		{
-			dispatchTo(aMessage, aTargetListeners.getListeners());
-		}
+		dispatchTo(aMessage, new ArrayList<IMessageListener>(listenersMap.get(Visibility.PUBLIC)));
 	}
 
 	@Override
