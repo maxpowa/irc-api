@@ -1,8 +1,11 @@
 package com.ircclouds.irc.api.utils;
 
-import java.io.*;
-import java.net.*;
-import java.util.*;
+import java.io.IOException;
+import java.math.BigInteger;
+import java.net.InetAddress;
+import java.net.ServerSocket;
+import java.net.UnknownHostException;
+import java.util.Random;
 
 public class NetUtils
 {
@@ -65,5 +68,15 @@ public class NetUtils
 		}
 
 		return false;
+	}
+
+	public static String getLocalAddressRepresentation() throws UnknownHostException {
+		InetAddress _localHost = InetAddress.getLocalHost();
+		byte[] _address = _localHost.getAddress();
+		if (_address.length == 4) {
+			return new BigInteger(1, _address).toString();
+		} else {
+			return _localHost.getHostAddress();
+		}
 	}
 }

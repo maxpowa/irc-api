@@ -45,6 +45,7 @@ import java.io.IOException;
 import java.net.Proxy;
 import java.net.SocketAddress;
 import java.net.SocketException;
+import java.net.UnknownHostException;
 
 import static com.ircclouds.irc.api.dcc.DCCManager.DCC_SEND_TIMEOUT;
 
@@ -406,61 +407,61 @@ public class IRCApi implements IIRCApi
 	}
 
 	@Override
-	public void dccSend(final String aNick, final File aFile, IDCCSendCallback aCallback)
+	public void dccSend(final String aNick, final File aFile, IDCCSendCallback aCallback) throws UnknownHostException
 	{
-		dccSend(aNick, aFile, NetUtils.getRandDccPort(), DCC_SEND_TIMEOUT, aCallback);
+		dccSend(aNick, aFile, NetUtils.getLocalAddressRepresentation(), NetUtils.getRandDccPort(), DCC_SEND_TIMEOUT, aCallback);
 	}
 
 	@Override
-	public void dccSend(String aNick, Integer aListeningPort, File aFile, IDCCSendCallback aCallback)
+	public void dccSend(String aNick, String aListeningAddress, Integer aListeningPort, File aFile, IDCCSendCallback aCallback)
 	{
-		dccSend(aNick, aFile, aListeningPort, DCC_SEND_TIMEOUT, aCallback);
+		dccSend(aNick, aFile, aListeningAddress, aListeningPort, DCC_SEND_TIMEOUT, aCallback);
 	}
 
 	@Override
 	public void dccSend(String aNick, File aFile, Integer aTimeout, IDCCSendCallback aCallback)
 	{
-		dccSend(aNick, aFile, NetUtils.getRandDccPort(), aTimeout, aCallback);
+		dccSend(aNick, aFile, aTimeout, aCallback);
 	}
 
 	@Override
-	public void dccSend(String aNick, File aFile, Integer aListeningPort, Integer aTimeout, IDCCSendCallback aCallback)
+	public void dccSend(String aNick, File aFile, String aListeningAddress, Integer aListeningPort, Integer aTimeout, IDCCSendCallback aCallback)
 	{
-		dccManager.dccSend(aNick, aFile, aListeningPort, aTimeout, aCallback);
+		dccManager.dccSend(aNick, aFile, aListeningAddress, aListeningPort, aTimeout, aCallback);
 	}
 
 	@Override
-	public void dccAccept(String aNick, File aFile, Integer aPort, Integer aResumePosition, IDCCSendCallback aCallback)
+	public void dccAccept(String aNick, File aFile, Integer aPort, Long aResumePosition, IDCCSendCallback aCallback)
 	{
 		dccAccept(aNick, aFile, aPort, aResumePosition, DCC_SEND_TIMEOUT, aCallback);
 	}
 
 	@Override
-	public void dccAccept(String aNick, File aFile, Integer aPort, Integer aResumePosition, Integer aTimeout, IDCCSendCallback aCallback)
+	public void dccAccept(String aNick, File aFile, Integer aPort, Long aResumePosition, Integer aTimeout, IDCCSendCallback aCallback)
 	{
 		dccManager.dccAccept(aNick, aFile, aPort, aResumePosition, aTimeout, aCallback);
 	}
 
 	@Override
-	public void dccReceive(File aFile, Integer aSize, SocketAddress aAddress, IDCCReceiveCallback aCallback)
+	public void dccReceive(File aFile, Long aSize, SocketAddress aAddress, IDCCReceiveCallback aCallback)
 	{
-		dccResume(aFile, 0, aSize, aAddress, aCallback);
+		dccResume(aFile, 0L, aSize, aAddress, aCallback);
 	}
 
 	@Override
-	public void dccReceive(File aFile, Integer aSize, SocketAddress aAddress, IDCCReceiveCallback aCallback, Proxy aProxy)
+	public void dccReceive(File aFile, Long aSize, SocketAddress aAddress, IDCCReceiveCallback aCallback, Proxy aProxy)
 	{
-		dccResume(aFile, 0, aSize, aAddress, aCallback, aProxy);
+		dccResume(aFile, 0L, aSize, aAddress, aCallback, aProxy);
 	}
 
 	@Override
-	public void dccResume(File aFile, Integer aResumePosition, Integer aSize, SocketAddress aAddress, IDCCReceiveCallback aCallback)
+	public void dccResume(File aFile, Long aResumePosition, Long aSize, SocketAddress aAddress, IDCCReceiveCallback aCallback)
 	{
 		dccManager.dccResume(aFile, aResumePosition, aSize, aAddress, aCallback);
 	}
 
 	@Override
-	public void dccResume(File aFile, Integer aResumePosition, Integer aSize, SocketAddress aAddress, IDCCReceiveCallback aCallback, Proxy aProxy)
+	public void dccResume(File aFile, Long aResumePosition, Long aSize, SocketAddress aAddress, IDCCReceiveCallback aCallback, Proxy aProxy)
 	{
 		dccManager.dccResume(aFile, aResumePosition, aSize, aAddress, aCallback, aProxy);
 	}

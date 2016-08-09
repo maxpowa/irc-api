@@ -27,10 +27,10 @@ public class DCCSender
 	
 	private Integer timeout;
 	private Integer listeningPort;
-	private Integer resumePos;
+	private Long resumePos;
 
 	private IDCCSendCallback callback;
-	private int totalBytesTransferred;
+	private long totalBytesTransferred;
 	private int totalAcksRead;
 	
 	private Exception readerExc;
@@ -38,10 +38,10 @@ public class DCCSender
 	
 	public DCCSender(Integer aPort, Integer aTimeout, IDCCSendCallback aCallback)
 	{
-		this(aTimeout, aPort, 0, aCallback);
+		this(aTimeout, aPort, 0L, aCallback);
 	}
 
-	public DCCSender(int aTimeout, Integer aPort, Integer aResumePosition, IDCCSendCallback aCallback)
+	public DCCSender(int aTimeout, Integer aPort, Long aResumePosition, IDCCSendCallback aCallback)
 	{
 		timeout = aTimeout;
 		listeningPort = aPort;
@@ -49,7 +49,7 @@ public class DCCSender
 		callback = aCallback;
 	}
 
-	public void setResumePosition(int aResumePosition)
+	public void setResumePosition(Long aResumePosition)
 	{
 		resumePos = aResumePosition;
 	}
@@ -116,7 +116,7 @@ public class DCCSender
 		IDCCSendResult _dccSendRes = new IDCCSendResult()
 		{				
 			@Override
-			public int totalBytesSent()
+			public long totalBytesSent()
 			{
 				return totalBytesTransferred;
 			}

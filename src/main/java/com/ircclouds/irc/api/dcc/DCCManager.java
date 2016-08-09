@@ -1,6 +1,5 @@
 package com.ircclouds.irc.api.dcc;
 
-import com.ircclouds.irc.api.ApiException;
 import com.ircclouds.irc.api.dcc.interfaces.IDCCManager;
 import com.ircclouds.irc.api.dcc.interfaces.IDCCReceiveCallback;
 import com.ircclouds.irc.api.dcc.interfaces.IDCCReceiveProgressCallback;
@@ -14,11 +13,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.math.BigInteger;
-import java.net.InetAddress;
 import java.net.Proxy;
 import java.net.SocketAddress;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -40,7 +36,7 @@ public class DCCManager implements IDCCManager
 		api = aApi;
 	}
 
-	public void dccSend(String aNick, File aFile, Integer aListeningPort, Integer aTimeout, IDCCSendCallback aCallback)
+	public void dccSend(String aNick, File aFile, String aListeningAddress, Integer aListeningPort, Integer aTimeout, IDCCSendCallback aCallback)
 	{
 		DCCSender _dccSender = new DCCSender(aListeningPort, aTimeout, addManagerDCCSendCallback(aCallback, aListeningPort));
 
@@ -48,10 +44,10 @@ public class DCCManager implements IDCCManager
 
 		_dccSender.send(aFile);
 
-		api.message(aNick, '\001' + "DCC SEND " + aFile.getName() + " " + getLocalAddressRepresentation() + " " + aListeningPort + " " + aFile.length() + '\001');
+		api.message(aNick, '\001' + "DCC SEND " + aFile.getName() + " " + aListeningAddress + " " + aListeningPort + " " + aFile.length() + '\001');
 	}
 
-	public void dccAccept(String aNick, File aFile, Integer aPort, Integer aResumePosition, Integer aTimeout, IDCCSendCallback aCallback)
+	public void dccAccept(String aNick, File aFile, Integer aPort, Long aResumePosition, Integer aTimeout, IDCCSendCallback aCallback)
 	{
 		DCCSender _dccSender = new DCCSender(aTimeout, aPort, aResumePosition, addManagerDCCSendCallback(aCallback, aPort));
 
@@ -68,16 +64,12 @@ public class DCCManager implements IDCCManager
 		api.message(aNick, '\001' + "DCC ACCEPT " + aFile.getName() + " " + aPort + " " + aResumePosition + '\001');
 	}
 
-	public void dccResume(File aFile, Integer aResumePosition, Integer aSize, SocketAddress aAddress, IDCCReceiveCallback aCallback)
+	public void dccResume(File aFile, Long aResumePosition, Long aSize, SocketAddress aAddress, IDCCReceiveCallback aCallback)
 	{
-		DCCReceiver _dccReceiver = new DCCReceiver(addManagerDCCReceiveCallback(aCallback), null);
-		
-		registerReceiver(_dccReceiver);
-		
-		_dccReceiver.receive(aFile, aResumePosition, aSize, aAddress);
+		dccResume(aFile, aResumePosition, aSize, aAddress, aCallback, null);
 	}
 
-	public void dccResume(File aFile, Integer aResumePosition, Integer aSize, SocketAddress aAddress, IDCCReceiveCallback aCallback, Proxy aProxy)
+	public void dccResume(File aFile, Long aResumePosition, Long aSize, SocketAddress aAddress, IDCCReceiveCallback aCallback, Proxy aProxy)
 	{
 		DCCReceiver _dccReceiver = new DCCReceiver(addManagerDCCReceiveCallback(aCallback), aProxy);
 
@@ -96,28 +88,6 @@ public class DCCManager implements IDCCManager
 	public int activeDCCReceivesCount()
 	{
 		return dccReceivers.size();
-	}
-	
-	private String getLocalAddressRepresentation()
-	{
-		try
-		{
-			InetAddress _localHost = InetAddress.getLocalHost();
-			byte[] _address = _localHost.getAddress();
-			if (_address.length == 4)
-			{
-				return new BigInteger(1, _address).toString();
-			}
-			else
-			{
-				return _localHost.getHostAddress();
-			}
-		}
-		catch (UnknownHostException aExc)
-		{
-			LOG.error("", aExc);
-			throw new ApiException(aExc);
-		}
 	}
 
 	private IDCCReceiveCallback addManagerDCCReceiveCallback(final IDCCReceiveCallback aCallback)

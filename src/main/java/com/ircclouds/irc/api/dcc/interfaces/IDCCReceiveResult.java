@@ -4,7 +4,7 @@ public interface IDCCReceiveResult
 {
 	int getNumberOfAcksSent();
 	
-	int totalBytesReceived();
+	long totalBytesReceived();
 	
 	long totalTime();
 }

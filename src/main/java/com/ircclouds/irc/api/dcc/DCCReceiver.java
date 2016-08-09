@@ -30,7 +30,7 @@ public class DCCReceiver
 
 	private final Proxy proxy;
 
-	private int totalBytesReceived;
+	private long totalBytesReceived;
 	private int totalAcksSent;
 
 	private IOException exc;
@@ -41,7 +41,7 @@ public class DCCReceiver
 		callback = aCallback;
 	}
 	
-	public void receive(final File aFile, final Integer aResumePos, final Integer aSize, final SocketAddress aAddress)
+	public void receive(final File aFile, final Long aResumePos, final Long aSize, final SocketAddress aAddress)
 	{
 		new Thread(new Runnable()
 		{
@@ -96,7 +96,7 @@ public class DCCReceiver
 		}).start();
 	}
 
-	private void callBack(int aPromisedFileSize, final long aTimeTaken)
+	private void callBack(long aPromisedFileSize, final long aTimeTaken)
 	{
 		IDCCReceiveResult _dccRecRes = new IDCCReceiveResult()
 		{
@@ -107,7 +107,7 @@ public class DCCReceiver
 			}
 			
 			@Override
-			public int totalBytesReceived()
+			public long totalBytesReceived()
 			{
 				return totalBytesReceived;
 			}
