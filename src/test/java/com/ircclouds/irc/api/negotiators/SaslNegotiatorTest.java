@@ -16,7 +16,7 @@
 package com.ircclouds.irc.api.negotiators;
 
 import com.ircclouds.irc.api.commands.interfaces.ICapCmd;
-import com.ircclouds.irc.api.interfaces.IRCApi;
+import com.ircclouds.irc.api.interfaces.IIRCApi;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -70,7 +70,7 @@ public class SaslNegotiatorTest {
 	}
 
 	@Test
-	public void testInitiateValid(@Mocked IRCApi irc) {
+	public void testInitiateValid(@Mocked IIRCApi irc) {
 		SaslNegotiator neg = new SaslNegotiator("user", "pass", "role");
 		ICapCmd cmd = neg.initiate(irc);
 		assertNotNull(cmd);

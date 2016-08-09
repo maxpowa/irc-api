@@ -7,7 +7,7 @@ import com.ircclouds.irc.api.commands.interfaces.ICapCmd;
 import com.ircclouds.irc.api.domain.IRCNumerics;
 import com.ircclouds.irc.api.domain.messages.AbstractMessage;
 import com.ircclouds.irc.api.domain.messages.ServerNumeric;
-import com.ircclouds.irc.api.interfaces.IRCApi;
+import com.ircclouds.irc.api.interfaces.IIRCApi;
 import com.ircclouds.irc.api.negotiators.api.Relay;
 
 import net.engio.mbassy.listener.Handler;
@@ -35,7 +35,7 @@ public class SaslNegotiator implements CapabilityNegotiator {
     private final String authzid;
 
     private SaslContext state;
-    private IRCApi irc;
+    private IIRCApi irc;
 
     // TODO How to handle time-outs? (though not crucial since IRC server will also time-out)
     public SaslNegotiator(final String user, final String pass, final String authzid) {
@@ -51,7 +51,7 @@ public class SaslNegotiator implements CapabilityNegotiator {
     }
 
     @Override
-    public ICapCmd initiate(final IRCApi irc) {
+    public ICapCmd initiate(final IIRCApi irc) {
         if (irc == null) {
             throw new IllegalArgumentException("irc instance is required");
         }

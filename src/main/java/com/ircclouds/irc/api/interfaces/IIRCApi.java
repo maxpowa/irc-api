@@ -25,7 +25,7 @@ import java.net.SocketAddress;
  *  @author miguel@lebane.se  
  */
 @SuppressWarnings("unused")
-public interface IRCApi
+public interface IIRCApi
 {
 	/**
 	 * Asynchronous connect

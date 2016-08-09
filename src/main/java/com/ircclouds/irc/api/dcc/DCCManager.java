@@ -8,7 +8,7 @@ import com.ircclouds.irc.api.dcc.interfaces.IDCCReceiveResult;
 import com.ircclouds.irc.api.dcc.interfaces.IDCCSendCallback;
 import com.ircclouds.irc.api.dcc.interfaces.IDCCSendProgressCallback;
 import com.ircclouds.irc.api.dcc.interfaces.IDCCSendResult;
-import com.ircclouds.irc.api.interfaces.IRCApi;
+import com.ircclouds.irc.api.interfaces.IIRCApi;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,12 +30,12 @@ public class DCCManager implements IDCCManager
 
 	public static final int DCC_SEND_TIMEOUT = 10000;
 
-	private IRCApi api;
+	private IIRCApi api;
 
 	private Map<Integer, DCCSender> sendersMap = new HashMap<Integer, DCCSender>();
 	private List<DCCReceiver> dccReceivers = new ArrayList<DCCReceiver>();
 	
-	public DCCManager(IRCApi aApi)
+	public DCCManager(IIRCApi aApi)
 	{
 		api = aApi;
 	}

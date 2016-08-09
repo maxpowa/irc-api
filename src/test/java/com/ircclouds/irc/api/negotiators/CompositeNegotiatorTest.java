@@ -3,7 +3,7 @@ package com.ircclouds.irc.api.negotiators;
 import com.ircclouds.irc.api.commands.CapLsCmd;
 import com.ircclouds.irc.api.commands.interfaces.ICapCmd;
 import com.ircclouds.irc.api.domain.messages.AbstractMessage;
-import com.ircclouds.irc.api.interfaces.IRCApi;
+import com.ircclouds.irc.api.interfaces.IIRCApi;
 import com.ircclouds.irc.api.negotiators.CompositeNegotiator.Capability;
 import com.ircclouds.irc.api.negotiators.CompositeNegotiator.Host;
 import com.ircclouds.irc.api.negotiators.api.Relay;
@@ -145,7 +145,7 @@ public class CompositeNegotiatorTest
 	}
 
 	@Test
-	public void testInitiate(@Mocked IRCApi ircapi) {
+	public void testInitiate(@Mocked IIRCApi ircapi) {
 		Capability cap = getCapability("away-notify");
 		CompositeNegotiator negotiator = new CompositeNegotiator(Collections.singletonList(cap), null);
 		ICapCmd cmd = negotiator.initiate(ircapi);

@@ -2,7 +2,7 @@ package com.ircclouds.irc.api.negotiators;
 
 import com.ircclouds.irc.api.commands.interfaces.ICapCmd;
 import com.ircclouds.irc.api.domain.messages.AbstractMessage;
-import com.ircclouds.irc.api.interfaces.IRCApi;
+import com.ircclouds.irc.api.interfaces.IIRCApi;
 
 import org.junit.Test;
 
@@ -25,7 +25,7 @@ public class NoopNegotiatorTest
 	}
 
 	@Test
-	public void testInitiate(@Mocked IRCApi irc)
+	public void testInitiate(@Mocked IIRCApi irc)
 	{
 		ICapCmd cmd = neg.initiate(irc);
 		assertEquals("CAP END\r\n", cmd.toString());

@@ -2,7 +2,7 @@ package com.ircclouds.irc.api;
 
 import com.ircclouds.irc.api.comms.IConnection;
 import com.ircclouds.irc.api.interfaces.Callback;
-import com.ircclouds.irc.api.interfaces.IRCApi;
+import com.ircclouds.irc.api.interfaces.IIRCApi;
 import com.ircclouds.irc.api.interfaces.IServerParameters;
 import com.ircclouds.irc.api.state.IIRCState;
 
@@ -18,7 +18,7 @@ public class MockUtils
 	{
 		final CountDownLatch _cdl = new CountDownLatch(1);
 
-		final IRCApi api = new IRCApiImpl(false);
+		final IIRCApi api = new IRCApi(false);
 		api.connect(aServerParams, new Callback<IIRCState>()
 		{
 			@Override
@@ -51,18 +51,18 @@ public class MockUtils
 
 	protected interface ConnectedApi
 	{
-		IRCApi getIRCApi();
+		IIRCApi getIRCApi();
 
 		IIRCState getConnectedState();
 	}
 
-	private static void setConnectedApi(final IRCApi aApi, final IIRCState aConnectedState)
+	private static void setConnectedApi(final IIRCApi aApi, final IIRCState aConnectedState)
 	{
 		connectedApi = new ConnectedApi()
 		{
 
 			@Override
-			public IRCApi getIRCApi()
+			public IIRCApi getIRCApi()
 			{
 				return aApi;
 			}

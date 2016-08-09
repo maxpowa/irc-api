@@ -1,7 +1,7 @@
 package com.ircclouds.irc.api.negotiators;
 
 import com.ircclouds.irc.api.commands.interfaces.ICapCmd;
-import com.ircclouds.irc.api.interfaces.IRCApi;
+import com.ircclouds.irc.api.interfaces.IIRCApi;
 
 /**
  * IRC v3.1 capability negotiation.
@@ -24,12 +24,12 @@ public interface CapabilityNegotiator
 	 * </p>
 	 *
 	 * <p>
-	 * The IRCApi instance should be stored for later use during negotiations in
+	 * The IIRCApi instance should be stored for later use during negotiations in
 	 * order to respond to incoming CAP negoation messages.
 	 * </p>
 	 *
-	 * @param irc the current IRCApi instance
+	 * @param irc the current IIRCApi instance
 	 * @return returns initialization command for CAP negotiation
 	 */
-	ICapCmd initiate(IRCApi irc);
+	ICapCmd initiate(IIRCApi irc);
 }

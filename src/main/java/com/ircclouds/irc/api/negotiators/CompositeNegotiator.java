@@ -6,7 +6,7 @@ import com.ircclouds.irc.api.commands.interfaces.ICapCmd;
 import com.ircclouds.irc.api.commands.interfaces.ICommand;
 import com.ircclouds.irc.api.domain.messages.AbstractMessage;
 import com.ircclouds.irc.api.domain.messages.ServerNumeric;
-import com.ircclouds.irc.api.interfaces.IRCApi;
+import com.ircclouds.irc.api.interfaces.IIRCApi;
 import com.ircclouds.irc.api.negotiators.api.Relay;
 
 import net.engio.mbassy.listener.Handler;
@@ -65,7 +65,7 @@ public class CompositeNegotiator implements CapabilityNegotiator
 	/**
 	 * The IRC-API instance.
 	 */
-	private IRCApi irc;
+	private IIRCApi irc;
 
 	/**
 	 *  Prepared relay for Capability-Server conversations.
@@ -120,7 +120,7 @@ public class CompositeNegotiator implements CapabilityNegotiator
 	}
 
 	@Override
-	public ICapCmd initiate(final IRCApi irc)
+	public ICapCmd initiate(final IIRCApi irc)
 	{
 		if (irc == null)
 		{
@@ -546,12 +546,12 @@ public class CompositeNegotiator implements CapabilityNegotiator
 		return line.toString();
 	}
 
-	private static void send(final IRCApi irc, final ICommand cmd)
+	private static void send(final IIRCApi irc, final ICommand cmd)
 	{
 		send(irc, cmd.toString());
 	}
 
-	private static void send(final IRCApi irc, final String msg)
+	private static void send(final IIRCApi irc, final String msg)
 	{
 		if (LOG.isDebugEnabled())
 		{
