@@ -3,15 +3,20 @@ package com.ircclouds.irc.api.negotiators;
 import com.ircclouds.irc.api.commands.CapLsCmd;
 import com.ircclouds.irc.api.commands.interfaces.ICapCmd;
 import com.ircclouds.irc.api.domain.messages.AbstractMessage;
+import com.ircclouds.irc.api.domain.messages.GenericMessage;
+import com.ircclouds.irc.api.domain.messages.ServerNumeric;
 import com.ircclouds.irc.api.interfaces.IIRCApi;
 import com.ircclouds.irc.api.negotiators.CompositeNegotiator.Capability;
 import com.ircclouds.irc.api.negotiators.CompositeNegotiator.Host;
 import com.ircclouds.irc.api.negotiators.api.Relay;
+import com.ircclouds.irc.api.negotiators.capabilities.SimpleCapability;
 
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
+import java.util.List;
 
 import mockit.Mocked;
 
@@ -288,6 +293,34 @@ public class CompositeNegotiatorTest
 		assertTrue(parsed.get(1).isEnabled());
 		assertFalse(parsed.get(1).isRquiresAck());
 		assertTrue(parsed.get(1).isMandatory());
+	}
+
+	@Test
+	public void testCapabilityConversation(@Mocked IIRCApi ircapi) {
+		List<Capability> caps = new ArrayList<Capability>();
+		caps.add(new SimpleCapability("away-notify", true));
+		caps.add(new SimpleCapability("multi-prefix", false));
+		caps.add(new SimpleCapability("random.cap/nak", true));
+		CompositeNegotiator negotiator = new CompositeNegotiator(caps, null);
+		ICapCmd cmd = negotiator.initiate(ircapi);
+		assertEquals("CAP LS\r\n", cmd.toString());
+		negotiator.onMessage(new GenericMessage(":irc.serv.er CAP * LS :away-notify multi-prefix random.cap/nak"));
+		negotiator.onMessage(new GenericMessage(":irc.serv.er CAP * ACK :~away-notify -multi-prefix"));
+		negotiator.onMessage(new GenericMessage(":irc.serv.er CAP * NAK :random.cap/nak"));
+	}
+
+	@Test
+	public void testCapabilityConversationAbortEarly(@Mocked IIRCApi ircapi) {
+		List<Capability> caps = new ArrayList<Capability>();
+		caps.add(new SimpleCapability("away-notify", true));
+		CompositeNegotiator negotiator = new CompositeNegotiator(caps, null);
+		ICapCmd cmd = negotiator.initiate(ircapi);
+		assertEquals("CAP LS\r\n", cmd.toString());
+		negotiator.onMessage(new GenericMessage(":irc.serv.er CAP *")); // Malformed message
+		negotiator.onMessage(new GenericMessage(":irc.serv.er CAP * LS :away-notify"));
+		negotiator.onMessage(new ServerNumeric(new GenericMessage(":irc.serv.er 002 :funky out of order message"))); // Out of order message
+		negotiator.onMessage(new ServerNumeric(new GenericMessage(":irc.serv.er 001 :welcome to fake server")));
+		negotiator.onMessage(new GenericMessage(":irc.serv.er CAP * ACK :away-notify")); // Out of order should be dropped
 	}
 
 	private Capability getCapability(final String id) {

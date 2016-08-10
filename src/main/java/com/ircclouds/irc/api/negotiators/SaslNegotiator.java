@@ -60,9 +60,7 @@ public class SaslNegotiator implements CapabilityNegotiator {
 
             @Override
             public void send(final String msg) {
-                if (LOG.isDebugEnabled()) {
-                    LOG.debug("CLIENT: {}", msg);
-                }
+                LOG.debug("CLIENT: {}", msg);
                 SaslNegotiator.this.irc.rawMessage(msg);
             }
         });
@@ -71,9 +69,6 @@ public class SaslNegotiator implements CapabilityNegotiator {
 
     @Handler
     public void onMessage(AbstractMessage msg) {
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("SERVER: {}", msg.asRaw());
-        }
         List<String> params = msg.getParams();
         String subCommand = "";
         if (params.size() > 1) {
@@ -109,9 +104,6 @@ public class SaslNegotiator implements CapabilityNegotiator {
 
     @Handler
     public void onServerNumericMessage(ServerNumeric msg) {
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("SERVER: {}", msg.asRaw());
-        }
         try {
             switch (msg.getNumericCode()) {
                 case IRCNumerics.RPL_LOGGEDIN:

@@ -4,6 +4,7 @@ import com.ircclouds.irc.api.commands.CapEndCmd;
 import com.ircclouds.irc.api.commands.CapLsCmd;
 import com.ircclouds.irc.api.commands.interfaces.ICapCmd;
 import com.ircclouds.irc.api.commands.interfaces.ICommand;
+import com.ircclouds.irc.api.domain.IRCNumerics;
 import com.ircclouds.irc.api.domain.messages.AbstractMessage;
 import com.ircclouds.irc.api.domain.messages.ServerNumeric;
 import com.ircclouds.irc.api.interfaces.IIRCApi;
@@ -133,10 +134,7 @@ public class CompositeNegotiator implements CapabilityNegotiator
 			@Override
 			public void send(String msg)
 			{
-				if (LOG.isDebugEnabled())
-				{
-					LOG.debug("CAPABILITY: " + msg);
-				}
+				LOG.debug("CAPABILITY: " + msg);
 				irc.rawMessage(msg);
 			}
 		};
@@ -155,13 +153,9 @@ public class CompositeNegotiator implements CapabilityNegotiator
 			// TODO renegotiation after registration is currently not possible
 			return;
 		}
-		if (LOG.isDebugEnabled())
-		{
-			LOG.debug("SERVER: {}", msg.asRaw());
-		}
 		if (msg instanceof ServerNumeric) {
 			final ServerNumeric numeric = (ServerNumeric) msg;
-			if (numeric.getNumericCode() == 1)
+			if (numeric.getNumericCode() == IRCNumerics.RPL_WELCOME)
 			{
 				// server numeric message 001 is indication that IRC server finished
 				// IRC registration phase. That is an indication that CAP NEG phase
@@ -179,7 +173,7 @@ public class CompositeNegotiator implements CapabilityNegotiator
                 subCommand = msg.getParams().get(1);
             }
             if (subCommand.equalsIgnoreCase("LS")) {
-				final LinkedList<Cap> responseCaps = parseResponseCaps(msg.getParams().get(2));
+				final LinkedList<Cap> responseCaps = parseResponseCaps(msg.getText());
 				final List<Capability> reject = unsupportedCapabilities(responseCaps);
 				feedbackRejection(reject);
 				final List<Capability> request = requestedCapabilities(reject);
@@ -195,7 +189,7 @@ public class CompositeNegotiator implements CapabilityNegotiator
 				}
 				return;
 			} else if (subCommand.equalsIgnoreCase("ACK")) {
-				final LinkedList<Cap> responseCaps = parseResponseCaps(msg.getParams().get(2));
+				final LinkedList<Cap> responseCaps = parseResponseCaps(msg.getText());
 				final List<Capability> confirms = acknowledgeCapabilities(responseCaps);
 				if (!confirms.isEmpty())
 				{
@@ -210,7 +204,7 @@ public class CompositeNegotiator implements CapabilityNegotiator
 				// but do clean the message, since it has already been handled.
 				msg = null;
 			} else if (subCommand.equalsIgnoreCase("NAK")) {
-				LOG.error("Capability request NOT Acknowledged: {} (this may be due to inconsistent server responses)", msg.getParams().get(2));
+				LOG.error("Capability request NOT Acknowledged: {} (this may be due to inconsistent server responses)", msg.getText());
 				endNegotiation();
 				return;
 			}
@@ -329,14 +323,8 @@ public class CompositeNegotiator implements CapabilityNegotiator
 		// compute unsupported capabilities
 		final LinkedList<Capability> unsupported = new LinkedList<Capability>(this.capabilities);
 		unsupported.removeAll(found);
-		if (LOG.isTraceEnabled())
-		{
-			LOG.trace("Supported capabilities: {}", repr(found));
-		}
-		if (LOG.isDebugEnabled())
-		{
-			LOG.debug("Unsupported capabilities: {}", repr(unsupported));
-		}
+		LOG.debug("Supported capabilities: {}", repr(found));
+		LOG.debug("Unsupported capabilities: {}", repr(unsupported));
 		return unsupported;
 	}
 
@@ -351,10 +339,7 @@ public class CompositeNegotiator implements CapabilityNegotiator
 	{
 		final LinkedList<Capability> requests = new LinkedList<Capability>(this.capabilities);
 		requests.removeAll(unsupported);
-		if (LOG.isDebugEnabled())
-		{
-			LOG.debug("Requesting capabilities: {}", repr(requests));
-		}
+		LOG.debug("Requesting capabilities: {}", repr(requests));
 		return requests;
 	}
 
@@ -553,10 +538,7 @@ public class CompositeNegotiator implements CapabilityNegotiator
 
 	private static void send(final IIRCApi irc, final String msg)
 	{
-		if (LOG.isDebugEnabled())
-		{
-			LOG.debug("NEGOTIATOR: " + msg);
-		}
+		LOG.debug("NEGOTIATOR: " + msg);
 		irc.rawMessage(msg);
 	}
 
