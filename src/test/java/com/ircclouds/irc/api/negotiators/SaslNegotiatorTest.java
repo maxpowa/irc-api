@@ -16,6 +16,8 @@
 package com.ircclouds.irc.api.negotiators;
 
 import com.ircclouds.irc.api.commands.interfaces.ICapCmd;
+import com.ircclouds.irc.api.domain.messages.GenericMessage;
+import com.ircclouds.irc.api.domain.messages.ServerNumeric;
 import com.ircclouds.irc.api.interfaces.IIRCApi;
 
 import org.junit.Before;
@@ -75,5 +77,30 @@ public class SaslNegotiatorTest {
 		ICapCmd cmd = neg.initiate(irc);
 		assertNotNull(cmd);
 		assertEquals("CAP REQ :sasl", cmd.toString().trim());
+	}
+
+	@Test
+	public void testCapabilityConversation(@Mocked IIRCApi ircapi) {
+		SaslNegotiator negotiator = new SaslNegotiator("nick", "pass", "authzid");
+		ICapCmd cmd = negotiator.initiate(ircapi);
+		assertEquals("CAP REQ :sasl", cmd.toString().trim());
+		negotiator.onMessage(new GenericMessage(":irc.serv.er CAP * ACK :sasl"));
+		negotiator.onMessage(new GenericMessage("AUTHENTICATE +"));
+		negotiator.onServerNumericMessage(new ServerNumeric(new GenericMessage(":irc.serv.er 900 nick nick!user@host authzid :You're now logged in as authzid")));
+		negotiator.onServerNumericMessage(new ServerNumeric(new GenericMessage(":irc.serv.er 903 nick :SASL success")));
+		negotiator.onServerNumericMessage(new ServerNumeric(new GenericMessage(":irc.serv.er 902 nick :You must use a nick assigned to you")));
+		negotiator.onServerNumericMessage(new ServerNumeric(new GenericMessage(":irc.serv.er 904 nick :SASL fail")));
+		negotiator.onServerNumericMessage(new ServerNumeric(new GenericMessage(":irc.serv.er 905 nick :SASL too long")));
+		negotiator.onServerNumericMessage(new ServerNumeric(new GenericMessage(":irc.serv.er 906 nick :SASL aborted")));
+		negotiator.onServerNumericMessage(new ServerNumeric(new GenericMessage(":irc.serv.er 907 nick :Already authenticated via SASL")));
+		negotiator.onServerNumericMessage(new ServerNumeric(new GenericMessage(":irc.serv.er 908 nick PLAIN EXTERNAL :are available mechanisms")));
+	}
+
+	@Test
+	public void testCapabilityConversationAbortEarly(@Mocked IIRCApi ircapi) {
+		SaslNegotiator negotiator = new SaslNegotiator("user", "pass", "authzid");
+		ICapCmd cmd = negotiator.initiate(ircapi);
+		assertEquals("CAP REQ :sasl", cmd.toString().trim());
+		negotiator.onMessage(new GenericMessage(":irc.serv.er CAP * NAK :sasl"));
 	}
 }
