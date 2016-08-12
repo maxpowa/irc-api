@@ -1,9 +1,13 @@
 package com.ircclouds.irc.api.domain;
 
-import java.io.*;
-import java.util.*;
-
-import com.ircclouds.irc.api.utils.*;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class IRCChannel implements Serializable
 {
@@ -20,8 +24,8 @@ public class IRCChannel implements Serializable
 
 	String name;
 	IRCTopic topic;
-	Set<ChannelMode> chanModes = new SynchronizedUnmodifiableSet<ChannelMode>(new HashSet<ChannelMode>());
-	SynchronizedUnmodifiableList<IRCUser> users = new SynchronizedUnmodifiableList<IRCUser>(new ArrayList<IRCUser>());
+	Set<ChannelMode> chanModes = Collections.synchronizedSet(new HashSet<ChannelMode>());
+	List<IRCUser> users = Collections.synchronizedList(new ArrayList<IRCUser>());
 	Map<IRCUser, Set<IRCUserStatus>> usersStatuses = new LinkedHashMap<IRCUser, Set<IRCUserStatus>>();
 	
 	public IRCChannel(String aName)

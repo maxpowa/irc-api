@@ -1,11 +1,25 @@
 package com.ircclouds.irc.api.state;
 
-import com.ircclouds.irc.api.domain.*;
-import com.ircclouds.irc.api.domain.messages.*;
+import com.ircclouds.irc.api.domain.IRCUser;
+import com.ircclouds.irc.api.domain.IRCUserStatus;
+import com.ircclouds.irc.api.domain.IRCUserStatusMode;
+import com.ircclouds.irc.api.domain.IRCUserStatuses;
+import com.ircclouds.irc.api.domain.WritableIRCChannel;
+import com.ircclouds.irc.api.domain.WritableIRCTopic;
+import com.ircclouds.irc.api.domain.WritableIRCUser;
+import com.ircclouds.irc.api.domain.messages.AbstractUserMessage;
+import com.ircclouds.irc.api.domain.messages.ChannelJoin;
+import com.ircclouds.irc.api.domain.messages.ChannelKick;
 import com.ircclouds.irc.api.domain.messages.ChannelMode;
+import com.ircclouds.irc.api.domain.messages.ChannelPart;
+import com.ircclouds.irc.api.domain.messages.ChannelTopic;
+import com.ircclouds.irc.api.domain.messages.UserNickMessage;
+import com.ircclouds.irc.api.domain.messages.UserQuitMessage;
 import com.ircclouds.irc.api.utils.StateUtils;
-import com.ircclouds.irc.api.utils.SynchronizedUnmodifiableSet;
+
 import net.engio.mbassy.listener.Handler;
+
+import java.util.Set;
 
 public abstract class AbstractIRCStateUpdater implements IStateAccessor
 {
@@ -102,8 +116,8 @@ public abstract class AbstractIRCStateUpdater implements IStateAccessor
 					IRCUserStatus _us = getAvailableUserStatuses().getUserStatus(_usm.getChannelModeType());
 					if (_us != null)
 					{
-						SynchronizedUnmodifiableSet<IRCUserStatus> _uStatuses = (SynchronizedUnmodifiableSet<IRCUserStatus>) _chan.getStatusesForUser(new WritableIRCUser(_usm.getUser()));
-						_uStatuses.addElement(_us);
+						Set<IRCUserStatus> _uStatuses = _chan.getStatusesForUser(new WritableIRCUser(_usm.getUser()));
+						_uStatuses.add(_us);
 					}
 				}
 			}
@@ -114,8 +128,8 @@ public abstract class AbstractIRCStateUpdater implements IStateAccessor
 				IRCUserStatus _us = getAvailableUserStatuses().getUserStatus(_usm.getChannelModeType());
 				if (_us != null)
 				{
-					SynchronizedUnmodifiableSet<IRCUserStatus> _uStatuses = (SynchronizedUnmodifiableSet<IRCUserStatus>) _chan.getStatusesForUser(new WritableIRCUser(_usm.getUser()));
-					_uStatuses.removeElement(_us);
+					Set<IRCUserStatus> _uStatuses = _chan.getStatusesForUser(new WritableIRCUser(_usm.getUser()));
+					_uStatuses.remove(_us);
 				}
 			}
 		}
@@ -144,13 +158,13 @@ public abstract class AbstractIRCStateUpdater implements IStateAccessor
 	@Override
 	public void saveChan(WritableIRCChannel aChannel)
 	{
-		getIRCStateImpl().getChannelsMutable().addElement(aChannel);
+		getIRCStateImpl().getChannelsMutable().add(aChannel);
 	}
 
 	@Override
 	public void deleteChan(String aChannelName)
 	{
-		getIRCStateImpl().getChannelsMutable().removeElement(aChannelName);
+		getIRCStateImpl().getChannelsMutable().remove(aChannelName);
 	}
 	
 	@Override
@@ -174,7 +188,7 @@ public abstract class AbstractIRCStateUpdater implements IStateAccessor
 	
 	private void savedOldState(WritableIRCChannel aChan)
 	{
-		getPreviousIRCStateImpl().getChannelsMutable().removeElement(aChan);
-		getPreviousIRCStateImpl().getChannelsMutable().addElement(StateUtils.cloneChannel(aChan));
+		getPreviousIRCStateImpl().getChannelsMutable().remove(aChan);
+		getPreviousIRCStateImpl().getChannelsMutable().add(StateUtils.cloneChannel(aChan));
 	}
 }

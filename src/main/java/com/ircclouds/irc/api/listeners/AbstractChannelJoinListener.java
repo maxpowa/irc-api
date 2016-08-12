@@ -12,12 +12,12 @@ import com.ircclouds.irc.api.domain.WritableIRCUser;
 import com.ircclouds.irc.api.domain.messages.ChannelJoin;
 import com.ircclouds.irc.api.domain.messages.ServerNumeric;
 import com.ircclouds.irc.api.interfaces.Callback;
-import com.ircclouds.irc.api.utils.SynchronizedUnmodifiableSet;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -139,7 +139,7 @@ public abstract class AbstractChannelJoinListener
 			LOG.debug("Skipping user {}: not able to extract a valid nick name.", aNick);
 			return;
 		}
-		channel.addUser(user, new SynchronizedUnmodifiableSet<IRCUserStatus>(active));
+		channel.addUser(user, Collections.synchronizedSet(active));
 	}
 
 	private static Map<Character, IRCUserStatus> mapPrefixes(final IRCUserStatuses statuses) {
