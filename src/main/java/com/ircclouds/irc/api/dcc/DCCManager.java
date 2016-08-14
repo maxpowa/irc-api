@@ -1,20 +1,16 @@
 package com.ircclouds.irc.api.dcc;
 
-import com.ircclouds.irc.api.dcc.interfaces.IDCCManager;
-import com.ircclouds.irc.api.dcc.interfaces.IDCCReceiveCallback;
-import com.ircclouds.irc.api.dcc.interfaces.IDCCReceiveProgressCallback;
-import com.ircclouds.irc.api.dcc.interfaces.IDCCReceiveResult;
-import com.ircclouds.irc.api.dcc.interfaces.IDCCSendCallback;
-import com.ircclouds.irc.api.dcc.interfaces.IDCCSendProgressCallback;
-import com.ircclouds.irc.api.dcc.interfaces.IDCCSendResult;
+import com.ircclouds.irc.api.dcc.interfaces.*;
 import com.ircclouds.irc.api.interfaces.IIRCApi;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.io.IOException;
+import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.net.SocketAddress;
+import java.nio.channels.ServerSocketChannel;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -199,5 +195,12 @@ public class DCCManager implements IDCCManager
 	private boolean isWaitingForConnection(Integer aPort)
 	{
 		return sendersMap.containsKey(aPort);
+	}
+
+	public static ServerSocketChannel getServerSocketChannel(Integer listeningPort) throws IOException {
+		ServerSocketChannel ssc = ServerSocketChannel.open();
+		ssc.configureBlocking(false);
+		ssc.socket().bind(new InetSocketAddress(listeningPort));
+		return ssc;
 	}
 }

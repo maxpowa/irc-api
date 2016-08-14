@@ -1,9 +1,13 @@
 package com.ircclouds.irc.api.dcc;
 
 import com.ircclouds.irc.api.IRCApi;
+import com.ircclouds.irc.api.dcc.interfaces.IDCCReceiveCallback;
+import com.ircclouds.irc.api.dcc.interfaces.IDCCReceiveResult;
+import com.ircclouds.irc.api.dcc.interfaces.IDCCSendCallback;
+import com.ircclouds.irc.api.dcc.interfaces.IDCCSendResult;
 import com.ircclouds.irc.api.interfaces.Callback;
 import com.ircclouds.irc.api.interfaces.IIRCApi;
-
+import mockit.Mock;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -11,8 +15,6 @@ import org.junit.rules.TemporaryFolder;
 import java.io.File;
 import java.io.IOException;
 import java.net.InetSocketAddress;
-
-import mockit.Mock;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
@@ -48,7 +50,17 @@ public class TestDCCManager {
 
         DCCManager manager = new DCCManager(getApiWithExpectedResponses(nick, response));
 
-        manager.dccAccept(nick, tmpFile, 1337, 0L, 5, null);
+        manager.dccAccept(nick, tmpFile, 1337, 0L, 5, new IDCCSendCallback() {
+            @Override
+            public void onSuccess(IDCCSendResult aU) {
+                // cool
+            }
+
+            @Override
+            public void onFailure(DCCSendException aV) {
+                // aww
+            }
+        });
 
         assertEquals(1, manager.activeDCCSendsCount());
     }
@@ -62,7 +74,17 @@ public class TestDCCManager {
 
         DCCManager manager = new DCCManager(getApiWithExpectedResponses(nick, response));
 
-        manager.dccSend(nick, tmpFile, "localhost", 1337, 5, null);
+        manager.dccSend(nick, tmpFile, "localhost", 1337, 5, new IDCCSendCallback() {
+            @Override
+            public void onSuccess(IDCCSendResult aU) {
+                // cool
+            }
+
+            @Override
+            public void onFailure(DCCSendException aV) {
+                // aww
+            }
+        });
 
         assertEquals(1, manager.activeDCCSendsCount());
     }
@@ -76,7 +98,17 @@ public class TestDCCManager {
 
         DCCManager manager = new DCCManager(getApiWithExpectedResponses(nick, response));
 
-        manager.dccResume(tmpFile, 0L, tmpFile.length(), new InetSocketAddress(1337), null);
+        manager.dccResume(tmpFile, 0L, tmpFile.length(), new InetSocketAddress(1337), new IDCCReceiveCallback() {
+            @Override
+            public void onSuccess(IDCCReceiveResult aU) {
+                // cool
+            }
+
+            @Override
+            public void onFailure(DCCReceiveException aV) {
+                // aww
+            }
+        });
 
         assertEquals(1, manager.activeDCCReceivesCount());
     }

@@ -3,7 +3,6 @@ package com.ircclouds.irc.api.dcc;
 import com.ircclouds.irc.api.dcc.interfaces.IDCCSendCallback;
 import com.ircclouds.irc.api.dcc.interfaces.IDCCSendProgressCallback;
 import com.ircclouds.irc.api.dcc.interfaces.IDCCSendResult;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,14 +10,9 @@ import java.io.Closeable;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import java.nio.channels.FileChannel;
-import java.nio.channels.SelectionKey;
-import java.nio.channels.Selector;
-import java.nio.channels.ServerSocketChannel;
-import java.nio.channels.SocketChannel;
+import java.nio.channels.*;
 
 public class DCCSender
 {
@@ -70,9 +64,7 @@ public class DCCSender
 				{
 					_timeBefore = System.currentTimeMillis();
 
-					_ssc = ServerSocketChannel.open();
-					_ssc.configureBlocking(false);
-					_ssc.socket().bind(new InetSocketAddress(listeningPort));
+					_ssc = DCCManager.getServerSocketChannel(listeningPort);
 
 					Selector _selector = Selector.open();
 					_ssc.register(_selector, SelectionKey.OP_ACCEPT);
