@@ -1,17 +1,6 @@
 package com.ircclouds.irc.api;
 
-import com.ircclouds.irc.api.commands.ChangeModeCmd;
-import com.ircclouds.irc.api.commands.ChangeNickCmd;
-import com.ircclouds.irc.api.commands.ChangeTopicCmd;
-import com.ircclouds.irc.api.commands.ConnectCmd;
-import com.ircclouds.irc.api.commands.JoinChanCmd;
-import com.ircclouds.irc.api.commands.KickUserCmd;
-import com.ircclouds.irc.api.commands.PartChanCmd;
-import com.ircclouds.irc.api.commands.QuitCmd;
-import com.ircclouds.irc.api.commands.SendActionMessage;
-import com.ircclouds.irc.api.commands.SendNoticeMessage;
-import com.ircclouds.irc.api.commands.SendPrivateMessage;
-import com.ircclouds.irc.api.commands.SendRawMessage;
+import com.ircclouds.irc.api.commands.*;
 import com.ircclouds.irc.api.commands.interfaces.ICapCmd;
 import com.ircclouds.irc.api.commands.interfaces.ICommand;
 import com.ircclouds.irc.api.dcc.DCCManager;
@@ -21,22 +10,13 @@ import com.ircclouds.irc.api.dcc.interfaces.IDCCSendCallback;
 import com.ircclouds.irc.api.domain.IRCChannel;
 import com.ircclouds.irc.api.domain.IRCServerOptions;
 import com.ircclouds.irc.api.domain.WritableIRCChannel;
-import com.ircclouds.irc.api.interfaces.Callback;
-import com.ircclouds.irc.api.interfaces.ICommandServer;
-import com.ircclouds.irc.api.interfaces.IIRCApi;
-import com.ircclouds.irc.api.interfaces.IIRCSession;
-import com.ircclouds.irc.api.interfaces.IServerParameters;
+import com.ircclouds.irc.api.interfaces.*;
 import com.ircclouds.irc.api.listeners.AbstractExecuteCommandListener;
 import com.ircclouds.irc.api.listeners.ExecuteCommandListenerImpl;
 import com.ircclouds.irc.api.listeners.PingVersionListenerImpl;
 import com.ircclouds.irc.api.negotiators.CapabilityNegotiator;
-import com.ircclouds.irc.api.state.AbstractIRCStateUpdater;
-import com.ircclouds.irc.api.state.DisconnectedIRCState;
-import com.ircclouds.irc.api.state.IIRCState;
-import com.ircclouds.irc.api.state.IRCStateImpl;
-import com.ircclouds.irc.api.state.IStateAccessor;
+import com.ircclouds.irc.api.state.*;
 import com.ircclouds.irc.api.utils.NetUtils;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -525,7 +505,7 @@ public class IRCApi implements IIRCApi
 			{
 				state = aConnectedState;
 
-				((IRCStateImpl) (state)).setConnected(true);
+				((IRCState) (state)).setConnected(true);
 
 				aCallback.onSuccess(aConnectedState);
 			}
@@ -558,7 +538,7 @@ public class IRCApi implements IIRCApi
 		}
 		catch (SocketException aExc)
 		{
-			((IRCStateImpl) this.state).setConnected(false);
+			((IRCState) this.state).setConnected(false);
 			dispatchError(aExc);
 			throw new RuntimeException(aExc);
 		}
@@ -631,7 +611,7 @@ public class IRCApi implements IIRCApi
 		}
 		catch (SocketException aExc)
 		{
-			((IRCStateImpl) this.state).setConnected(false);
+			((IRCState) this.state).setConnected(false);
 			dispatchError(aExc);
 			tryInvokeCallback(aCallback, aDirty, aExc);
 		}

@@ -1,22 +1,9 @@
 package com.ircclouds.irc.api.state;
 
-import com.ircclouds.irc.api.domain.IRCUser;
-import com.ircclouds.irc.api.domain.IRCUserStatus;
-import com.ircclouds.irc.api.domain.IRCUserStatusMode;
-import com.ircclouds.irc.api.domain.IRCUserStatuses;
-import com.ircclouds.irc.api.domain.WritableIRCChannel;
-import com.ircclouds.irc.api.domain.WritableIRCTopic;
-import com.ircclouds.irc.api.domain.WritableIRCUser;
-import com.ircclouds.irc.api.domain.messages.AbstractUserMessage;
-import com.ircclouds.irc.api.domain.messages.ChannelJoin;
-import com.ircclouds.irc.api.domain.messages.ChannelKick;
+import com.ircclouds.irc.api.domain.*;
+import com.ircclouds.irc.api.domain.messages.*;
 import com.ircclouds.irc.api.domain.messages.ChannelMode;
-import com.ircclouds.irc.api.domain.messages.ChannelPart;
-import com.ircclouds.irc.api.domain.messages.ChannelTopic;
-import com.ircclouds.irc.api.domain.messages.UserNickMessage;
-import com.ircclouds.irc.api.domain.messages.UserQuitMessage;
 import com.ircclouds.irc.api.utils.StateUtils;
-
 import net.engio.mbassy.listener.Handler;
 
 import java.util.Set;
@@ -135,14 +122,14 @@ public abstract class AbstractIRCStateUpdater implements IStateAccessor
 		}
 	}
 
-	private IRCStateImpl getIRCStateImpl()
+	private IRCState getIRCStateImpl()
 	{
-		return (IRCStateImpl) getIRCState();
+		return (IRCState) getIRCState();
 	}
 	
-	private IRCStateImpl getPreviousIRCStateImpl()
+	private IRCState getPreviousIRCStateImpl()
 	{
-		return (IRCStateImpl) getIRCStateImpl().getPrevious();
+		return (IRCState) getIRCStateImpl().getPrevious();
 	}
 	
 	private IRCUserStatuses getAvailableUserStatuses()

@@ -10,7 +10,7 @@ import com.ircclouds.irc.api.interfaces.Callback;
 import com.ircclouds.irc.api.interfaces.IIRCSession;
 import com.ircclouds.irc.api.interfaces.IServerParameters;
 import com.ircclouds.irc.api.state.IIRCState;
-import com.ircclouds.irc.api.state.IRCStateImpl;
+import com.ircclouds.irc.api.state.IRCState;
 
 import java.io.IOException;
 import java.util.Properties;
@@ -73,7 +73,7 @@ public class ConnectCmdListener
 				break;
 			case IRCNumerics.RPL_ENDOFMOTD:
 			case IRCNumerics.ERR_NOMOTD:
-				callback.onSuccess(new IRCStateImpl(
+				callback.onSuccess(new IRCState(
 						nick, params.getIdent(), params.getRealname(), params.getAlternativeNicknames(),
 						params.getServer(), new IRCServerOptions(properties))
 				);
