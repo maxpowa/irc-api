@@ -1,15 +1,12 @@
 package com.ircclouds.irc.api.interfaces;
 
 import com.ircclouds.irc.api.commands.interfaces.ICommand;
-import com.ircclouds.irc.api.dcc.DCCSendException;
-import com.ircclouds.irc.api.dcc.interfaces.IDCCManager;
-import com.ircclouds.irc.api.dcc.interfaces.IDCCReceiveCallback;
-import com.ircclouds.irc.api.dcc.interfaces.IDCCReceiveResult;
-import com.ircclouds.irc.api.dcc.interfaces.IDCCSendCallback;
-import com.ircclouds.irc.api.dcc.interfaces.IDCCSendResult;
+import com.ircclouds.irc.api.dcc.DCCManager;
 import com.ircclouds.irc.api.domain.IRCChannel;
 import com.ircclouds.irc.api.negotiators.CapabilityNegotiator;
 import com.ircclouds.irc.api.state.IIRCState;
+
+import net.engio.mbassy.bus.MBassador;
 
 import java.io.File;
 import java.net.Proxy;
@@ -287,26 +284,23 @@ public interface IIRCApi
 	 * 
 	 * @param aNick A nick to send the file to
 	 * @param aFile A file resource
-	 * @param aCallback A callback that will return a {@link IDCCSendResult} on success, or a {@link DCCSendException} on failure
 	 * @throws UnknownHostException Throws because we have to get the host from the system, which may or may not be nothing.
 	 */
-	void dccSend(String aNick, File aFile, IDCCSendCallback aCallback) throws UnknownHostException;
+	void dccSend(String aNick, File aFile) throws UnknownHostException;
 
 	/**
 	 * @param aNick A nick to send the file to
 	 * @param aFile A file resource to send
 	 * @param aTimeout A timeout in milliseconds for destination to reply
-	 * @param aCallback A callback that will return a {@link IDCCSendResult} on success, or a {@link DCCSendException} on failure
 	 */
-	void dccSend(String aNick, File aFile, Integer aTimeout, IDCCSendCallback aCallback);
+	void dccSend(String aNick, File aFile, Integer aTimeout);
 
 	/**
 	 * @param aNick A nick to send the file to
 	 * @param aListeningPort A port to listen on
 	 * @param aFile A file resource to send
-	 * @param aCallback A callback that will return a {@link IDCCSendResult} on success, or a {@link DCCSendException} on failure
 	 */
-	void dccSend(String aNick, String aListeningAddress, Integer aListeningPort, File aFile, IDCCSendCallback aCallback);
+	void dccSend(String aNick, String aListeningAddress, Integer aListeningPort, File aFile);
 
 	/**
 	 * 
@@ -314,9 +308,8 @@ public interface IIRCApi
 	 * @param aFile A file resource to send
 	 * @param aListeningPort A port to listen on for incoming DCC connections
 	 * @param aTimeout A timeout in milliseconds for destination to reply
-	 * @param aCallback A callback that will return a {@link IDCCSendResult} on success, or a {@link DCCSendException} on failure
 	 */
-	void dccSend(String aNick, File aFile, String aListeningAddress, Integer aListeningPort, Integer aTimeout, IDCCSendCallback aCallback);
+	void dccSend(String aNick, File aFile, String aListeningAddress, Integer aListeningPort, Integer aTimeout);
 
 	/**
 	 * 
@@ -324,9 +317,8 @@ public interface IIRCApi
 	 * @param aFile A file resource to receive to
 	 * @param aPort A port to advertise and to listen on for DCC senders to send us to the file
 	 * @param aResumePosition A file resume position in bytes
-	 * @param aCallback A callback that will return a {@link IDCCSendResult} on success, or a {@link DCCSendException} on failure
 	 */
-	void dccAccept(String aNick, File aFile, Integer aPort, Long aResumePosition, IDCCSendCallback aCallback);
+	void dccAccept(String aNick, File aFile, Integer aPort, Long aResumePosition);
 
 	/**
 	 * 
@@ -335,28 +327,25 @@ public interface IIRCApi
 	 * @param aPort A port to advertise and to listen on for DCC senders to send us to the file
 	 * @param aResumePosition A file resume position in bytes
 	 * @param aTimeout A timeout in milliseconds for destination to reply
-	 * @param aCallback A callback that will return a {@link IDCCSendResult} on success, or a {@link DCCSendException} on failure
 	 */
-	void dccAccept(String aNick, File aFile, Integer aPort, Long aResumePosition, Integer aTimeout, IDCCSendCallback aCallback);
+	void dccAccept(String aNick, File aFile, Integer aPort, Long aResumePosition, Integer aTimeout);
 
 	/**
 	 * 
 	 * @param aFile A file resource
 	 * @param aSize A file size.  Used to denote how much to receive to file
 	 * @param aAddress A socket address to connect to and get the file
-	 * @param aCallback A callback that will return a {@link IDCCReceiveResult} on success, or a {@link DCCSendException} on failure
 	 */
-	void dccReceive(File aFile, Long aSize, SocketAddress aAddress, IDCCReceiveCallback aCallback);
+	void dccReceive(File aFile, Long aSize, SocketAddress aAddress);
 
 	/**
 	 * 
 	 * @param aFile A file resource
 	 * @param aSize A file size.  Used to denote how much to receive to file
 	 * @param aAddress A socket address to connect to and get the file
-	 * @param aCallback A callback that will return a {@link IDCCReceiveResult} on success, or a {@link DCCSendException} on failure
 	 * @param aProxy A SOCKS proxy
 	 */
-	void dccReceive(File aFile, Long aSize, SocketAddress aAddress, IDCCReceiveCallback aCallback, Proxy aProxy);
+	void dccReceive(File aFile, Long aSize, SocketAddress aAddress, Proxy aProxy);
 
 	/**
 	 *
@@ -364,9 +353,8 @@ public interface IIRCApi
 	 * @param aResumePosition A resume position in bytes
 	 * @param aSize A size in bytes.  Used to denote how much to receive to file
 	 * @param aAddress A socket address to connect to and get the file
-	 * @param aCallback A callback that will return a {@link IDCCReceiveResult} on success, or a {@link DCCSendException} on failure
 	 */
-	void dccResume(File aFile, Long aResumePosition, Long aSize, SocketAddress aAddress, IDCCReceiveCallback aCallback);
+	void dccResume(File aFile, Long aResumePosition, Long aSize, SocketAddress aAddress);
 
 	/**
 	 *
@@ -374,17 +362,18 @@ public interface IIRCApi
 	 * @param aResumePosition A resume position in bytes
 	 * @param aSize A size in bytes.  Used to denote how much to receive to file
 	 * @param aAddress A socket address to connect to and get the file
-	 * @param aCallback A callback that will return a {@link IDCCReceiveResult} on success, or a {@link DCCSendException} on failure
 	 * @param aProxy The proxy server to use for connecting.
 	 */
-	void dccResume(File aFile, Long aResumePosition, Long aSize, SocketAddress aAddress, IDCCReceiveCallback aCallback, Proxy aProxy);
+	void dccResume(File aFile, Long aResumePosition, Long aSize, SocketAddress aAddress, Proxy aProxy);
 
 	/**
 	 * Returns the DCC manager
 	 * 
-	 * @return {@link IDCCManager}
+	 * @return {@link DCCManager}
 	 */
-	IDCCManager getDCCManager();
+	DCCManager getDCCManager();
+
+	MBassador getEventBus();
 
 	/**
 	 * Adds a message listener

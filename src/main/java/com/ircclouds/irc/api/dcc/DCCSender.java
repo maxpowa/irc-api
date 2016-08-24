@@ -1,8 +1,7 @@
 package com.ircclouds.irc.api.dcc;
 
-import com.ircclouds.irc.api.dcc.interfaces.IDCCSendCallback;
-import com.ircclouds.irc.api.dcc.interfaces.IDCCSendProgressCallback;
-import com.ircclouds.irc.api.dcc.interfaces.IDCCSendResult;
+import net.engio.mbassy.bus.MBassador;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,280 +11,252 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import java.nio.channels.*;
+import java.nio.channels.FileChannel;
+import java.nio.channels.SelectionKey;
+import java.nio.channels.Selector;
+import java.nio.channels.ServerSocketChannel;
+import java.nio.channels.SocketChannel;
 
-public class DCCSender
-{
-	private static final Logger LOG = LoggerFactory.getLogger(DCCSender.class);
-	private static final int READ_BUFFER_SIZE = 1024;
-	
-	private Integer timeout;
-	private Integer listeningPort;
-	private Long resumePos;
+public class DCCSender implements Runnable {
+    private static final Logger LOG = LoggerFactory.getLogger(DCCSender.class);
+    private static final int READ_BUFFER_SIZE = 1024;
+    private final File file;
 
-	private IDCCSendCallback callback;
-	private long totalBytesTransferred;
-	private int totalAcksRead;
-	
-	private Exception readerExc;
-	private Exception writerExc;
-	
-	public DCCSender(Integer aPort, Integer aTimeout, IDCCSendCallback aCallback)
-	{
-		this(aTimeout, aPort, 0L, aCallback);
-	}
+    private Integer timeout;
+    private Integer listeningPort;
+    private Long resumePos;
 
-	public DCCSender(int aTimeout, Integer aPort, Long aResumePosition, IDCCSendCallback aCallback)
-	{
-		timeout = aTimeout;
-		listeningPort = aPort;
-		resumePos = aResumePosition;
-		callback = aCallback;
-	}
+    private final MBassador eventBus;
+    private long totalBytesTransferred;
+    private int totalAcksRead;
 
-	public void setResumePosition(Long aResumePosition)
-	{
-		resumePos = aResumePosition;
-	}
-	
-	public void send(final File aFile)
-	{
-		new Thread(new Runnable()
-		{
-			@Override
-			public void run()
-			{
-				ServerSocketChannel _ssc = null;
-				SocketChannel _sc = null;
+    private Exception readerExc;
+    private Exception writerExc;
+    private long timeTaken;
+    private long timeBefore;
 
-				long _timeBefore = 0;
-				
-				try
-				{
-					_timeBefore = System.currentTimeMillis();
+    public DCCSender(File aFile, Integer aPort, Integer aTimeout, MBassador aEventBus) {
+        this(aFile, aTimeout, aPort, 0L, aEventBus);
+    }
 
-					_ssc = DCCManager.getServerSocketChannel(listeningPort);
+    public DCCSender(File aFile, int aTimeout, Integer aPort, Long aResumePosition, MBassador aEventBus) {
+        timeout = aTimeout;
+        listeningPort = aPort;
+        resumePos = aResumePosition;
+        eventBus = aEventBus;
+        file = aFile;
+    }
 
-					Selector _selector = Selector.open();
-					_ssc.register(_selector, SelectionKey.OP_ACCEPT);
+    public void setResumePosition(Long aResumePosition) {
+        resumePos = aResumePosition;
+    }
 
-					if (_selector.select(timeout) > 0 && _selector.selectedKeys().iterator().next().isAcceptable())
-					{
-						_sc = _ssc.accept();
+    @Override
+    public void run() {
+        ServerSocketChannel _ssc = null;
+        SocketChannel _sc = null;
 
-						Thread _ar = getACKsReader(_sc);
-						_ar.start();
+        timeBefore = System.currentTimeMillis();
 
-						if (_sc != null)
-						{
-							writeFileToChannel(aFile, _sc);
-						}
+        try {
+            _ssc = DCCManager.getServerSocketChannel(listeningPort);
 
-						_ar.join();
-					}
-				}
-				catch (Exception aExc)
-				{
-					LOG.error("Error Transmitting File", aExc);
-					
-					writerExc = aExc;
-				}
-				finally
-				{
-					if (_ssc != null)
-						close(_ssc);
-					if (_sc != null)
-						close(_sc);
-										
-					callBack(aFile, System.currentTimeMillis() - _timeBefore);
-				}
-			}
-		}, "DCCSender").start();
-	}
+            Selector _selector = Selector.open();
+            _ssc.register(_selector, SelectionKey.OP_ACCEPT);
 
-	private void callBack(File aFile, final long aTotalTime)
-	{
-		IDCCSendResult _dccSendRes = new IDCCSendResult()
-		{				
-			@Override
-			public long totalBytesSent()
-			{
-				return totalBytesTransferred;
-			}
-			
-			@Override
-			public int getNumberOfAcksReceived()
-			{
-				return totalAcksRead;
-			}
+            if (_selector.select(timeout) > 0 && _selector.selectedKeys().iterator().next().isAcceptable()) {
+                _sc = _ssc.accept();
 
-			@Override
-			public long totalTime()
-			{
-				return aTotalTime;
-			}
-			
-			@Override
-			public String toString()
-			{
-				return "Total bytes sent: " + totalBytesTransferred + " - Number of acks received: " + totalAcksRead + " - Total time: " + aTotalTime;
-			}
-		};
-		
-		if (totalBytesTransferred == aFile.length())
-		{
-			LOG.debug(_dccSendRes.toString());
-			
-			callback.onSuccess(_dccSendRes);
-		}
-		else
-		{
-			DCCSendException _dccSendExc = new DCCSendException(_dccSendRes, readerExc, writerExc);
+                Thread _ar = getACKsReader(_sc);
+                _ar.start();
 
-			LOG.debug("", _dccSendExc);
-			
-			callback.onFailure(_dccSendExc);
-		}
-	}
-	
-	private void writeFileToChannel(File aFile, SocketChannel aSocketChannel) throws IOException
-	{
-		FileInputStream _fis = new FileInputStream(aFile);
-		FileChannel _fc = _fis.getChannel();
+                if (_sc != null) {
+                    writeFileToChannel(file, _sc);
+                }
 
-		long _size = aFile.length();
-		long _position = resumePos;
+                _ar.join();
+            }
+        } catch (Exception aExc) {
+            LOG.error("Error Transmitting File", aExc);
 
-		while (_position < _size)
-		{
-			_position += _fc.transferTo(_position, _size - _position, aSocketChannel);
-		}
+            writerExc = aExc;
+        } finally {
+            if (_ssc != null)
+                close(_ssc);
+            if (_sc != null)
+                close(_sc);
 
-		if (_fis != null)
-			close(_fis);
-		if (_fc != null)
-			close(_fc);
-	}
+            timeTaken = System.currentTimeMillis() - timeBefore;
+            if (writerExc == null && readerExc == null && totalBytesTransferred == file.length()) {
+                eventBus.post(new Success()).asynchronously();
+            } else {
+                eventBus.post(new Failure(readerExc, writerExc)).asynchronously();
+            }
+        }
+    }
 
-	private Thread getACKsReader(final SocketChannel aSocketChannel)
-	{
-		return new Thread(new Runnable()
-		{
-			public void run()
-			{
-				ByteBuffer _bb = ByteBuffer.allocate(READ_BUFFER_SIZE).order(ByteOrder.BIG_ENDIAN);
-				
-				boolean _hasReadData = false;
-				boolean _cleared = false;
-				try
-				{
-					ProgressReader _pr = getProgressReader();
-					
-					int _readCount = 0;
-					totalAcksRead = 0;
-					
-					while ((_readCount = aSocketChannel.read(_bb)) > 0)
-					{
-						totalAcksRead += _readCount / 4;
-						_pr.read(_bb, _readCount);
-						
-						_hasReadData = true;
-						_cleared = false;
+    public void send() {
+        new Thread(this, "DCCSender").start();
+    }
 
-						if (!_bb.hasRemaining())
-						{
-							_bb.clear();
-							_cleared = true;
-						}
-					}
+    private int getPort() {
+        return listeningPort;
+    }
 
-					if (_hasReadData)
-					{
-						if (!_cleared)
-						{
-							_bb.flip();
-							if (_bb.limit() >= 4)
-								_bb.position(_bb.limit() - 4);
-						}
-						else
-						{
-							_bb.position(READ_BUFFER_SIZE - 4);
-						}
+    private File getFile() {
+        return file;
+    }
 
-						totalBytesTransferred = _bb.getInt();
-					}
-				}
-				catch (IOException aExc)
-				{
-					LOG.error("Error Reading Acks", aExc);
-					readerExc = aExc;
-				}
-			}
+    private long getTotalSentBytes() {
+        return totalBytesTransferred;
+    }
 
-		}, "DCCACKsReader");
-	}
+    private int getTotalAcks() {
+        return totalAcksRead;
+    }
 
+    private long getTimeTaken() {
+        return timeTaken != 0L ? timeTaken : System.currentTimeMillis() - timeBefore;
+    }
 
-	private ProgressReader getProgressReader()
-	{
-		ProgressReader _pr = null;
-		
-		if (callback instanceof IDCCSendProgressCallback)
-		{
-			_pr = new ProgressReaderImpl((IDCCSendProgressCallback) callback);
-		}
-		else
-		{
-			_pr = new NullProgressReader();
-		}
-		
-		return _pr;
-	}
-	
-	private void close(Closeable aCloseable)
-	{
-		try
-		{
-			aCloseable.close();
-		}
+    private void writeFileToChannel(File aFile, SocketChannel aSocketChannel) throws IOException {
+        FileInputStream _fis = new FileInputStream(aFile);
+        FileChannel _fc = _fis.getChannel();
 
-		catch (IOException aExc)
-		{
-			LOG.error("", aExc);
-		}
-	}
-	
-	interface ProgressReader
-	{
-		void read(ByteBuffer aBuffer, int aReadCount);
-	}
-	
-	class NullProgressReader implements ProgressReader
-	{
-		@Override
-		public void read(ByteBuffer aBuffer, int aReadCount)
-		{
-			// Do Nothing
-		}		
-	}
-	
-	class ProgressReaderImpl implements ProgressReader
-	{
-		IDCCSendProgressCallback callback;
-		
-		ProgressReaderImpl(IDCCSendProgressCallback aCallback)
-		{
-			callback = aCallback;
-		}
-		
-		@Override
-		public void read(ByteBuffer aByteBuffer, int aReadCount)
-		{
-			aByteBuffer.position(aByteBuffer.position() - aReadCount);
-			for (int _i = 0; _i < aReadCount / 4; _i++)
-			{
-				callback.onProgress(aByteBuffer.getInt());
-			}
-		}
-	}	
+        long _size = aFile.length();
+        long _position = resumePos;
+
+        while (_position < _size) {
+            _position += _fc.transferTo(_position, _size - _position, aSocketChannel);
+        }
+
+        if (_fis != null)
+            close(_fis);
+        if (_fc != null)
+            close(_fc);
+    }
+
+    private Thread getACKsReader(final SocketChannel aSocketChannel) {
+        return new Thread(new Runnable() {
+            public void run() {
+                ByteBuffer _bb = ByteBuffer.allocate(READ_BUFFER_SIZE).order(ByteOrder.BIG_ENDIAN);
+
+                boolean _hasReadData = false;
+                boolean _cleared = false;
+                try {
+
+                    int _readCount = 0;
+                    totalAcksRead = 0;
+
+                    while ((_readCount = aSocketChannel.read(_bb)) > 0) {
+                        totalAcksRead += _readCount / 4;
+
+                        _bb.position(_bb.position() - _readCount);
+                        for (int _i = 0; _i < _readCount / 4; _i++) {
+                            eventBus.post(new Progress(_bb.getInt())).asynchronously();
+                        }
+
+                        _hasReadData = true;
+                        _cleared = false;
+
+                        if (!_bb.hasRemaining()) {
+                            _bb.clear();
+                            _cleared = true;
+                        }
+                    }
+
+                    if (_hasReadData) {
+                        if (!_cleared) {
+                            _bb.flip();
+                            if (_bb.limit() >= 4)
+                                _bb.position(_bb.limit() - 4);
+                        } else {
+                            _bb.position(READ_BUFFER_SIZE - 4);
+                        }
+
+                        totalBytesTransferred = _bb.getInt();
+                    }
+                } catch (IOException aExc) {
+                    LOG.error("Error Reading Acks", aExc);
+                    readerExc = aExc;
+                }
+            }
+
+        }, "DCCACKsReader");
+    }
+
+    private void close(Closeable aCloseable) {
+        try {
+            aCloseable.close();
+        } catch (IOException aExc) {
+            LOG.error("", aExc);
+        }
+    }
+
+    public class Event {
+
+        public File getFile() {
+            return DCCSender.this.getFile();
+        }
+
+        public long getTimeTaken() {
+            return DCCSender.this.getTimeTaken();
+        }
+
+        public long getTotalSentBytes() {
+            return DCCSender.this.getTotalSentBytes();
+        }
+
+        public long getTotalAcks() {
+            return DCCSender.this.getTotalAcks();
+        }
+
+        public int getPort() {
+            return DCCSender.this.getPort();
+        }
+
+        public DCCSender getSender() {
+            return DCCSender.this;
+        }
+    }
+
+    public class Success extends Event {
+
+        public Success() {}
+
+    }
+
+    public class Failure extends Event {
+
+        private final Exception readerExc;
+        private final Exception writerExc;
+
+        public Failure(Exception aReaderExc, Exception aWriterExc) {
+            readerExc = aReaderExc;
+            writerExc = aWriterExc;
+        }
+
+        public Exception getReaderException() {
+            return readerExc;
+        }
+
+        public Exception getWriterException() {
+            return writerExc;
+        }
+
+    }
+
+    public class Progress extends Event {
+
+        private final int deltaBytes;
+
+        public Progress(int aCount) {
+            deltaBytes = aCount;
+        }
+
+        public int getDeltaBytes() {
+            return deltaBytes;
+        }
+
+    }
 }

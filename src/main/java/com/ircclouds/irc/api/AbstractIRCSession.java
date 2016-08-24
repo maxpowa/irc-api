@@ -100,6 +100,11 @@ public abstract class AbstractIRCSession implements IIRCSession
 	}
 
 	@Override
+	public MBassador getEventBus() {
+		return eventBus;
+	}
+
+	@Override
 	public void unregister(Object aListener)
 	{
 		eventBus.unsubscribe(aListener);

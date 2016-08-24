@@ -264,6 +264,10 @@ public class TestCaseBuilders extends TestCase {
         assertEquals(ChannelAction.class, _msg.getClass());
         checkChannelAndUser(((ChannelAction) _msg).getSource(), ((ChannelAction) _msg).getChannelName(), false);
         assertEquals("CTCP to a chan", ((ChannelAction) _msg).getText());
+
+        _msg = _builder.build(new GenericMessage(":sender PRIVMSG recv_nick :Message!"));
+        assertEquals("sender", _msg.prefix);
+        assertEquals("Message!", _msg.getText());
     }
 
     /**
