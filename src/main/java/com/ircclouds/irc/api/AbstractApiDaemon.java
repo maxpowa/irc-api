@@ -28,21 +28,15 @@ public abstract class AbstractApiDaemon extends Thread
 	}
 
 	@Override
-	public void run()
-	{
-		try
-		{
-			while (reader.available())
-			{
+	public void run() {
+		try {
+			while (reader.available()) {
 				AbstractMessage _msg = reader.readMessage();
-				if (_msg != null)
-				{
+				if (_msg != null) {
 					eventBus.post(_msg).now();
 				}
 			}
-		}
-		catch (EndOfStreamException aExc)
-		{
+		} catch (EndOfStreamException aExc) {
 			LOG.debug("Received end of stream, closing connection", aExc);
 			// Signaling the exception to the api is necessary, since there is a
 			// chance that the connection is abruptly cut off before connection
@@ -50,15 +44,11 @@ public abstract class AbstractApiDaemon extends Thread
 			// there would be no feedback of the connection failure.
 			signalExceptionToApi(aExc);
 			eventBus.post(new ClientErrorMessage(aExc)).asynchronously();
-		}
-		catch (IOException aExc)
-		{
+		} catch (IOException aExc) {
 			LOG.error(this.getName(), aExc);
 			signalExceptionToApi(aExc);
 			eventBus.post(new ClientErrorMessage(aExc)).asynchronously();
-		}
-		finally
-		{
+		} finally {
 			LOG.debug("ApiDaemon Exiting..");
 
 			onExit();
