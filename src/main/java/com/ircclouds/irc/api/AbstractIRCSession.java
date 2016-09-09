@@ -32,7 +32,7 @@ public abstract class AbstractIRCSession implements IIRCSession
 
 	public AbstractIRCSession()
 	{
-		cmdServ = new AbstractCommandServerImpl()
+		cmdServ = new AbstractCommandServer()
 		{
 			@Override
 			public IConnection getConnection()
