@@ -39,6 +39,8 @@ import net.engio.mbassy.bus.MBassador;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLException;
 import java.io.File;
 import java.io.IOException;
 import java.net.Proxy;
@@ -511,6 +513,12 @@ public class IRCApi implements IIRCApi
 			LOG.error("Error Closing Session.", aExc);
 		}
 	}
+
+    @Override
+    public void secureConnection(final SSLContext aContext, final String aHostname, final int aPort) throws SSLException
+    {
+        this.session.secureConnection(aContext, aHostname, aPort);
+    }
 
 	private void checkConnected()
 	{

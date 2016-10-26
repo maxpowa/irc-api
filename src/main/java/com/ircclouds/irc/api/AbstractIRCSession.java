@@ -19,6 +19,7 @@ import net.engio.mbassy.bus.MBassador;
 import java.io.IOException;
 
 import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLException;
 
 public abstract class AbstractIRCSession implements IIRCSession
 {
@@ -167,5 +168,15 @@ public abstract class AbstractIRCSession implements IIRCSession
 				currentDispatcher.post(errorMsg).asynchronously();
 			}
 		}.start();
+	}
+	
+	@Override
+	public void secureConnection(final SSLContext aContext, final String aHostname, final int aPort) throws SSLException
+	{
+		if (!(this.conn instanceof SocketChannelConnection))
+		{
+			throw new IllegalArgumentException("unsupported connection type in use");
+		}
+		this.conn = new SSLSocketChannelConnection((SocketChannelConnection) this.conn, aContext, aHostname, aPort);
 	}
 }

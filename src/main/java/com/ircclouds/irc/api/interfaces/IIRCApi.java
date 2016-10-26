@@ -8,6 +8,8 @@ import com.ircclouds.irc.api.state.IIRCState;
 
 import net.engio.mbassy.bus.MBassador;
 
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLException;
 import java.io.File;
 import java.net.Proxy;
 import java.net.SocketAddress;
@@ -388,4 +390,16 @@ public interface IIRCApi
 	 * @param aListener A message listener
 	 */
 	void unregister(Object aListener);
+
+	/**
+	 * Convert a plain text connection into an SSL/TLS secured connection.
+	 *
+	 * @param aContext An SSL context, optional, if null will fall back to
+	 * default SSLContext of IRCApi.
+	 * @param aHostname The IRC server host name.
+	 * @param aPort The IRC server port.
+	 * @throws SSLException Throws SSLException in case the SSL/TLS
+	 * initiation fails, specifically the beginning of the handshake.
+	 */
+	void secureConnection(SSLContext aContext, String aHostname, int aPort) throws SSLException;
 }
