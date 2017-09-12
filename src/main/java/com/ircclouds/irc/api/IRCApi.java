@@ -19,7 +19,6 @@ import com.ircclouds.irc.api.domain.IRCChannel;
 import com.ircclouds.irc.api.domain.IRCServerOptions;
 import com.ircclouds.irc.api.domain.WritableIRCChannel;
 import com.ircclouds.irc.api.interfaces.Callback;
-import com.ircclouds.irc.api.interfaces.ICommandServer;
 import com.ircclouds.irc.api.interfaces.IIRCApi;
 import com.ircclouds.irc.api.interfaces.IIRCSession;
 import com.ircclouds.irc.api.interfaces.IServerParameters;
@@ -52,7 +51,7 @@ import static com.ircclouds.irc.api.dcc.DCCManager.DCC_SEND_TIMEOUT;
 
 /**
  * The main implementation of {@link IIRCApi}. It offers the ability to save the
- * IRC state, and allows for extensibility through {@link #getCommandServer()}.
+ * IRC state, and allows for extensibility through {@link #getIRCSession()}.
  * 
  * This implementation provides logging via slf4j.
  * 
@@ -481,11 +480,11 @@ public class IRCApi implements IIRCApi
 	/**
 	 * Returns the interface responsible for executing IRC commands
 	 * 
-	 * @return {@link ICommandServer}
+	 * @return {@link IIRCSession}
 	 */
-	protected ICommandServer getCommandServer()
+	protected IIRCSession getIRCSession()
 	{
-		return session.getCommandServer();
+		return session;
 	}
 
 	private String prependChanType(String aChannelName)
@@ -566,7 +565,7 @@ public class IRCApi implements IIRCApi
 	{
 		try
 		{
-			getCommandServer().execute(aCommand);
+			session.execute(aCommand);
 		}
 		catch (SocketException aExc)
 		{
@@ -639,7 +638,7 @@ public class IRCApi implements IIRCApi
 	{
 		try
 		{
-			getCommandServer().execute(aCommand);
+			getIRCSession().execute(aCommand);
 		}
 		catch (SocketException aExc)
 		{

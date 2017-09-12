@@ -17,7 +17,7 @@ public abstract class AbstractPingVersionListener
 
 	@Handler
 	public void onServerPing(ServerPing aMsg) throws IOException {
-		getSession().getCommandServer().execute(new PongCommand(aMsg.getText()));
+		getSession().execute(new PongCommand(aMsg.getText()));
     }
 
 	protected abstract IIRCSession getSession();

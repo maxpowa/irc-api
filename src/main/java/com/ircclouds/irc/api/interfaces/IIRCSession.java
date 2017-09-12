@@ -1,5 +1,6 @@
 package com.ircclouds.irc.api.interfaces;
 
+import com.ircclouds.irc.api.commands.interfaces.ICommand;
 import com.ircclouds.irc.api.domain.IRCServer;
 import com.ircclouds.irc.api.state.IIRCState;
 
@@ -11,9 +12,9 @@ import java.io.IOException;
 
 public interface IIRCSession
 {
-	ICommandServer getCommandServer();
-
 	MBassador getEventBus();
+
+	void execute(ICommand aCommand) throws IOException;
 
 	void register(Object... aListener);
 	

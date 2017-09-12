@@ -21,7 +21,7 @@ public abstract class AbstractApiDaemon extends Thread
 
 	public AbstractApiDaemon(IMessageReader aReader, MBassador aDispatcher)
 	{
-		super("ApiDaemon");
+		super("IRCApiDaemon");
 
 		reader = aReader;
 		eventBus = aDispatcher;
@@ -32,6 +32,8 @@ public abstract class AbstractApiDaemon extends Thread
 		try {
 			while (reader.available()) {
 				AbstractMessage _msg = reader.readMessage();
+
+				LOG.trace("<< " + _msg.asRaw());
 				if (_msg != null) {
 					eventBus.post(_msg).now();
 				}
@@ -49,7 +51,7 @@ public abstract class AbstractApiDaemon extends Thread
 			signalExceptionToApi(aExc);
 			eventBus.post(new ClientErrorMessage(aExc)).asynchronously();
 		} finally {
-			LOG.debug("ApiDaemon Exiting..");
+			LOG.debug("IRCApiDaemon Exiting..");
 
 			onExit();
 		}

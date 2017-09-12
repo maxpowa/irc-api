@@ -53,7 +53,7 @@ public class ConnectCmdListener
 				}
 
 				try {
-					session.getCommandServer().execute(new SendRawMessage("NICK " + _altNick + "\r\n"));
+					session.execute(new SendRawMessage("NICK " + _altNick + "\r\n"));
 				} catch (IOException aExc) {
 					throw new RuntimeException(aExc);
 				}
