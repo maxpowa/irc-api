@@ -33,8 +33,8 @@ public abstract class AbstractApiDaemon extends Thread
 			while (reader.available()) {
 				AbstractMessage _msg = reader.readMessage();
 
-				LOG.trace("<< " + _msg.asRaw());
 				if (_msg != null) {
+					LOG.trace("<< " + _msg.asRaw());
 					eventBus.post(_msg).now();
 				}
 			}
